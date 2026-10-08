@@ -109,9 +109,13 @@ export class AdminLoginComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading.set(false);
-        this.errorMessage.set(
-          err.error?.message || 'بيانات الدخول غير صحيحة، أو تم تجاوز عدد المحاولات.'
-        );
+        if (err.status === 401) {
+          this.errorMessage.set('البريد الإلكتروني أو كلمة المرور غير صحيحة.');
+        } else if (err.status === 429) {
+          this.errorMessage.set('تم تجاوز عدد محاولات الدخول المسموح بها، يرجى المحاولة بعد قليل.');
+        } else {
+          this.errorMessage.set('تعذر تسجيل الدخول حالياً، يرجى التحقق من الاتصال والمحاولة لاحقاً.');
+        }
       },
     });
   }
