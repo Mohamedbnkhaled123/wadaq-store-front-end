@@ -30,6 +30,16 @@ export interface AiChatResponse {
 export class AiConsultantService {
   private api = inject(ApiService);
 
+  private get apiUrl(): string {
+    if (typeof window !== 'undefined') {
+      const host = window.location.hostname;
+      if (host !== 'localhost' && host !== '127.0.0.1') {
+        return 'https://wadaq-store-back-end.vercel.app/api';
+      }
+    }
+    return environment.apiUrl || 'https://wadaq-store-back-end.vercel.app/api';
+  }
+
   getStatus(): Observable<ApiResponse<AiStatusResponse>> {
     return this.api.get<AiStatusResponse>('/ai/status', undefined, false);
   }
@@ -56,7 +66,7 @@ export class AiConsultantService {
     onError: (err: any) => void
   ): Promise<void> {
     try {
-      const response = await fetch(`${environment.apiUrl}/ai/chat/stream`, {
+      const response = await fetch(`${this.apiUrl}/ai/chat/stream`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -18,7 +18,16 @@ export interface ApiResponse<T> {
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private http = inject(HttpClient);
-  private baseUrl = environment.apiUrl;
+
+  private get baseUrl(): string {
+    if (typeof window !== 'undefined') {
+      const host = window.location.hostname;
+      if (host !== 'localhost' && host !== '127.0.0.1') {
+        return 'https://wadaq-store-back-end.vercel.app/api';
+      }
+    }
+    return environment.apiUrl || 'https://wadaq-store-back-end.vercel.app/api';
+  }
 
   private getHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
