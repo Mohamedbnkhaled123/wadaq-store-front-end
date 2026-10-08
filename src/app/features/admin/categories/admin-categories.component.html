@@ -1,0 +1,88 @@
+<div class="categories-manager">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">إدارة تصنيفات الأدوات الحسية</h1>
+      <p class="page-subtitle">تنظيم الأدوات حسب نوع التدخل الحسي والأنظمة العلاجية</p>
+    </div>
+
+    <button (click)="openAddModal()" class="btn btn-primary">
+      + إضافة تصنيف جديد
+    </button>
+  </header>
+
+  <div class="table-card card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>الترتيب</th>
+          <th>اسم التصنيف</th>
+          <th>الحالة</th>
+          <th>الإجراءات</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cat of categories(); track cat._id) {
+          <tr [class.row-deleted]="cat.isDeleted">
+            <td>{{ cat.order }}</td>
+            <td>
+              <strong>{{ cat.name.ar }}</strong>
+              <span class="sub-text">{{ cat.name.en }}</span>
+            </td>
+            <td>
+              @if (cat.isDeleted) {
+                <span class="badge badge-danger">محذوف</span>
+              } @else if (cat.isActive) {
+                <span class="badge badge-success">نشط</span>
+              } @else {
+                <span class="badge badge-warning">معطل</span>
+              }
+            </td>
+            <td>
+              <div class="table-actions">
+                @if (!cat.isDeleted) {
+                  <button (click)="openEditModal(cat)" class="btn btn-outline btn-sm">تعديل</button>
+                  <button (click)="deleteCat(cat)" class="btn btn-danger-outline btn-sm">حذف</button>
+                } @else {
+                  <button (click)="restoreCat(cat)" class="btn btn-secondary btn-sm">استعادة</button>
+                }
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  @if (isModalOpen()) {
+    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <div class="modal-box card">
+      <div class="modal-header">
+        <h2 class="modal-title">{{ editingCat() ? 'تعديل التصنيف' : 'إضافة تصنيف جديد' }}</h2>
+        <button (click)="closeModal()" class="close-btn">&times;</button>
+      </div>
+
+      <form (ngSubmit)="saveCat()" class="modal-form">
+        <div class="form-group">
+          <label class="form-label">الاسم بالعربية *</label>
+          <input type="text" [(ngModel)]="formData.name.ar" name="nameAr" required class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Name in English *</label>
+          <input type="text" [(ngModel)]="formData.name.en" name="nameEn" required class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">ترتيب العرض</label>
+          <input type="number" [(ngModel)]="formData.order" name="order" class="form-control" />
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" (click)="closeModal()" class="btn btn-outline">إلغاء</button>
+          <button type="submit" class="btn btn-primary">حفظ</button>
+        </div>
+      </form>
+    </div>
+  }
+</div>

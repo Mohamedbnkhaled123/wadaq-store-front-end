@@ -1,0 +1,163 @@
+<div class="packages-manager">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">إدارة باقات تجهيز الغرف الحسية</h1>
+      <p class="page-subtitle">تعديل أسعار الباقات، إضافة عروض جديدة، وتحديد الأدوات المشمولة</p>
+    </div>
+
+    <button (click)="openAddModal()" class="btn btn-primary">
+      + إضافة باقة تجهيز جديدة
+    </button>
+  </header>
+
+  <!-- Section Master Toggle Banner -->
+  <div class="section-status-banner card" [class.banner-disabled]="!settingsService.showPackagesSection()">
+    <div class="banner-info">
+      <div class="banner-title-row">
+        <span class="status-indicator-dot" [class.dot-active]="settingsService.showPackagesSection()"></span>
+        <strong>حالة قسم باقات تجهيز الغرف في الصفحة الرئيسية:</strong>
+        <span class="badge" [ngClass]="settingsService.showPackagesSection() ? 'badge-success' : 'badge-warning'">
+          {{ settingsService.showPackagesSection() ? 'معروض للعملاء' : 'معطل ومخفي بالكامل' }}
+        </span>
+      </div>
+      <p class="banner-desc">
+        {{ settingsService.showPackagesSection() ? 'القسم معروض حالياً لزوار المتجر في الصفحة الرئيسية.' : 'القسم مخفي تماماً من الصفحة الرئيسية للمتجر ولا يظهر لأي زائر حتى تقوم بإعادة تنشيطه.' }}
+      </p>
+    </div>
+
+    <button
+      type="button"
+      (click)="toggleSectionActive()"
+      class="btn btn-sm"
+      [class.btn-warning-outline]="settingsService.showPackagesSection()"
+      [class.btn-primary]="!settingsService.showPackagesSection()"
+    >
+      {{ settingsService.showPackagesSection() ? 'إيقاف تنشيط القسم وإخفاؤه' : 'تنشيط وإظهار القسم في المتجر' }}
+    </button>
+  </div>
+
+  <!-- Packages Table -->
+  <div class="table-card card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>اسم الباقة</th>
+          <th>المستوى (Tier)</th>
+          <th>المساحة المقترحة</th>
+          <th>السعر التقديري</th>
+          <th>عدد الأدوات</th>
+          <th>الحالة</th>
+          <th>الإجراءات</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of packages(); track p._id) {
+          <tr [class.row-deleted]="p.isDeleted" [class.row-inactive]="!p.isActive && !p.isDeleted">
+            <td>
+              <strong>{{ p.name.ar }}</strong>
+              <span class="sub-text">{{ p.name.en }}</span>
+            </td>
+            <td>
+              <span class="tier-tag">{{ p.tier }}</span>
+            </td>
+            <td>{{ p.roomSize?.ar || '-' }}</td>
+            <td>
+              <strong class="price-val">{{ p.price.toLocaleString() }} ج.م</strong>
+            </td>
+            <td>{{ p.items.length }} أداة</td>
+            <td>
+              @if (p.isDeleted) {
+                <span class="badge badge-danger">محذوف</span>
+              } @else if (!p.isActive) {
+                <span class="badge badge-warning">معطل</span>
+              } @else {
+                <span class="badge badge-success">نشط</span>
+              }
+            </td>
+            <td>
+              <div class="table-actions">
+                <button
+                  type="button"
+                  (click)="toggleActive(p)"
+                  class="btn btn-sm"
+                  [class.btn-warning-outline]="p.isActive"
+                  [class.btn-outline]="!p.isActive"
+                  [title]="p.isActive ? 'إيقاف تنشيط الباقة وإخفائها من المتجر' : 'تنشيط الباقة وإتاحتها للعملاء'"
+                >
+                  {{ p.isActive ? 'إيقاف' : 'تنشيط' }}
+                </button>
+                <button (click)="openEditModal(p)" class="btn btn-outline btn-sm">تعديل السعر والمحتوى</button>
+                <button (click)="deletePackage(p)" class="btn btn-danger-outline btn-sm">حذف</button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  @if (isModalOpen()) {
+    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <div class="modal-box card">
+      <div class="modal-header">
+        <h2 class="modal-title">{{ editingPkg() ? 'تعديل باقة التجهيز والسعر' : 'إضافة باقة تجهيز جديدة' }}</h2>
+        <button (click)="closeModal()" class="close-btn">&times;</button>
+      </div>
+
+      <form (ngSubmit)="savePackage()" class="modal-form">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label">اسم الباقة (عربي) *</label>
+            <input type="text" [(ngModel)]="formData.name.ar" name="nameAr" required class="form-control" />
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">Package Name (English) *</label>
+            <input type="text" [(ngModel)]="formData.name.en" name="nameEn" required class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label">السعر التقديري (ج.م) *</label>
+            <input type="number" [(ngModel)]="formData.price" name="price" required min="0" class="form-control" />
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">مستوى الباقة</label>
+            <select [(ngModel)]="formData.tier" name="tier" class="form-control">
+              <option value="basic">أساسية (Basic)</option>
+              <option value="standard">قياسية (Standard)</option>
+              <option value="premium">متكاملة VIP (Premium)</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">المساحة المقترحة (عربي)</label>
+            <input type="text" [(ngModel)]="formData.roomSize.ar" name="roomSizeAr" class="form-control" placeholder="15 - 25 متر مربع" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">الوصف القصير (عربي) *</label>
+          <input type="text" [(ngModel)]="formData.shortDescription.ar" name="shortDescAr" required class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">الوصف التفصيلي ومعايير التركيب (عربي) *</label>
+          <textarea [(ngModel)]="formData.description.ar" name="descAr" rows="4" required class="form-control"></textarea>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="formData.isActive" name="isActive" />
+            <span>تنشيط الباقة وإتاحتها للعملاء في المتجر</span>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" (click)="closeModal()" class="btn btn-outline">إلغاء</button>
+          <button type="submit" class="btn btn-primary">حفظ الباقة</button>
+        </div>
+      </form>
+    </div>
+  }
+</div>

@@ -1,0 +1,212 @@
+<div class="product-detail-page" *transloco="let t">
+  <div class="container">
+    @if (isLoading() && !product()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>{{ t('common.loading') }}</p>
+      </div>
+    } @else if (product(); as p) {
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs animate-fade-down" aria-label="Breadcrumb">
+        <a [routerLink]="['/', langService.currentLang()]">{{ t('nav.home') }}</a>
+        <span class="sep">/</span>
+        <a [routerLink]="['/', langService.currentLang(), 'products']">{{ t('nav.products') }}</a>
+        <span class="sep">/</span>
+        <span class="current">{{ p.name | localize }}</span>
+      </nav>
+
+      <!-- Deactivated / Soft-deleted Banner (Explicit User Requirement) -->
+      @if (p.isDeleted || p.isActive === false || p.inStock === false) {
+        <div class="unavailable-alert card animate-fade-up">
+          <div class="alert-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E04B4B" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <div class="alert-content">
+            <h3 class="alert-title">{{ p.statusMessage ? (p.statusMessage | localize) : t('products.unavailable_title') }}</h3>
+            <p class="alert-desc">{{ t('products.unavailable_desc') }}</p>
+          </div>
+          <a
+            [href]="getInquiryUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-whatsapp btn-sm alert-action pulse-whatsapp"
+          >
+            {{ t('products.inquire_whatsapp') }}
+          </a>
+        </div>
+      }
+
+      <!-- Admin Logged In Banner -->
+      @if (authService.isAdmin()) {
+        <div class="admin-bar card animate-fade-up">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>{{ t('products.admin_cannot_buy') }}</span>
+          <a [routerLink]="['/admin/products', (product()?._id || product()?.id), 'edit']" class="btn btn-outline btn-sm">
+            {{ t('products.edit_in_dashboard') }}
+          </a>
+        </div>
+      }
+
+      <!-- Product Main Details Grid -->
+      <div class="product-layout">
+        <!-- Gallery Section -->
+        <div class="gallery-col animate-scale-in">
+          <div class="main-image-card card">
+            @if (!isMainImageLoaded()) {
+              <div class="img-skeleton-overlay" aria-hidden="true">
+                <div class="skeleton-shimmer"></div>
+                <div class="skeleton-spinner"></div>
+              </div>
+            }
+            <img
+              [src]="selectedImage() || p.images[0]?.url || 'images/logo.png'"
+              [alt]="p.name | localize"
+              class="main-img"
+              [class.blur-loading]="!isMainImageLoaded()"
+              (load)="onMainImageLoad()"
+              width="600"
+              height="450"
+            />
+          </div>
+
+          @if (p.images.length > 1) {
+            <div class="thumbnails-row">
+              @for (img of p.images; track img.url) {
+                <button
+                  (click)="selectImage(img.url)"
+                  class="thumbnail-btn"
+                  [class.active]="selectedImage() === img.url"
+                >
+                  <img [src]="img.url" [alt]="p.name | localize" width="80" height="80" />
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Info & Actions Section -->
+        <div class="info-col animate-fade-up delay-75">
+          <div class="meta-tags">
+            @if (p.sensorySystem?.ar) {
+              <span class="badge badge-primary">
+                {{ t('products.sensory_system') }}: {{ p.sensorySystem | localize }}
+              </span>
+            }
+            @if (p.ageRange?.ar) {
+              <span class="badge badge-success">
+                {{ t('products.age_range') }}: {{ p.ageRange | localize }}
+              </span>
+            }
+          </div>
+
+          <h1 class="product-title">{{ p.name | localize }}</h1>
+
+          <div class="price-box">
+            <div class="price-main">
+              <span class="price-val">{{ p.price.toLocaleString() }} {{ t('common.currency') }}</span>
+              @if (p.oldPrice && p.oldPrice > p.price) {
+                <span class="old-price">{{ p.oldPrice.toLocaleString() }} {{ t('common.currency') }}</span>
+              }
+            </div>
+            <span class="shipping-hint">+ مصاريف الشحن حسب المحافظة</span>
+          </div>
+
+          <p class="short-description">{{ p.shortDescription | localize }}</p>
+
+          <!-- Purchase Controls (Disabled if Unavailable or Admin) -->
+          @if (!p.isDeleted && p.isActive !== false && p.inStock && !authService.isAdmin()) {
+            <div class="purchase-box card">
+              <div class="qty-selector">
+                <span class="qty-lbl">{{ t('cart.quantity') }}:</span>
+                <div class="qty-controls">
+                  <button (click)="decreaseQty()" class="qty-btn" aria-label="Decrease quantity">-</button>
+                  <span class="qty-display">{{ quantity() }}</span>
+                  <button (click)="increaseQty()" class="qty-btn" aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+
+              <div class="buttons-group">
+                <button
+                  (click)="addToCart($event)"
+                  class="btn btn-lg flex-1"
+                  [ngClass]="justAdded() ? 'btn-success' : 'btn-outline'"
+                  [attr.aria-label]="justAdded() ? 'تمت الإضافة للسلة' : t('products.add_to_cart')"
+                >
+                  @if (justAdded()) {
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="animate-scale-in">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span class="animate-scale-in">تمت الإضافة للسلة!</span>
+                  } @else {
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                      <line x1="3" y1="6" x2="21" y2="6"></line>
+                      <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span>{{ t('products.add_to_cart') }}</span>
+                  }
+                </button>
+
+                <!-- Direct WhatsApp Single-Product Purchase -->
+                <a
+                  [href]="getSingleProductBuyUrl()"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-whatsapp btn-lg flex-1"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.055-1.92-.477-1.528-.63-2.518-2.176-2.595-2.277-.076-.101-.617-.821-.617-1.565 0-.745.39-1.111.528-1.262.138-.152.3-.19.4-.19.1 0 .2 0 .288.005.093.004.22-.036.343.262.13.312.441 1.077.48 1.156.038.079.063.172.013.272-.05.101-.076.165-.152.253-.076.089-.16.198-.228.266-.076.076-.156.16-.067.312.089.152.395.65.847 1.054.582.52 1.073.681 1.225.757.152.076.24.063.329-.038.089-.101.38-.443.481-.595.101-.152.202-.127.341-.076.139.051.884.417 1.036.493.152.076.253.114.291.177.038.064.038.368-.106.773z"/>
+                  </svg>
+                  <span>{{ t('products.buy_now_whatsapp') }}</span>
+                </a>
+              </div>
+            </div>
+          }
+
+          <!-- Clinical Description -->
+          <div class="full-desc card">
+            <h2 class="section-heading">الوصف العلاجي والتأهيلي</h2>
+            <div class="desc-text">{{ p.description | localize }}</div>
+          </div>
+
+          <!-- Technical & Clinical Specs Table -->
+          @if (p.specs && p.specs.length > 0) {
+            <div class="specs-card card">
+              <h2 class="section-heading">{{ t('products.specs') }}</h2>
+              <table class="specs-table">
+                <tbody>
+                  @for (spec of p.specs; track spec.label.ar) {
+                    <tr>
+                      <td class="spec-label">{{ spec.label | localize }}</td>
+                      <td class="spec-value">{{ spec.value | localize }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Related Products Section -->
+      @if (relatedProducts().length > 0) {
+        <section class="related-section">
+          <h2 class="related-title">{{ t('products.related_products') }}</h2>
+          <div class="related-grid">
+            @for (rel of relatedProducts(); track rel._id) {
+              <app-product-card [product]="rel" />
+            }
+          </div>
+        </section>
+      }
+    }
+  </div>
+</div>

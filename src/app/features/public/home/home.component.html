@@ -1,0 +1,176 @@
+<div class="home-page" *transloco="let t">
+  <!-- 1. Hero Section -->
+  <section class="hero-section">
+    <div class="hero-glow-orb"></div>
+    <div class="container hero-container">
+      <div class="hero-content">
+        <h1 class="hero-title animate-fade-up">
+          {{ settingsService.settings()?.hero?.title ? (settingsService.settings()?.hero?.title | localize) : t('hero.title') }}
+        </h1>
+
+        <p class="hero-subtitle animate-fade-up delay-75">
+          {{ settingsService.settings()?.hero?.subtitle ? (settingsService.settings()?.hero?.subtitle | localize) : t('hero.subtitle') }}
+        </p>
+
+        <div class="hero-actions animate-fade-up delay-150">
+          <a [routerLink]="['/', langService.currentLang(), 'products']" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+            </svg>
+            <span>{{ t('hero.cta_products') }}</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-image-card card">
+          <img
+            [src]="heroImageUrl"
+            alt="متجر ودق للتكامل الحسي"
+            class="hero-img"
+            width="600"
+            height="450"
+            fetchpriority="high"
+            loading="eager"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Trust Stats Bar -->
+  <section class="stats-section">
+    <div class="container stats-grid">
+      @if (settingsService.settings()?.stats; as statsList) {
+        @for (stat of statsList; track $index) {
+          <div class="stat-card">
+            <span class="stat-val">{{ stat.value }}</span>
+            <span class="stat-lbl">{{ stat.label | localize }}</span>
+          </div>
+        }
+      } @else {
+        <div class="stat-card"><span class="stat-val">+120</span><span class="stat-lbl">{{ t('stats.centers') }}</span></div>
+        <div class="stat-card"><span class="stat-val">+85</span><span class="stat-lbl">{{ t('stats.tools') }}</span></div>
+        <div class="stat-card"><span class="stat-val">+350</span><span class="stat-lbl">{{ t('stats.partners') }}</span></div>
+        <div class="stat-card"><span class="stat-val">99%</span><span class="stat-lbl">{{ t('stats.satisfaction') }}</span></div>
+      }
+    </div>
+  </section>
+
+  <!-- 3. Categories Horizontal Chips -->
+  @if (categories().length > 0) {
+    <section class="section categories-section">
+      <div class="container">
+        <div class="categories-scroll">
+          <a
+            [routerLink]="['/', langService.currentLang(), 'products']"
+            class="category-chip active"
+          >
+            {{ t('products.all_categories') }}
+          </a>
+          @for (cat of categories(); track cat._id) {
+            <a
+              [routerLink]="['/', langService.currentLang(), 'products']"
+              [queryParams]="{ category: cat.slug | localize }"
+              class="category-chip"
+            >
+              {{ cat.name | localize }}
+            </a>
+          }
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- 4. Featured Sensory Products -->
+  <section class="section featured-products-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">أحدث الأدوات الطبية</span>
+        <h2 class="section-title">أدوات التكامل الحسي المختارة للمتخصصين</h2>
+        <p class="section-subtitle">تشكيلة مختارة بعناية لتحفيز وتدريب الحواس الدهليزية، العميقة، واللمسية.</p>
+      </div>
+
+      <div class="products-grid">
+        @for (prod of featuredProducts(); track prod._id) {
+          <app-product-card [product]="prod" />
+        }
+      </div>
+
+      <div class="section-cta">
+        <a [routerLink]="['/', langService.currentLang(), 'products']" class="btn btn-primary btn-lg">
+          <span>عرض كل المنتجات</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Sensory Room Setup Packages Section (Controlled by Admin Toggle) -->
+  @if (settingsService.showPackagesSection()) {
+    <section class="section packages-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">حلول تسليم مفتاح</span>
+          <h2 class="section-title">{{ t('packages.title') }}</h2>
+          <p class="section-subtitle">{{ t('packages.subtitle') }}</p>
+        </div>
+
+        @if (activePackages().length > 0) {
+          <div class="packages-grid">
+            @for (pkg of activePackages(); track pkg._id) {
+              <app-package-card [pkg]="pkg" />
+            }
+          </div>
+        } @else {
+          <div class="empty-packages-hint card text-center p-6">
+            <p style="color: var(--color-text-muted);">جاري تجهيز باقات جديدة للغرف الحسية قريباً، يمكنك التواصل معنا مباشرة لطلب عرض مخصص.</p>
+          </div>
+        }
+
+        <div class="section-cta">
+          <a [routerLink]="['/', langService.currentLang(), 'packages']" class="btn btn-outline btn-lg">
+            <span>عرض كل الباقات</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- 6. Custom Sensory Tool CTA (Explicit User Requirement) -->
+  <section class="section custom-cta-section">
+    <div class="container">
+      <div class="custom-cta-card">
+        <div class="cta-text-group">
+          <span class="cta-tag">تصنيع وتوريد خاص</span>
+          <h2 class="cta-title">
+            {{ settingsService.settings()?.customProductCta?.title ? (settingsService.settings()?.customProductCta?.title | localize) : t('custom_cta.title') }}
+          </h2>
+          <p class="cta-desc">
+            {{ settingsService.settings()?.customProductCta?.description ? (settingsService.settings()?.customProductCta?.description | localize) : t('custom_cta.description') }}
+          </p>
+        </div>
+
+        <div class="cta-action">
+          <a
+            [href]="customInquiryUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-whatsapp btn-lg pulse-whatsapp"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.055-1.92-.477-1.528-.63-2.518-2.176-2.595-2.277-.076-.101-.617-.821-.617-1.565 0-.745.39-1.111.528-1.262.138-.152.3-.19.4-.19.1 0 .2 0 .288.005.093.004.22-.036.343.262.13.312.441 1.077.48 1.156.038.079.063.172.013.272-.05.101-.076.165-.152.253-.076.089-.16.198-.228.266-.076.076-.156.16-.067.312.089.152.395.65.847 1.054.582.52 1.073.681 1.225.757.152.076.24.063.329-.038.089-.101.38-.443.481-.595.101-.152.202-.127.341-.076.139.051.884.417 1.036.493.152.076.253.114.291.177.038.064.038.368-.106.773z"/>
+            </svg>
+            <span>{{ settingsService.settings()?.customProductCta?.buttonText ? (settingsService.settings()?.customProductCta?.buttonText | localize) : t('custom_cta.button') }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

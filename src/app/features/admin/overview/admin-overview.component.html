@@ -1,0 +1,273 @@
+<div class="overview-page">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">تحليلات وإحصائيات المنتجات والمتجر</h1>
+      <p class="page-subtitle">إحصائيات حية وشاملة عن كتالوج المنتجات الحسية وباقات التجهيز والعيادات</p>
+    </div>
+
+    <div class="header-actions">
+      <a routerLink="/admin/products/new" class="btn btn-primary btn-lg">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>إضافة منتج حسي جديد</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Key Performance / Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-box card">
+      <div class="stat-top">
+        <span class="stat-label">إجمالي المنتجات الحسية</span>
+        <div class="stat-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </div>
+      </div>
+      <span class="stat-number">{{ totalProducts() }}</span>
+      <span class="stat-sub">منتجاً معتمداً في الكتالوج</span>
+    </div>
+
+    <div class="stat-box card border-success">
+      <div class="stat-top">
+        <span class="stat-label">المنتجات النشطة والمعروضة</span>
+        <div class="stat-icon-wrap text-success">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+      </div>
+      <span class="stat-number text-success">{{ activeProducts() }}</span>
+      <span class="stat-sub">متاحة للشراء وطلب الواتساب</span>
+    </div>
+
+    <div class="stat-box card border-warning">
+      <div class="stat-top">
+        <span class="stat-label">المعطلة أو غير المتاحة</span>
+        <div class="stat-icon-wrap text-warning">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="10" y1="15" x2="10" y2="9"></line>
+            <line x1="14" y1="15" x2="14" y2="9"></line>
+          </svg>
+        </div>
+      </div>
+      <span class="stat-number text-warning">{{ inactiveProducts() }}</span>
+      <span class="stat-sub">معطلة أو نفد مخزونها</span>
+    </div>
+
+    <div class="stat-box card border-danger">
+      <div class="stat-top">
+        <span class="stat-label">محذوفة مؤقتاً (Soft Delete)</span>
+        <div class="stat-icon-wrap text-danger">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </div>
+      </div>
+      <span class="stat-number text-danger">{{ deletedProducts() }}</span>
+      <span class="stat-sub">يمكن استعادتها بضغطة زر</span>
+    </div>
+
+    <div class="stat-box card">
+      <div class="stat-top">
+        <span class="stat-label">أقسام المعالجة الحسية</span>
+        <div class="stat-icon-wrap text-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+        </div>
+      </div>
+      <span class="stat-number text-primary">{{ categories().length }}</span>
+      <span class="stat-sub">تصنيفات إكلينيكية رئيسية</span>
+    </div>
+
+    <div class="stat-box card">
+      <div class="stat-top">
+        <span class="stat-label">باقات تأسيس العيادات</span>
+        <div class="stat-icon-wrap text-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
+      </div>
+      <span class="stat-number text-primary">{{ packagesCount() }}</span>
+      <span class="stat-sub">غرف سنوزلين وتكامل حسي</span>
+    </div>
+  </div>
+
+  <!-- Categories Breakdown Section -->
+  <section class="breakdown-section card">
+    <div class="section-top">
+      <div>
+        <h2 class="section-title">توزيع المنتجات حسب الأجهزة الحسية</h2>
+        <p class="section-desc">إحصائية دقيقة بعدد الأدوات المتوفرة لكل تخصص حسي وعلاجي</p>
+      </div>
+      <a routerLink="/admin/categories" class="btn btn-outline btn-sm">
+        إدارة التصنيفات
+      </a>
+    </div>
+
+    <div class="cats-grid">
+      @for (c of categoryStats(); track c.slug) {
+        <div class="cat-stat-card">
+          <div class="cat-stat-header">
+            <span class="cat-name">{{ c.nameAr }}</span>
+            <span class="cat-count">{{ c.count }} أداة</span>
+          </div>
+          <span class="cat-sub">{{ c.nameEn }}</span>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" [style.width.%]="c.percentage"></div>
+          </div>
+          <span class="cat-pct">{{ c.percentage }}% من الكتالوج الكلي</span>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Latest Products Table -->
+  <section class="recent-products-section card">
+    <div class="section-top">
+      <div>
+        <h2 class="section-title">أحدث المنتجات في المتجر</h2>
+        <p class="section-desc">عرض سريع لأحدث الأدوات الحسية المضافة مع إمكانية التعديل الفوري</p>
+      </div>
+      <a routerLink="/admin/products" class="btn btn-outline btn-sm">
+        <span>عرض كافة المنتجات ({{ totalProducts() }})</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="recent-table">
+        <thead>
+          <tr>
+            <th style="width: 60px;">الصورة</th>
+            <th>اسم الأداة الحسية</th>
+            <th>التصنيف</th>
+            <th>السعر</th>
+            <th>الحالة</th>
+            <th style="text-align: center; width: 140px;">الإجراء</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of recentProducts(); track p._id) {
+            <tr>
+              <td>
+                <div class="mini-thumb">
+                  <img [src]="p.images[0]?.url || 'images/logo.png'" [alt]="p.name.ar" />
+                </div>
+              </td>
+              <td>
+                <div class="prod-text">
+                  <strong class="title">{{ p.name.ar }}</strong>
+                  <span class="sub">{{ p.name.en }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="badge badge-light">
+                  {{ getCategoryName(p) }}
+                </span>
+              </td>
+              <td>
+                <strong>{{ p.price.toLocaleString() }} ج.م</strong>
+              </td>
+              <td>
+                @if (p.isDeleted) {
+                  <span class="badge badge-danger">محذوف</span>
+                } @else if (!p.isActive) {
+                  <span class="badge badge-warning">معطل</span>
+                } @else {
+                  <span class="badge badge-success">نشط</span>
+                }
+              </td>
+              <td style="text-align: center;">
+                <a [routerLink]="['/admin/products', p._id || p.id, 'edit']" class="btn btn-outline btn-sm action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                  <span>تعديل</span>
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Quick Shortcuts Grid -->
+  <div class="shortcuts-grid">
+    <a routerLink="/admin/products/new" class="shortcut-card card">
+      <div class="shortcut-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </div>
+      <div class="shortcut-info">
+        <h3>إضافة منتج جديد</h3>
+        <p>إدراج أداة حسية جديدة مع صورها ومواصفاتها الطبية</p>
+      </div>
+    </a>
+
+    <a routerLink="/admin/packages" class="shortcut-card card">
+      <div class="shortcut-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+      </div>
+      <div class="shortcut-info">
+        <h3>باقات تجهيز العيادات</h3>
+        <p>تعديل أسعار وعروض تجهيز غرف سنوزلين ومراكز التأهيل</p>
+      </div>
+    </a>
+
+    <a routerLink="/admin/projects" class="shortcut-card card">
+      <div class="shortcut-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+      </div>
+      <div class="shortcut-info">
+        <h3>معرض المشاريع المنفذة</h3>
+        <p>إضافة صور وتفاصيل غرف التكامل الحسي المنجزة</p>
+      </div>
+    </a>
+
+    <a routerLink="/admin/settings" class="shortcut-card card">
+      <div class="shortcut-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </div>
+      <div class="shortcut-info">
+        <h3>إعدادات المتجر (CMS)</h3>
+        <p>تعديل رقم الواتساب، الشحن المجاني، ومحتوى المتجر</p>
+      </div>
+    </a>
+  </div>
+</div>

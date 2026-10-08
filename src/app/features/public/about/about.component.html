@@ -1,0 +1,85 @@
+<div class="about-page" *transloco="let t">
+  <div class="container">
+    <!-- Header -->
+    <header class="page-header animate-fade-down">
+      <span class="section-tag">من نحن</span>
+      <h1 class="page-title">
+        {{ settingsService.settings()?.about?.title ? (settingsService.settings()?.about?.title | localize) : t('about.title') }}
+      </h1>
+    </header>
+
+    <!-- Main About Grid -->
+    <div class="about-grid">
+      <div class="about-main card animate-fade-up delay-75">
+        @if (settingsService.settings()?.about?.image; as aboutImg) {
+          <div class="about-banner-wrap">
+            <img [src]="aboutImg" alt="مؤسسة ودق لتنمية المهارات والتكامل الحسي" class="about-banner-img" />
+          </div>
+        }
+        <h2 class="block-title">عن مؤسسة ودق للتنمية والتدريب</h2>
+        <div class="about-text">
+          {{ settingsService.settings()?.about?.content ? (settingsService.settings()?.about?.content | localize) : '' }}
+        </div>
+
+        <div class="mission-vision-grid">
+          <div class="mv-card">
+            <div class="mv-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#165E74" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="12 6 12 12 16 14"></polygon>
+              </svg>
+            </div>
+            <h3>{{ t('about.mission_title') }}</h3>
+            <p>{{ settingsService.settings()?.about?.mission ? (settingsService.settings()?.about?.mission | localize) : '' }}</p>
+          </div>
+
+          <div class="mv-card">
+            <div class="mv-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5DBB8A" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </div>
+            <h3>{{ t('about.vision_title') }}</h3>
+            <p>{{ settingsService.settings()?.about?.vision ? (settingsService.settings()?.about?.vision | localize) : '' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Information Sidebar -->
+      <aside class="contact-sidebar card animate-fade-up delay-150">
+        <h2 class="sidebar-title">{{ t('about.contact_us') }}</h2>
+
+        @if (settingsService.settings(); as s) {
+          <ul class="contact-items">
+            <li class="contact-box">
+              <span class="box-lbl">{{ t('about.whatsapp') }}</span>
+              <a [href]="whatsappUrl" target="_blank" rel="noopener noreferrer" class="box-link whatsapp-link" dir="ltr">
+                {{ s.whatsappNumber }}
+              </a>
+            </li>
+
+            <li class="contact-box">
+              <span class="box-lbl">{{ t('about.phone') }}</span>
+              <a [href]="'tel:' + s.phone" class="box-link" dir="ltr">
+                {{ s.phone }}
+              </a>
+            </li>
+
+            <li class="contact-box">
+              <span class="box-lbl">{{ t('about.email') }}</span>
+              <a [href]="'mailto:' + s.email" class="box-link">
+                {{ s.email }}
+              </a>
+            </li>
+
+            <li class="contact-box">
+              <span class="box-lbl">{{ t('about.address') }}</span>
+              <p class="box-text">{{ s.address | localize }}</p>
+            </li>
+          </ul>
+        }
+      </aside>
+    </div>
+  </div>
+</div>

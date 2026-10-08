@@ -1,0 +1,505 @@
+<div class="product-form-page">
+  <!-- Breadcrumbs & Navigation -->
+  <nav class="breadcrumb-bar">
+    <a routerLink="/admin/products" class="crumb-link">لوحة التحكم</a>
+    <span class="crumb-sep">/</span>
+    <a routerLink="/admin/products" class="crumb-link">المنتجات</a>
+    <span class="crumb-sep">/</span>
+    <span class="crumb-current">{{ isEditMode() ? 'تعديل: ' + (formData.name.ar || 'منتج') : 'إضافة منتج حسي جديد' }}</span>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-titles">
+      <div class="title-with-badge">
+        <h1 class="page-title">
+          {{ isEditMode() ? 'تعديل المنتج الحسي' : 'إضافة منتج حسي جديد' }}
+        </h1>
+        @if (isEditMode() && originalProduct()) {
+          @if (originalProduct()?.isDeleted) {
+            <span class="badge badge-danger">محذوف مؤقتاً</span>
+          } @else if (!originalProduct()?.isActive) {
+            <span class="badge badge-warning">معطل (غير نشط)</span>
+          } @else {
+            <span class="badge badge-success">نشط ومتاح في المتجر</span>
+          }
+        }
+      </div>
+      <p class="page-subtitle">
+        {{ isEditMode() ? 'تحديث الأسعار والمواصفات والصور والبيانات الإكلينيكية' : 'إدراج أداة حسية جديدة مع تصنيفها الطبي ومواصفاتها' }}
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <a routerLink="/admin/products" class="btn btn-outline nav-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 19 12 12 5"></polyline>
+        </svg>
+        <span>العودة للقائمة</span>
+      </a>
+
+      @if (isEditMode() && originalProduct()) {
+        <a
+          [href]="'/ar/products/' + (originalProduct()?.slug?.ar || originalProduct()?.slug?.en)"
+          target="_blank"
+          class="btn btn-outline nav-btn"
+          title="معاينة في المتجر كما يراه العميل"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span>معاينة في المتجر</span>
+        </a>
+
+        @if (!originalProduct()?.isDeleted) {
+          <button
+            type="button"
+            (click)="toggleActive()"
+            class="btn btn-outline"
+            [class.btn-warning-outline]="originalProduct()?.isActive"
+          >
+            {{ originalProduct()?.isActive ? 'إيقاف التنشيط' : 'تنشيط المنتج' }}
+          </button>
+
+          <button
+            type="button"
+            (click)="softDeleteProduct()"
+            class="btn btn-danger-outline"
+            title="إخفاء المنتج مع إمكانية استعادته"
+          >
+            حذف مؤقت
+          </button>
+        } @else {
+          <button
+            type="button"
+            (click)="restoreProduct()"
+            class="btn btn-success"
+          >
+            استعادة المنتج
+          </button>
+        }
+      }
+
+      <button
+        type="button"
+        (click)="onSubmit()"
+        [disabled]="isSaving()"
+        class="btn btn-primary btn-save"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+          <polyline points="17 21 17 13 7 13 7 21"></polyline>
+          <polyline points="7 3 7 8 15 8"></polyline>
+        </svg>
+        <span>{{ isSaving() ? 'جاري الحفظ...' : (isEditMode() ? 'حفظ التعديلات' : 'إضافة المنتج للمتجر') }}</span>
+      </button>
+    </div>
+  </header>
+
+  @if (saveSuccessMessage()) {
+    <div class="alert alert-success">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>{{ saveSuccessMessage() }}</span>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-box card">
+      <div class="spinner"></div>
+      <p>جاري تحميل بيانات المنتج من قاعدة البيانات السحابية...</p>
+    </div>
+  } @else {
+    <!-- Main Form Grid -->
+    <form (ngSubmit)="onSubmit()" class="form-grid">
+      <!-- Left Column (Main details) -->
+      <div class="main-column">
+        <!-- Basic Info Card -->
+        <div class="card form-section">
+          <div class="section-header">
+            <h2 class="section-title">بيانات المنتج الأساسية</h2>
+            <div class="lang-selector">
+              <button
+                type="button"
+                (click)="activeTab = 'ar'"
+                class="lang-pill"
+                [class.active]="activeTab === 'ar'"
+              >
+                العربية (الأساسية)
+              </button>
+              <button
+                type="button"
+                (click)="activeTab = 'en'"
+                class="lang-pill"
+                [class.active]="activeTab === 'en'"
+              >
+                English
+              </button>
+            </div>
+          </div>
+
+          @if (activeTab === 'ar') {
+            <div class="tab-content">
+              <div class="form-group">
+                <label class="form-label required">اسم المنتج (بالعربية)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.name.ar"
+                  name="nameAr"
+                  required
+                  placeholder="مثال: عصا دقدقة لتنشيط الحواس (موديل 1)"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label required">الوصف القصير (المختصر)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.shortDescription.ar"
+                  name="shortDescAr"
+                  required
+                  placeholder="وصف موجز يظهر في بطاقة المنتج وقوائم البحث"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label required">الوصف الكامل والتأهيلي</label>
+                <textarea
+                  [(ngModel)]="formData.description.ar"
+                  name="descAr"
+                  rows="5"
+                  required
+                  placeholder="وصف تفصيلي يشرح طريقة الاستخدام والفوائد الحسية والطبية للأداة"
+                  class="form-control"
+                ></textarea>
+              </div>
+            </div>
+          } @else {
+            <div class="tab-content">
+              <div class="form-group">
+                <label class="form-label required">Product Name (English)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.name.en"
+                  name="nameEn"
+                  required
+                  placeholder="e.g. Back Tapping Massager 1"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label required">Short Description (English)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.shortDescription.en"
+                  name="shortDescEn"
+                  required
+                  placeholder="Brief overview for product cards and search snippets"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label required">Full Description (English)</label>
+                <textarea
+                  [(ngModel)]="formData.description.en"
+                  name="descEn"
+                  rows="5"
+                  required
+                  placeholder="Comprehensive clinical and sensory description"
+                  class="form-control"
+                ></textarea>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Clinical Indications & Specifications -->
+        <div class="card form-section">
+          <h2 class="section-title">دواعي الاستخدام والتأهيل الحسي (Clinical Indications)</h2>
+          <p class="section-desc">أدخل الحالات أو الأهداف التأهيلية المناسبة للأداة (مثل: تحفيز عصبي، اضطراب المعالجة الحسية، فرط الحركة):</p>
+
+          <div class="tags-builder">
+            <div class="tags-input-row">
+              <input
+                type="text"
+                [(ngModel)]="newIndicationInput"
+                name="newIndication"
+                (keydown.enter)="$event.preventDefault(); addIndication()"
+                placeholder="اكتب هدفاً أو داعي استخدام واضغط إضافة أو Enter"
+                class="form-control"
+              />
+              <button type="button" (click)="addIndication()" class="btn btn-outline btn-add-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>إضافة</span>
+              </button>
+            </div>
+
+            <div class="tags-list">
+              @for (tag of clinicalIndicationsList; track $index) {
+                <span class="tag-chip">
+                  {{ tag }}
+                  <button type="button" (click)="removeIndication($index)" class="tag-del" title="إزالة">&times;</button>
+                </span>
+              }
+              @if (clinicalIndicationsList.length === 0) {
+                <span class="no-tags">لا توجد دواعي استخدام مضافة حتى الآن.</span>
+              }
+            </div>
+          </div>
+
+          <hr class="divider" />
+
+          <h2 class="section-title">المواصفات الفنية الإضافية (Specs)</h2>
+          <div class="specs-builder">
+            @for (spec of formData.specs; track $index) {
+              <div class="spec-row">
+                <input
+                  type="text"
+                  [(ngModel)]="spec.label.ar"
+                  [name]="'specLabelAr_' + $index"
+                  placeholder="خاصية بالعربية (مثل: المقاس أو الخامة)"
+                  class="form-control flex-1"
+                />
+                <input
+                  type="text"
+                  [(ngModel)]="spec.value.ar"
+                  [name]="'specValAr_' + $index"
+                  placeholder="القيمة (مثل: 50×60 سم)"
+                  class="form-control flex-1"
+                />
+                <button type="button" (click)="removeSpec($index)" class="btn btn-danger-outline btn-sm">
+                  حذف
+                </button>
+              </div>
+            }
+
+            <button type="button" (click)="addSpec()" class="btn btn-outline btn-sm btn-inline-add">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>إضافة خاصية جديدة</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Images Management Card -->
+        <div class="card form-section">
+          <h2 class="section-title">صور المنتج</h2>
+          <p class="section-desc">أدخل مسار الصورة (WebP أو رابط سحابي) لمعاينتها فوراً:</p>
+
+          <div class="image-input-row">
+            <input
+              type="text"
+              [(ngModel)]="newImageUrl"
+              name="newImg"
+              placeholder="مثال: /images/products/back-tapping-massager-1.webp أو رابط مباشر"
+              class="form-control"
+            />
+            <button type="button" (click)="addImage()" class="btn btn-outline btn-add-img">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>إضافة برابط</span>
+            </button>
+
+            <input
+              type="file"
+              #prodImgInput
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              style="display: none;"
+            />
+            <button
+              type="button"
+              (click)="prodImgInput.click()"
+              [disabled]="isUploadingImage()"
+              class="btn btn-primary btn-add-img"
+              title="رفع ملف صورة مباشرة من جهاز الكمبيوتر أو الهاتف"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>{{ isUploadingImage() ? 'جاري الرفع...' : 'رفع من جهازك' }}</span>
+            </button>
+          </div>
+
+          <div class="images-grid">
+            @for (img of formData.images; track $index) {
+              <div class="image-preview-card" [class.primary-img]="$index === 0">
+                <div class="img-wrap">
+                  <img [src]="img.url" [alt]="formData.name.ar || 'صورة المنتج'" />
+                </div>
+                <div class="img-meta">
+                  @if ($index === 0) {
+                    <span class="badge badge-primary">الرئيسية</span>
+                  } @else {
+                    <button type="button" (click)="makePrimaryImage($index)" class="btn-text">
+                      تعيين كرئيسية
+                    </button>
+                  }
+                  <button type="button" (click)="removeImage($index)" class="btn-text text-danger">
+                    حذف
+                  </button>
+                </div>
+              </div>
+            }
+            @if (formData.images.length === 0) {
+              <div class="no-images-box">
+                <span>لم تتم إضافة أي صور للمنتج بعد.</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column (Sidebar details: Category, Pricing, Visibility) -->
+      <div class="side-column">
+        <!-- Category & Sensory System -->
+        <div class="card form-section">
+          <h2 class="section-title">التصنيف الطبي الحسي</h2>
+
+          <div class="form-group">
+            <label class="form-label required">التصنيف الرئيسي للمنتج</label>
+            <select
+              [(ngModel)]="formData.category"
+              name="category"
+              (change)="onCategoryChange()"
+              required
+              class="form-control form-select"
+            >
+              <option value="" disabled>اختر التصنيف الحسي...</option>
+              @for (cat of categories(); track cat._id) {
+                <option [value]="cat._id">{{ cat.name.ar }} ({{ cat.slug.en }})</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">الجهاز الحسي المستهدف</label>
+            <input
+              type="text"
+              [(ngModel)]="formData.sensorySystem.ar"
+              name="sensorySystemAr"
+              placeholder="مثال: الحس العميق أو المعالجة الدهليزية"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">الفئة العمرية المستهدفة</label>
+            <input
+              type="text"
+              [(ngModel)]="formData.ageRange.ar"
+              name="ageRangeAr"
+              placeholder="مثال: مناسب لجميع الأعمار (أطفال وبالغين)"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <!-- Pricing & Discounts -->
+        <div class="card form-section">
+          <h2 class="section-title">التسعير والمخزون</h2>
+
+          <div class="form-group">
+            <label class="form-label required">السعر الحالي (ج.م)</label>
+            <input
+              type="number"
+              [(ngModel)]="formData.price"
+              name="price"
+              required
+              min="0"
+              class="form-control price-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">السعر قبل الخصم (ج.م - اختياري)</label>
+            <input
+              type="number"
+              [(ngModel)]="formData.oldPrice"
+              name="oldPrice"
+              min="0"
+              placeholder="يظهر مشطوباً بجوار السعر الأصلي"
+              class="form-control"
+            />
+          </div>
+
+          @if (formData.oldPrice && formData.oldPrice > formData.price) {
+            <div class="discount-calc">
+              <span>نسبة الخصم المحسوبة:</span>
+              <strong>{{ calculateDiscount() }}% خصم</strong>
+            </div>
+          }
+
+          <hr class="divider" />
+
+          <div class="switches-list">
+            <label class="switch-item">
+              <input type="checkbox" [(ngModel)]="formData.inStock" name="inStock" />
+              <div class="switch-text">
+                <strong>متوفر في المخزون</strong>
+                <small>إذا أغلقت يظهر كـ "نفد المخزون" في المتجر</small>
+              </div>
+            </label>
+
+            <label class="switch-item">
+              <input type="checkbox" [(ngModel)]="formData.isFeatured" name="isFeatured" />
+              <div class="switch-text">
+                <strong>منتج مميز في الرئيسية</strong>
+                <small>يظهر في المنتجات المختارة بالصفحة الرئيسية</small>
+              </div>
+            </label>
+
+            <label class="switch-item">
+              <input type="checkbox" [(ngModel)]="formData.isActive" name="isActive" />
+              <div class="switch-text">
+                <strong>تفعيل المنتج</strong>
+                <small>إذا ألغي التفعيل يظهر تنبيه بعدم إتاحته</small>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Submit Button Bar -->
+        <div class="card form-section sticky-save">
+          <button
+            type="submit"
+            [disabled]="isSaving()"
+            class="btn btn-primary btn-block btn-lg"
+          >
+            {{ isSaving() ? 'جاري الحفظ...' : (isEditMode() ? 'حفظ كافة التعديلات' : 'إضافة المنتج للمتجر') }}
+          </button>
+          <a routerLink="/admin/products" class="btn btn-outline btn-block mt-2">
+            إلغاء والعودة
+          </a>
+        </div>
+      </div>
+    </form>
+  }
+</div>

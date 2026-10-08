@@ -1,0 +1,282 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(var(--color-surface-rgb), 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: 1.5rem;
+}
+.brand-link {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 44px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.brand-logo {
+  height: 54px;
+  width: auto;
+  object-fit: contain;
+  transition: transform var(--transition-normal);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.brand-link:hover .brand-logo {
+  transform: scale(1.02);
+}
+.desktop-nav {
+  display: none;
+  align-items: center;
+  gap: 2rem;
+}
+@media (min-width: 992px) {
+  .desktop-nav {
+    display: flex;
+  }
+}
+.nav-link {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  position: relative;
+  padding-block: 0.5rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+.nav-link:hover {
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+.nav-link.active {
+  color: var(--color-primary);
+}
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  inset-inline: 0;
+  height: 2.5px;
+  background: var(--color-secondary);
+  border-radius: var(--radius-full);
+  animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+/* UI/UX Pro Max 44px minimum touch target bounds */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  position: relative;
+  cursor: pointer;
+}
+.action-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-accent-soft);
+  transform: translateY(-1px);
+}
+.action-btn:active {
+  transform: scale(0.94);
+}
+.theme-btn {
+  padding: 0.5rem;
+  color: var(--color-text-muted);
+}
+.theme-btn svg {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.theme-btn:hover svg {
+  transform: rotate(35deg) scale(1.1);
+}
+.cart-badge {
+  position: absolute;
+  top: -3px;
+  inset-inline-end: -3px;
+  background: var(--color-secondary);
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  animation: badgeBounce 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.admin-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  padding: 0.35rem 0.85rem;
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--color-warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+}
+.admin-pill:hover {
+  background: rgba(245, 158, 11, 0.25);
+  transform: translateY(-1px);
+}
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-warning);
+  border-radius: 50%;
+  animation: pulseDot 1.6s ease-in-out infinite;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+.mobile-menu-btn {
+  display: inline-flex;
+}
+@media (min-width: 992px) {
+  .mobile-menu-btn {
+    display: none;
+  }
+}
+.mobile-nav {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 1rem 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: fadeInDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.mobile-nav-link {
+  padding: 0.75rem 1rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  color: var(--color-text);
+  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+.mobile-nav-link.active, .mobile-nav-link:hover {
+  background: var(--color-accent-soft);
+  color: var(--color-primary);
+  transform: translateX(4px);
+}
+[dir="rtl"] .mobile-nav-link.active, [dir="rtl"] .mobile-nav-link:hover {
+  transform: translateX(-4px);
+}
+.mobile-theme-btn {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.mobile-theme-btn:active {
+  transform: scale(0.98);
+}
+.theme-info {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.theme-badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  border: 1px solid var(--color-border);
+}
+
+/* Mobile Responsive Ergonomics (Strict UI/UX Pro Max 44x44px touch targets) */
+@media (max-width: 640px) {
+  .header-container {
+    height: 64px;
+    gap: 0.5rem;
+    padding-inline: 0.85rem;
+  }
+  .brand-logo {
+    height: 40px;
+    max-width: 120px;
+  }
+  .lang-text {
+    display: none;
+  }
+  .header-actions {
+    gap: 0.5rem;
+  }
+  /* Preserve strictly compliant 44x44px touch bounds */
+  .action-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem;
+  }
+  .admin-pill span:not(.pulse-dot) {
+    display: none;
+  }
+  .admin-pill {
+    padding: 0.35rem 0.6rem;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+  }
+}
+@media (max-width: 420px) {
+  .header-container {
+    padding-inline: 0.5rem;
+    gap: 0.35rem;
+  }
+  .brand-logo {
+    height: 38px;
+    max-width: 95px;
+  }
+  .header-actions {
+    gap: 0.35rem;
+  }
+  /* On compact screens, hide the desktop theme toggle icon from header bar
+     since it is fully integrated into the hamburger drawer (.mobile-theme-btn) */
+  .theme-btn {
+    display: none;
+  }
+}

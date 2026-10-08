@@ -1,0 +1,1286 @@
+<div class="cms-manager">
+  <!-- Header -->
+  <header class="page-header animate-fade-down">
+    <div class="header-titles">
+      <h1 class="page-title">إدارة المحتوى والإعدادات (CMS)</h1>
+      <p class="page-subtitle">تعديل نصوص وصور واجهة المتجر، رقم واتساب المبيعات، الشحن، وبانرات التواصل</p>
+    </div>
+
+    <button (click)="saveSettings()" [disabled]="isSaving()" class="btn btn-primary btn-lg">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+        <polyline points="7 3 7 8 15 8"></polyline>
+      </svg>
+      <span>{{ isSaving() ? 'جاري الحفظ وتحديث الكاش...' : 'حفظ تعديلات المحتوى والصور' }}</span>
+    </button>
+  </header>
+
+  @if (saveSuccess()) {
+    <div class="alert alert-success animate-fade-down">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>تم حفظ الإعدادات ومحتوى المتجر بنجاح وتحديث الكاش في قاعدة البيانات!</span>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger animate-fade-down">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-state card">
+      <div class="spinner"></div>
+      <p>جاري جلب إعدادات المتجر ومحتوى الـ CMS...</p>
+    </div>
+  } @else if (formData) {
+    <!-- CMS Tabs Navigation -->
+    <div class="cms-nav-tabs animate-fade-down delay-75">
+      <button
+        type="button"
+        (click)="activeSection = 'sections'"
+        class="tab-btn"
+        [class.active]="activeSection === 'sections'"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        <span>ظهور وتنشيط الأقسام</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="activeSection = 'aiConsultant'"
+        class="tab-btn"
+        [class.active]="activeSection === 'aiConsultant'"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <span>الأسئلة الشائعة ومحتوى المستشار</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="activeSection = 'contact'"
+        class="tab-btn"
+        [class.active]="activeSection === 'contact'"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+        <span>التواصل والواتساب والشحن</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="activeSection = 'media'"
+        class="tab-btn"
+        [class.active]="activeSection === 'media'"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+        <span>الصور والهوية البصرية</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="activeSection = 'hero'"
+        class="tab-btn"
+        [class.active]="activeSection === 'hero'"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <span>الصفحة الرئيسية (Hero Section)</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="activeSection = 'cta'"
+        class="tab-btn"
+        [class.active]="activeSection === 'cta'"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span>بانر طلب أداة خاصة</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="activeSection = 'about'"
+        class="tab-btn"
+        [class.active]="activeSection === 'about'"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span>صفحة "عن ودق" (About)</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="activeSection = 'social'"
+        class="tab-btn"
+        [class.active]="activeSection === 'social'"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+        </svg>
+        <span>السوشيال ميديا وعناوين الفوتر</span>
+      </button>
+    </div>
+
+    <div class="cms-content-area">
+      <!-- 0. Homepage Section Controls -->
+      @if (activeSection === 'sections') {
+        <div class="cms-card card">
+          <h2 class="card-heading">التحكم في ظهور وتنشيط أقسام الصفحة الرئيسية</h2>
+          <p class="section-desc">يمكنك هنا تفعيل أو إلغاء تنشيط الأقسام الرئيسية في المتجر بالكامل (حتى عند عدم وجود عناصر مضافة، أو إخفائها مؤقتاً).</p>
+
+          <div class="section-control-item card">
+            <div class="section-control-info">
+              <div class="section-status-header">
+                <span class="status-indicator-dot" [class.dot-active]="formData.showPackagesSection"></span>
+                <h3 class="section-item-title">قسم باقات تجهيز الغرف الحسية</h3>
+                <span class="badge" [ngClass]="formData.showPackagesSection ? 'badge-success' : 'badge-warning'">
+                  {{ formData.showPackagesSection ? 'مفعّل ومعروض' : 'معطل ومخفي' }}
+                </span>
+              </div>
+              <p class="section-item-desc">
+                {{ formData.showPackagesSection ? 'القسم معروض حالياً لزوار الصفحة الرئيسية في المتجر.' : 'القسم مخفي تماماً من الصفحة الرئيسية ولن يظهر لأي زائر حتى تقوم بإعادة تنشيطه.' }}
+              </p>
+            </div>
+            <button
+              type="button"
+              (click)="togglePackagesSection()"
+              class="btn"
+              [class.btn-warning-outline]="formData.showPackagesSection"
+              [class.btn-primary]="!formData.showPackagesSection"
+            >
+              {{ formData.showPackagesSection ? 'إيقاف تنشيط وإخفاء القسم' : 'تنشيط وإظهار القسم' }}
+            </button>
+          </div>
+
+          <div class="section-control-item card mt-4">
+            <div class="section-control-info">
+              <div class="section-status-header">
+                <span class="status-indicator-dot" [class.dot-active]="formData.showProjectsSection"></span>
+                <h3 class="section-item-title">قسم معرض الأعمال والمشاريع المجهزة</h3>
+                <span class="badge" [ngClass]="formData.showProjectsSection ? 'badge-success' : 'badge-warning'">
+                  {{ formData.showProjectsSection ? 'مفعّل ومعروض' : 'معطل ومخفي' }}
+                </span>
+              </div>
+              <p class="section-item-desc">
+                {{ formData.showProjectsSection ? 'معرض الأعمال معروض حالياً في الصفحة الرئيسية للمتجر.' : 'معرض الأعمال مخفي تماماً من الصفحة الرئيسية ولن يظهر لأي زائر حتى تقوم بإعادة تنشيطه.' }}
+              </p>
+            </div>
+            <button
+              type="button"
+              (click)="toggleProjectsSection()"
+              class="btn"
+              [class.btn-warning-outline]="formData.showProjectsSection"
+              [class.btn-primary]="!formData.showProjectsSection"
+            >
+              {{ formData.showProjectsSection ? 'إيقاف تنشيط وإخفاء المعرض' : 'تنشيط وإظهار المعرض' }}
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- 1. Contact & WhatsApp settings -->
+      @if (activeSection === 'contact') {
+        <div class="cms-card card">
+          <h2 class="card-heading">بيانات التواصل والواتساب ومصاريف الشحن</h2>
+          <p class="section-desc">هذه الأرقام هي التي يتم تحويل طلبات السلة والاستفسارات إليها تلقائياً:</p>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label class="form-label required">رقم واتساب المبيعات الرئيسي (مع كود الدولة)</label>
+              <input
+                type="text"
+                [(ngModel)]="formData.whatsappNumber"
+                name="whatsappNumber"
+                class="form-control"
+                placeholder="مثال: 201024891448"
+              />
+              <span class="field-hint">بدون مسافات أو علامة + (مثال لمصر: 201024891448)</span>
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label">رقم الهاتف الأرضي/المباشر</label>
+              <input
+                type="text"
+                [(ngModel)]="formData.phone"
+                name="phone"
+                class="form-control"
+                placeholder="02 37358540"
+              />
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label">البريد الإلكتروني الرسمي</label>
+              <input
+                type="email"
+                [(ngModel)]="formData.email"
+                name="email"
+                class="form-control"
+                placeholder="info@wadaqstore.com"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label class="form-label required">ملاحظة مصاريف الشحن (التي تظهر في رسالة طلب الواتساب)</label>
+              <input
+                type="text"
+                [(ngModel)]="formData.shippingNote.ar"
+                name="shippingNoteAr"
+                class="form-control"
+                placeholder="يضاف مصاريف الشحن حسب المحافظة وموقع التوصيل"
+              />
+              <span class="field-hint">تظهر في رسالة الواتساب التلقائية بعد ملخص السلة</span>
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label">الحد الأدنى للشحن المجاني (ج.م)</label>
+              <input
+                type="number"
+                [(ngModel)]="formData.freeShippingThreshold"
+                name="freeShippingThreshold"
+                class="form-control"
+                placeholder="5000"
+              />
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label">رمز العملة الرسمي</label>
+              <input
+                type="text"
+                [(ngModel)]="formData.currency"
+                name="currency"
+                class="form-control"
+                placeholder="ج.م"
+              />
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- 2. Media & Branding (Images) CMS -->
+      @if (activeSection === 'media') {
+        <div class="cms-card card">
+          <h2 class="card-heading">إدارة صور واجهات المتجر والهوية البصرية</h2>
+          <p class="section-desc">يمكنك تعديل أي صورة عن طريق رفع صورة مباشرة من جهازك، أو إدخال رابط URL، أو الاختيار من النماذج الطبية الجاهزة:</p>
+
+          <div class="media-grid">
+            <!-- A. Hero Section Image -->
+            <div class="media-box card">
+              <div class="media-header">
+                <div>
+                  <h3 class="media-title">صورة واجهة المتجر الرئيسية (Hero Image)</h3>
+                  <span class="media-badge">أعلى الصفحة الرئيسية بجوار العنوان الترويجي</span>
+                </div>
+              </div>
+
+              <div class="media-preview-container">
+                @if (formData.hero.image) {
+                  <img [src]="formData.hero.image" alt="معاينة صورة واجهة المتجر" class="media-preview-img" />
+                } @else {
+                  <div class="media-placeholder">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                      <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <span>لم يتم تعيين صورة</span>
+                  </div>
+                }
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">رابط الصورة (URL أو مسار محلي)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.hero.image"
+                  name="heroImgUrl"
+                  class="form-control"
+                  placeholder="https://... أو /images/..."
+                />
+              </div>
+
+              <div class="media-actions-row">
+                <input
+                  type="file"
+                  #heroFileInput
+                  accept="image/*"
+                  style="display:none"
+                  (change)="onFileSelected($event, 'hero')"
+                />
+                <button
+                  type="button"
+                  (click)="heroFileInput.click()"
+                  [disabled]="uploadingTarget() === 'hero'"
+                  class="btn btn-outline btn-sm"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span>{{ uploadingTarget() === 'hero' ? 'جاري الرفع...' : 'رفع صورة من جهازك' }}</span>
+                </button>
+
+                <button
+                  type="button"
+                  (click)="formData.hero.image = 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80'"
+                  class="btn btn-outline btn-sm"
+                >
+                  استعادة الافتراضية
+                </button>
+              </div>
+
+              <!-- Quick Presets -->
+              <div class="presets-row">
+                <span class="presets-lbl">نماذج مقترحة:</span>
+                <button
+                  type="button"
+                  (click)="formData.hero.image = 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80'"
+                  class="preset-chip"
+                >
+                  غرفة حسية علاجية
+                </button>
+                <button
+                  type="button"
+                  (click)="formData.hero.image = 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1000&q=80'"
+                  class="preset-chip"
+                >
+                  تكامل حسي وحركي
+                </button>
+                <button
+                  type="button"
+                  (click)="formData.hero.image = 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1000&q=80'"
+                  class="preset-chip"
+                >
+                  بيئة هادئة للأطفال
+                </button>
+              </div>
+            </div>
+
+            <!-- B. About Us Page Image -->
+            <div class="media-box card">
+              <div class="media-header">
+                <div>
+                  <h3 class="media-title">صورة صفحة "عن ودق" (About Image)</h3>
+                  <span class="media-badge">بانر تعريفي أعلى نبذة المؤسسة ورسالتها</span>
+                </div>
+              </div>
+
+              <div class="media-preview-container">
+                @if (formData.about.image) {
+                  <img [src]="formData.about.image" alt="معاينة صورة صفحة عن ودق" class="media-preview-img" />
+                } @else {
+                  <div class="media-placeholder">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                      <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <span>لم يتم تعيين صورة</span>
+                  </div>
+                }
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">رابط الصورة (URL أو مسار محلي)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.about.image"
+                  name="aboutImgUrl"
+                  class="form-control"
+                  placeholder="https://... أو /images/..."
+                />
+              </div>
+
+              <div class="media-actions-row">
+                <input
+                  type="file"
+                  #aboutFileInput
+                  accept="image/*"
+                  style="display:none"
+                  (change)="onFileSelected($event, 'about')"
+                />
+                <button
+                  type="button"
+                  (click)="aboutFileInput.click()"
+                  [disabled]="uploadingTarget() === 'about'"
+                  class="btn btn-outline btn-sm"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span>{{ uploadingTarget() === 'about' ? 'جاري الرفع...' : 'رفع صورة من جهازك' }}</span>
+                </button>
+
+                <button
+                  type="button"
+                  (click)="formData.about.image = 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1000&q=80'"
+                  class="btn btn-outline btn-sm"
+                >
+                  استعادة الافتراضية
+                </button>
+              </div>
+
+              <!-- Quick Presets -->
+              <div class="presets-row">
+                <span class="presets-lbl">نماذج مقترحة:</span>
+                <button
+                  type="button"
+                  (click)="formData.about.image = 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1000&q=80'"
+                  class="preset-chip"
+                >
+                  عيادة علاج وظيفي
+                </button>
+                <button
+                  type="button"
+                  (click)="formData.about.image = 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1000&q=80'"
+                  class="preset-chip"
+                >
+                  تجهيزات طبية متخصصة
+                </button>
+              </div>
+            </div>
+
+            <!-- C. Custom Product Request CTA Banner Image -->
+            <div class="media-box card">
+              <div class="media-header">
+                <div>
+                  <h3 class="media-title">صورة بانر طلب أداة خاصة (CTA Banner)</h3>
+                  <span class="media-badge">تظهر داخل قسم طلب تصنيع أو توفير أداة خاصة</span>
+                </div>
+              </div>
+
+              <div class="media-preview-container">
+                @if (formData.customProductCta.image) {
+                  <img [src]="formData.customProductCta.image" alt="معاينة بانر طلب أداة خاصة" class="media-preview-img" />
+                } @else {
+                  <div class="media-placeholder">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                      <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <span>بانر افتراضي بدون صورة خلفية</span>
+                  </div>
+                }
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">رابط الصورة (URL أو مسار محلي)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.customProductCta.image"
+                  name="ctaImgUrl"
+                  class="form-control"
+                  placeholder="اختياري: رابط صورة البانر"
+                />
+              </div>
+
+              <div class="media-actions-row">
+                <input
+                  type="file"
+                  #ctaFileInput
+                  accept="image/*"
+                  style="display:none"
+                  (change)="onFileSelected($event, 'cta')"
+                />
+                <button
+                  type="button"
+                  (click)="ctaFileInput.click()"
+                  [disabled]="uploadingTarget() === 'cta'"
+                  class="btn btn-outline btn-sm"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span>{{ uploadingTarget() === 'cta' ? 'جاري الرفع...' : 'رفع صورة من جهازك' }}</span>
+                </button>
+
+                <button
+                  type="button"
+                  (click)="formData.customProductCta.image = ''"
+                  class="btn btn-outline btn-sm"
+                >
+                  حذف الصورة
+                </button>
+              </div>
+            </div>
+
+            <!-- D. Store Logo -->
+            <div class="media-box card">
+              <div class="media-header">
+                <div>
+                  <h3 class="media-title">شعار المتجر (Store Logo)</h3>
+                  <span class="media-badge">يظهر في الهيدر والفوتر ولوحة التحكم</span>
+                </div>
+              </div>
+
+              <div class="media-preview-container logo-container">
+                <img [src]="formData.logo || '/images/logo.png'" alt="معاينة شعار متجر ودق" class="media-preview-logo" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">رابط الشعار (SVG أو WebP أو PNG)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.logo"
+                  name="logoUrl"
+                  class="form-control"
+                  placeholder="/images/logo.png"
+                />
+              </div>
+
+              <div class="media-actions-row">
+                <input
+                  type="file"
+                  #logoFileInput
+                  accept="image/*,.svg"
+                  style="display:none"
+                  (change)="onFileSelected($event, 'logo')"
+                />
+                <button
+                  type="button"
+                  (click)="logoFileInput.click()"
+                  [disabled]="uploadingTarget() === 'logo'"
+                  class="btn btn-outline btn-sm"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span>{{ uploadingTarget() === 'logo' ? 'جاري الرفع...' : 'رفع شعار جديد' }}</span>
+                </button>
+
+                <button
+                  type="button"
+                  (click)="formData.logo = '/images/logo.png'"
+                  class="btn btn-outline btn-sm"
+                >
+                  استعادة شعار ودق الأصلي
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- 3. Hero Section CMS -->
+      @if (activeSection === 'hero') {
+        <div class="cms-card card">
+          <h2 class="card-heading">الصفحة الرئيسية (Hero Section)</h2>
+          <p class="section-desc">الصورة والنصوص الترويجية التي يراها زوار المتجر في أعلى الصفحة الرئيسية:</p>
+
+          <!-- Hero Image Box in Hero Tab -->
+          <div class="media-preview-compact">
+            <div class="preview-thumb">
+              <img [src]="formData.hero.image || 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80'" alt="Hero Image Preview" />
+            </div>
+            <div class="preview-ctrls">
+              <label class="form-label required">صورة الـ Hero الترويجية</label>
+              <div class="input-with-upload">
+                <input
+                  type="text"
+                  [(ngModel)]="formData.hero.image"
+                  name="heroImageInTab"
+                  class="form-control"
+                  placeholder="رابط الصورة..."
+                />
+                <input
+                  type="file"
+                  #heroTabFileInput
+                  accept="image/*"
+                  style="display:none"
+                  (change)="onFileSelected($event, 'hero')"
+                />
+                <button
+                  type="button"
+                  (click)="heroTabFileInput.click()"
+                  [disabled]="uploadingTarget() === 'hero'"
+                  class="btn btn-outline btn-sm"
+                >
+                  {{ uploadingTarget() === 'hero' ? 'جاري الرفع...' : 'رفع من جهازك' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label required">العنوان الرئيسي H1 (عربي)</label>
+            <input
+              type="text"
+              [(ngModel)]="formData.hero.title.ar"
+              name="heroTitleAr"
+              class="form-control text-lg"
+              placeholder="ودق لتنمية المهارات وتجهيز غرف التكامل الحسي"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label required">الوصف الترويجي تحت العنوان (عربي)</label>
+            <textarea
+              [(ngModel)]="formData.hero.subtitle.ar"
+              name="heroSubtitleAr"
+              rows="3"
+              class="form-control"
+              placeholder="حلول متكاملة وأدوات حسية معتمدة للأطباء، الأخصائيين، ومراكز التأهيل والعلاج الوظيفي"
+            ></textarea>
+          </div>
+
+          <hr class="divider" />
+
+          <div class="form-group">
+            <label class="form-label">Hero Title (English)</label>
+            <input
+              type="text"
+              [(ngModel)]="formData.hero.title.en"
+              name="heroTitleEn"
+              class="form-control"
+              placeholder="Wadaq for Skill Development & Sensory Integration Rooms"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Hero Subtitle (English)</label>
+            <textarea
+              [(ngModel)]="formData.hero.subtitle.en"
+              name="heroSubtitleEn"
+              rows="2"
+              class="form-control"
+              placeholder="Integrated solutions & certified sensory tools for specialists"
+            ></textarea>
+          </div>
+        </div>
+      }
+
+      <!-- 4. Custom Product Request CTA -->
+      @if (activeSection === 'cta') {
+        <div class="cms-card card">
+          <h2 class="card-heading">بانر طلب أداة حسية مخصصة (Custom Request CTA)</h2>
+          <p class="section-desc">البانر الذي يظهر للمستخدمين عند عدم العثور على أداة معينة أو لطلب تصنيع خاص:</p>
+
+          <!-- CTA Image Box in CTA Tab -->
+          <div class="media-preview-compact">
+            <div class="preview-thumb">
+              @if (formData.customProductCta.image) {
+                <img [src]="formData.customProductCta.image" alt="CTA Image Preview" />
+              } @else {
+                <div class="thumb-empty">بدون صورة</div>
+              }
+            </div>
+            <div class="preview-ctrls">
+              <label class="form-label">صورة البانر التوضيحية (اختياري)</label>
+              <div class="input-with-upload">
+                <input
+                  type="text"
+                  [(ngModel)]="formData.customProductCta.image"
+                  name="ctaImageInTab"
+                  class="form-control"
+                  placeholder="رابط الصورة أو اترك فارغاً..."
+                />
+                <input
+                  type="file"
+                  #ctaTabFileInput
+                  accept="image/*"
+                  style="display:none"
+                  (change)="onFileSelected($event, 'cta')"
+                />
+                <button
+                  type="button"
+                  (click)="ctaTabFileInput.click()"
+                  [disabled]="uploadingTarget() === 'cta'"
+                  class="btn btn-outline btn-sm"
+                >
+                  {{ uploadingTarget() === 'cta' ? 'جاري الرفع...' : 'رفع من جهازك' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label required">عنوان البانر (عربي)</label>
+            <input
+              type="text"
+              [(ngModel)]="formData.customProductCta.title.ar"
+              name="ctaTitleAr"
+              class="form-control"
+              placeholder="لم تجد الأداة الحسية التي تبحث عنها؟"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label required">وصف البانر (عربي)</label>
+            <textarea
+              [(ngModel)]="formData.customProductCta.description.ar"
+              name="ctaDescAr"
+              rows="2"
+              class="form-control"
+              placeholder="يمكننا تصنيع أو توفير أي أداة أو جهاز تكامل حسي بمواصفات خاصة"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label required">نص زر التحويل للواتساب (عربي)</label>
+            <input
+              type="text"
+              [(ngModel)]="formData.customProductCta.buttonText.ar"
+              name="ctaBtnAr"
+              class="form-control"
+              placeholder="اطلب منتجاً خاصاً عبر واتساب"
+            />
+          </div>
+        </div>
+      }
+
+      <!-- 5. About Us CMS -->
+      @if (activeSection === 'about') {
+        <div class="cms-card card">
+          <h2 class="card-heading">محتوى وصورة صفحة "عن ودق" (About Us)</h2>
+          <p class="section-desc">الصورة والرسالة التعريفية لمؤسسة ودق المعروضة في صفحة من نحن:</p>
+
+          <!-- About Image Box in About Tab -->
+          <div class="media-preview-compact">
+            <div class="preview-thumb">
+              <img [src]="formData.about.image || 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1000&q=80'" alt="About Image Preview" />
+            </div>
+            <div class="preview-ctrls">
+              <label class="form-label required">صورة صفحة عن المؤسسة</label>
+              <div class="input-with-upload">
+                <input
+                  type="text"
+                  [(ngModel)]="formData.about.image"
+                  name="aboutImageInTab"
+                  class="form-control"
+                  placeholder="رابط الصورة..."
+                />
+                <input
+                  type="file"
+                  #aboutTabFileInput
+                  accept="image/*"
+                  style="display:none"
+                  (change)="onFileSelected($event, 'about')"
+                />
+                <button
+                  type="button"
+                  (click)="aboutTabFileInput.click()"
+                  [disabled]="uploadingTarget() === 'about'"
+                  class="btn btn-outline btn-sm"
+                >
+                  {{ uploadingTarget() === 'about' ? 'جاري الرفع...' : 'رفع من جهازك' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label required">عنوان صفحة من نحن (عربي)</label>
+            <input
+              type="text"
+              [(ngModel)]="formData.about.title.ar"
+              name="aboutTitleAr"
+              class="form-control"
+              placeholder="عن ودق لتنمية المهارات والتكامل الحسي"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label required">نبذة عن المؤسسة ورسالتها العلاجية</label>
+            <textarea
+              [(ngModel)]="formData.about.content.ar"
+              name="aboutContentAr"
+              rows="4"
+              class="form-control"
+            ></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label class="form-label">الرسالة (Mission)</label>
+              <textarea
+                [(ngModel)]="formData.about.mission.ar"
+                name="aboutMissionAr"
+                rows="3"
+                class="form-control"
+              ></textarea>
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label">الرؤية (Vision)</label>
+              <textarea
+                [(ngModel)]="formData.about.vision.ar"
+                name="aboutVisionAr"
+                rows="3"
+                class="form-control"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- 6. Social & Footer CMS -->
+      @if (activeSection === 'social') {
+        <div class="cms-card card">
+          <h2 class="card-heading">روابط التواصل الاجتماعي وعنوان المتجر</h2>
+
+          <div class="form-group">
+            <label class="form-label">العنوان الجغرافي (يظهر في الفوتر)</label>
+            <input
+              type="text"
+              [(ngModel)]="formData.address.ar"
+              name="addressAr"
+              class="form-control"
+              placeholder="جمهورية مصر العربية - القاهرة"
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label class="form-label">رابط فيسبوك</label>
+              <input
+                type="text"
+                [(ngModel)]="formData.social.facebook"
+                name="fb"
+                class="form-control"
+                placeholder="https://facebook.com/wadaqstore"
+              />
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label">رابط إنستجرام</label>
+              <input
+                type="text"
+                [(ngModel)]="formData.social.instagram"
+                name="insta"
+                class="form-control"
+                placeholder="https://instagram.com/wadaqstore"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label class="form-label">رابط تيك توك</label>
+              <input
+                type="text"
+                [(ngModel)]="formData.social.tiktok"
+                name="tiktok"
+                class="form-control"
+                placeholder="https://tiktok.com/@wadaqstore"
+              />
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label">رابط يوتيوب</label>
+              <input
+                type="text"
+                [(ngModel)]="formData.social.youtube"
+                name="youtube"
+                class="form-control"
+                placeholder="https://youtube.com/@wadaqstore"
+              />
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- 7. AI Consultant Management (CRUD for Suggestions and Topic Cards) -->
+      @if (activeSection === 'aiConsultant') {
+        <div class="cms-card card animate-fade-down">
+          <div class="card-header-row">
+            <div>
+              <h2 class="card-heading">إدارة الأسئلة الشائعة ومحتوى المستشار الذكي</h2>
+              <p class="card-desc">
+                تحكم كامل في الأسئلة والاستشارات الشائعة ومربعات المواضيع الترحيبية المعروضة للمستخدمين والأخصائيين.
+              </p>
+            </div>
+            <button
+              type="button"
+              (click)="saveSettings(false)"
+              [disabled]="isSaving()"
+              class="btn btn-primary btn-sm"
+              title="حفظ كافة الإعدادات والأسئلة في قاعدة البيانات"
+            >
+              @if (isSaving()) {
+                <span class="spinner-sm"></span>
+                <span>جاري الحفظ...</span>
+              } @else {
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                  <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                <span>حفظ التغييرات</span>
+              }
+            </button>
+          </div>
+
+          <!-- Section A: Common Consultation Questions (Suggestions CRUD) -->
+          <div class="cms-sub-section">
+            <div class="section-title-badge">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <span>الأسئلة والاستشارات الشائعة (FAQ Chips)</span>
+            </div>
+
+            <!-- Add New Suggestion Form -->
+            <div class="add-item-box">
+              <div class="form-row">
+                <div class="form-group flex-2">
+                  <label class="form-label">نص السؤال أو الاستشارة (بالعربية) *</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="newSuggestionAr"
+                    class="form-control"
+                    placeholder="اكتب نص السؤال هنا..."
+                    (keydown.enter)="addSuggestion()"
+                  />
+                </div>
+                <div class="form-group flex-2">
+                  <label class="form-label">نص السؤال (بالإنجليزية - اختياري)</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="newSuggestionEn"
+                    class="form-control text-ltr"
+                    placeholder="Type question in English here..."
+                    (keydown.enter)="addSuggestion()"
+                  />
+                </div>
+                <div class="form-group action-align">
+                  <button
+                    type="button"
+                    (click)="addSuggestion()"
+                    class="btn btn-primary btn-md"
+                    title="إضافة السؤال للقائمة"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>إضافة سؤال</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Current Suggestions List -->
+            <div class="items-list-container">
+              <div class="flex-between-center">
+                <label class="form-label font-bold" style="margin-bottom: 0;">الأسئلة الشائعة الحالية ({{ formData.aiConsultant?.suggestions?.ar?.length || 0 }}):</label>
+                <span class="text-hint text-xs">يمكنك تعديل أي سؤال مباشرة في الحقل أدناه</span>
+              </div>
+              @if (!formData.aiConsultant?.suggestions?.ar?.length) {
+                <div class="empty-list-note">لا توجد أسئلة مقترحة حالياً. قم بإضافة أسئلة من الحقل أعلاه.</div>
+              } @else {
+                <div class="crud-list">
+                  @for (sug of formData.aiConsultant.suggestions.ar; track $index) {
+                    <div class="crud-item-row">
+                      <span class="item-order-badge">{{ $index + 1 }}</span>
+                      <div class="item-inputs">
+                        <input
+                          type="text"
+                          [(ngModel)]="formData.aiConsultant.suggestions.ar[$index]"
+                          (change)="saveSettings(false)"
+                          class="form-control form-control-sm"
+                          placeholder="السؤال بالعربية"
+                        />
+                        @if (formData.aiConsultant.suggestions.en && formData.aiConsultant.suggestions.en[$index] !== undefined) {
+                          <input
+                            type="text"
+                            [(ngModel)]="formData.aiConsultant.suggestions.en[$index]"
+                            (change)="saveSettings(false)"
+                            class="form-control form-control-sm text-ltr"
+                            placeholder="Question in English"
+                          />
+                        }
+                      </div>
+                      <div class="row-actions-group">
+                        <button
+                          type="button"
+                          (click)="saveSettings(false)"
+                          class="btn-icon-save"
+                          title="حفظ تعديل هذا السؤال فوراً"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        </button>
+                        <button
+                          type="button"
+                          (click)="removeSuggestion($index)"
+                          class="btn-icon-danger"
+                          title="حذف هذا السؤال"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <hr class="section-divider" />
+
+          <!-- Section B: Welcome Topic Cards (Cards CRUD) -->
+          <div class="cms-sub-section">
+            <div class="section-header-flex">
+              <div class="section-title-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>مربعات المواضيع الترحيبية (Topic Cards)</span>
+              </div>
+
+              <button
+                type="button"
+                (click)="openAddCardModal()"
+                class="btn btn-secondary btn-sm"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>إضافة كارت موضوع جديد</span>
+              </button>
+            </div>
+
+            <!-- Cards Grid Display -->
+            <div class="cards-preview-grid">
+              @for (card of formData.aiConsultant?.topicCards; track $index) {
+                <div class="preview-card-item card">
+                  <div class="card-item-top">
+                    <div class="card-icon-preview">
+                      @if (card.iconType === 'vestibular') {
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                          <path d="M2 12h20"></path>
+                        </svg>
+                      } @else if (card.iconType === 'deep_pressure') {
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                          <path d="M12 8v4"></path>
+                          <path d="M12 16h.01"></path>
+                        </svg>
+                      } @else if (card.iconType === 'snoezelen') {
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                        </svg>
+                      } @else if (card.iconType === 'tactile') {
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path>
+                          <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"></path>
+                          <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"></path>
+                          <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path>
+                        </svg>
+                      } @else {
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                      }
+                    </div>
+
+                    <div class="card-item-actions">
+                      <button
+                        type="button"
+                        (click)="openEditCardModal($index)"
+                        class="btn-icon-action"
+                        title="تعديل هذا الكارت"
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        (click)="deleteCard($index)"
+                        class="btn-icon-danger"
+                        title="حذف هذا الكارت"
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <strong class="preview-title">{{ card.title?.ar }}</strong>
+                  <p class="preview-desc">{{ card.description?.ar }}</p>
+                  <div class="preview-prompt-tag">
+                    <span class="prompt-key">الاستشارة التلقائية عند النقر:</span>
+                    <span class="prompt-val">{{ card.promptText?.ar || card.title?.ar }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="section-footer-actions">
+            <button
+              type="button"
+              (click)="saveSettings(false)"
+              [disabled]="isSaving()"
+              class="btn btn-primary btn-md"
+            >
+              @if (isSaving()) {
+                <span class="spinner-sm"></span>
+                <span>جاري الحفظ...</span>
+              } @else {
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                  <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                <span>حفظ التعديلات في قاعدة البيانات</span>
+              }
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Modal for Adding / Editing Topic Card -->
+    @if (showCardModal()) {
+      <div class="modal-backdrop animate-fade-in" (click)="closeCardModal()">
+        <div class="modal-card card animate-scale-up" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h3 class="modal-title">
+              {{ editingCardIndex() !== null ? 'تعديل كارت الموضوع الترحيبي' : 'إضافة كارت موضوع ترحيبي جديد' }}
+            </h3>
+            <button type="button" (click)="closeCardModal()" class="btn-close" aria-label="إغلاق">✕</button>
+          </div>
+
+          <div class="modal-body">
+            <!-- Icon Type Selector -->
+            <div class="form-group">
+              <label class="form-label">نوع الأيقونة الطبية (SVG) *</label>
+              <select [(ngModel)]="cardForm.iconType" class="form-control">
+                <option value="vestibular">الحس الدهليزي والتوازن (Vestibular Circle)</option>
+                <option value="deep_pressure">الضغط العميق والتهدئة (Deep Pressure Shield)</option>
+                <option value="snoezelen">غرف سنوزلين والإضاءة (Snoezelen Sparkle)</option>
+                <option value="tactile">الحاسة اللمسية والمسارات (Tactile Hand)</option>
+                <option value="general">استشارة عامة (Star Badge)</option>
+              </select>
+            </div>
+
+            <!-- Title in AR & EN -->
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label class="form-label">عنوان الكارت (بالعربية) *</label>
+                <input
+                  type="text"
+                  [(ngModel)]="cardForm.title.ar"
+                  class="form-control"
+                  placeholder="مثال: الحس الدهليزي والتوازن"
+                />
+              </div>
+              <div class="form-group flex-1">
+                <label class="form-label">عنوان الكارت (بالإنجليزية)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="cardForm.title.en"
+                  class="form-control text-ltr"
+                  placeholder="e.g. Vestibular & Balance"
+                />
+              </div>
+            </div>
+
+            <!-- Description in AR & EN -->
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label class="form-label">الوصف المختصر (بالعربية) *</label>
+                <textarea
+                  [(ngModel)]="cardForm.description.ar"
+                  class="form-control"
+                  rows="2"
+                  placeholder="مثال: ترشيح الأراجيح ومنصات التوازن المناسبة..."
+                ></textarea>
+              </div>
+              <div class="form-group flex-1">
+                <label class="form-label">الوصف المختصر (بالإنجليزية)</label>
+                <textarea
+                  [(ngModel)]="cardForm.description.en"
+                  class="form-control text-ltr"
+                  rows="2"
+                  placeholder="e.g. Swings and balance boards..."
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Prompt Text to Send when Clicked -->
+            <div class="form-group">
+              <label class="form-label">نص الاستشارة التلقائية التي تُرسل للذكاء الاصطناعي عند النقر على الكارت *</label>
+              <textarea
+                [(ngModel)]="cardForm.promptText.ar"
+                class="form-control"
+                rows="2"
+                placeholder="مثال: ما هي أفضل أدوات وأراجيح التحفيز الدهليزي والتوازن للأطفال ذوي الحساسية الدهليزية؟"
+              ></textarea>
+              <small class="form-hint">عندما ينقر المستخدم على هذا الكارت، سيتم استخراج هذا النص فوراً وبدء المحادثة به.</small>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" (click)="closeCardModal()" class="btn btn-outline btn-md">إلغاء</button>
+            <button
+              type="button"
+              (click)="saveCardModal()"
+              [disabled]="!cardForm.title.ar?.trim()"
+              class="btn btn-primary btn-md"
+            >
+              حفظ الكارت
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>

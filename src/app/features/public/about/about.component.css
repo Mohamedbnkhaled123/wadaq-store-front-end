@@ -1,0 +1,164 @@
+.about-page {
+  padding-block: 2.5rem 5rem;
+}
+
+.page-header {
+  text-align: center;
+  max-width: 680px;
+  margin-inline: auto;
+  margin-bottom: 3.5rem;
+}
+
+.page-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+@media (min-width: 992px) {
+  .about-grid {
+    grid-template-columns: 1.6fr 1fr;
+  }
+}
+
+.about-main {
+  padding: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.about-banner-wrap {
+  width: 100%;
+  height: 320px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 2rem;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.about-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.block-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 1.25rem;
+}
+
+.about-text {
+  color: var(--color-text-muted);
+  line-height: 1.85;
+  font-size: 1.05rem;
+  margin-bottom: 2.5rem;
+  white-space: pre-line;
+}
+
+.mission-vision-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 600px) {
+  .mission-vision-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.mv-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.mv-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.mv-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.mv-card p {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.contact-sidebar {
+  padding: 2rem;
+  height: fit-content;
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.contact-items {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.contact-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.box-lbl {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+}
+
+.box-link {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  transition: color var(--transition-fast);
+}
+
+.box-link:hover {
+  color: var(--color-secondary);
+}
+
+.whatsapp-link {
+  color: #1EB856;
+}
+
+.box-text {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}

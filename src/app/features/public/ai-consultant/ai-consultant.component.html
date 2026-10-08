@@ -1,0 +1,395 @@
+<div class="consultant-page animate-fade-in" *transloco="let t">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="page-breadcrumbs" aria-label="مسار التصفح">
+      <a [routerLink]="['/', langService.currentLang()]" class="crumb-link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>{{ t('nav.home') }}</span>
+      </a>
+      <span class="crumb-sep">/</span>
+      <span class="crumb-current">المستشار الحسي الذكي (AI)</span>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="consultant-header">
+      <div class="header-main">
+        <div class="title-with-pill">
+          <h1 class="consultant-title">المستشار الحسي الذكي للأخصائيين والمراكز</h1>
+          <span class="ai-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+            </svg>
+            <span>استشارة سريرية ذكية</span>
+          </span>
+        </div>
+        <p class="consultant-subtitle">
+          مساعد استشاري فوري للأخصائيين وأولياء الأمور لاختيار وتنسيق أدوات التكامل الحسي وتجهيزات الغرف متعددة الحواس وفق أحدث أسس العلاج الوظيفي.
+        </p>
+      </div>
+    </header>
+
+    <!-- Layout Grid: Chat Main + Clinical Sidebar -->
+    <div class="consultant-grid">
+      <!-- Main Chat Column -->
+      <section class="chat-main-card card">
+        <!-- Quick Suggestion Chips (Full text display on all screens) -->
+        @if (suggestions().length > 0) {
+          <div class="suggestions-bar">
+            <div class="suggestions-header">
+              <span class="suggestions-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span>استشارات شائعة:</span>
+              </span>
+            </div>
+            <div class="chips-container">
+              @for (chip of suggestions(); track chip) {
+                <button
+                  type="button"
+                  (click)="useSuggestion(chip)"
+                  [disabled]="isLoading()"
+                  class="suggestion-chip"
+                  [title]="chip"
+                >
+                  <span class="chip-text">{{ chip }}</span>
+                  <svg class="chip-action-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Messages Scroll Container -->
+        <div class="messages-container" #messagesScroll>
+          @if (messages().length === 0) {
+            <!-- Welcome Empty State -->
+            <div class="welcome-box">
+              <div class="welcome-avatar-wrapper">
+                <div class="welcome-glow"></div>
+                <div class="welcome-avatar">
+                  <img src="/images/ai-avatar-robot.png" alt="مستشار ودق الذكي" class="welcome-avatar-img" />
+                </div>
+              </div>
+
+              <h2 class="welcome-title">مرحباً بك في المستشار الحسي الذكي لمتجر ودق!</h2>
+              <p class="welcome-text">
+                أنا هنا لمساعدتك في فهم الاحتياجات الحسية، وتنسيق التجهيزات لغرفتك أو مركزك، وترشيح الأدوات الأنسب من واقع كتالوج ودق مع شرح الأثر التأهيلي لكل أداة.
+              </p>
+
+              <div class="welcome-topics-grid">
+                @for (card of topicCards(); track card._id || $index) {
+                  <button
+                    type="button"
+                    (click)="selectTopicCard(card)"
+                    [disabled]="isLoading()"
+                    class="topic-card"
+                    [title]="card.title[langService.currentLang()]"
+                  >
+                    <div class="topic-icon">
+                      @if (card.iconType === 'vestibular') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                          <path d="M2 12h20"></path>
+                        </svg>
+                      } @else if (card.iconType === 'deep_pressure') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                          <path d="M12 8v4"></path>
+                          <path d="M12 16h.01"></path>
+                        </svg>
+                      } @else if (card.iconType === 'snoezelen') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                        </svg>
+                      } @else if (card.iconType === 'tactile') {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path>
+                          <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"></path>
+                          <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"></path>
+                          <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path>
+                        </svg>
+                      } @else {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                      }
+                    </div>
+                    <strong>{{ card.title[langService.currentLang()] }}</strong>
+                    <p>{{ card.description[langService.currentLang()] }}</p>
+                    <span class="topic-action-hint">انقر لكتابة الاستشارة في الحقل ←</span>
+                  </button>
+                }
+              </div>
+
+              <p class="welcome-hint">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span>اختر أحد المواضيع المقترحة أعلاه أو اكتب استشارتك التخصصية في الحقل أدناه للبدء.</span>
+              </p>
+            </div>
+          } @else {
+            <!-- Chat Conversation History -->
+            <div class="messages-list">
+              @for (msg of messages(); track $index) {
+                <div
+                  class="message-row"
+                  [ngClass]="{
+                    'user-row': msg.role === 'user',
+                    'assistant-row': msg.role === 'assistant'
+                  }"
+                >
+                  @if (msg.role === 'assistant') {
+                    <div class="assistant-avatar" title="مستشار ودق الذكي">
+                      <img src="/images/ai-avatar-robot.png" alt="مستشار ودق الذكي" class="assistant-avatar-img" />
+                    </div>
+                  }
+
+                  <div class="message-bubble-wrapper">
+                    <div
+                      class="message-bubble"
+                      [ngClass]="{
+                        'user-bubble': msg.role === 'user',
+                        'assistant-bubble': msg.role === 'assistant'
+                      }"
+                    >
+                      @if (msg.role === 'assistant' && msg.isStreaming && !msg.content) {
+                        <div class="loading-content-inline">
+                          <span class="loading-dot"></span>
+                          <span class="loading-dot"></span>
+                          <span class="loading-dot"></span>
+                          <span class="loading-text">
+                            {{ langService.currentLang() === 'ar' ? 'جاري مراجعة الأدلة العلاجية وصياغة الاستشارة...' : 'Reviewing clinical evidence and preparing consultation...' }}
+                          </span>
+                        </div>
+                      } @else {
+                        <div class="message-content" [innerHTML]="formatContent(msg.content)"></div>
+                        @if (msg.isStreaming) {
+                          <span class="typing-cursor"></span>
+                        }
+                      }
+                    </div>
+
+                    <!-- Recommended Product Cards (Collapsible and Non-intrusive) -->
+                    @if (msg.recommendedProducts && msg.recommendedProducts.length > 0 && !msg.isStreaming) {
+                      <div class="products-suggestion-wrapper animate-fade-in">
+                        <button
+                          type="button"
+                          (click)="toggleShowProducts($index)"
+                          class="products-suggestion-toggle-btn"
+                          [class.active]="isProductsVisible($index)"
+                        >
+                          <div class="toggle-icon-wrap">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                          </div>
+                          <span class="toggle-label">
+                            {{ isProductsVisible($index)
+                              ? (langService.currentLang() === 'ar' ? 'إخفاء الأدوات المقترحة' : 'Hide suggested tools')
+                              : (langService.currentLang() === 'ar' ? 'هل تود استعراض بعض الأدوات المناسبة؟' : 'Would you like to explore matching tools?')
+                            }}
+                          </span>
+                          <span class="toggle-badge">{{ msg.recommendedProducts.length }}</span>
+                          <svg class="toggle-chevron" [class.rotated]="isProductsVisible($index)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                          </svg>
+                        </button>
+
+                        @if (isProductsVisible($index)) {
+                          <div class="recommended-products-container animate-fade-down">
+                            <div class="recommended-header">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5DBB8A" stroke-width="2">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                              </svg>
+                              <span class="recommended-title">
+                                {{ langService.currentLang() === 'ar' ? 'الأدوات المقترحة المطابقة للاستشارة من متجر ودق:' : 'Matching Sensory Tools from Wadaq Catalog:' }}
+                              </span>
+                            </div>
+
+                            <div class="recommended-grid">
+                              @for (prod of msg.recommendedProducts; track prod._id) {
+                                <app-product-card [product]="prod" />
+                              }
+                            </div>
+
+                            <!-- Custom Tool WhatsApp Inquiry Banner -->
+                            <div class="custom-tool-banner">
+                              <div class="custom-tool-content">
+                                <div class="custom-tool-icon">
+                                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                  </svg>
+                                </div>
+                                <div class="custom-tool-text">
+                                  <strong>{{ langService.currentLang() === 'ar' ? 'لم تجد الأداة المناسبة لاحتياجك؟' : 'Didn’t find the right clinical tool?' }}</strong>
+                                  <p>{{ langService.currentLang() === 'ar' ? 'يمكننا تصنيع أو توفير أي جهاز أو وسيلة حسية بمواصفات ومقاسات خاصة لمركزك.' : 'We can customize or supply specialized sensory equipment tailored to your clinic.' }}</p>
+                                </div>
+                              </div>
+                              <a
+                                [href]="getCustomProductWhatsAppUrl()"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="custom-tool-btn"
+                              >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                                </svg>
+                                <span>{{ langService.currentLang() === 'ar' ? 'اضغط هنا لطلب منتجك الخاص عبر واتساب' : 'Request custom tool via WhatsApp' }}</span>
+                                <span class="arrow-symbol">←</span>
+                              </a>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
+
+                    <div class="message-meta">
+                      <span>{{ msg.timestamp | date:'shortTime' }}</span>
+                      @if (msg.role === 'assistant') {
+                        <span class="ai-source-tag">مستشار ودق</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Chat Input Form -->
+        <footer class="chat-input-footer">
+          <div class="input-controls-row">
+            <textarea
+              #chatTextarea
+              [ngModel]="inputText()"
+              (ngModelChange)="inputText.set($event)"
+              (keydown)="onTextareaKeydown($event)"
+              [disabled]="isLoading()"
+              rows="2"
+              class="chat-textarea form-control"
+              placeholder="اكتب استشارتك هنا (مثلاً: ما هي الأدوات المناسبة لتهدئة طفل يبحث عن تحفيز دهليزي؟)..."
+              aria-label="رسالة الاستشارة"
+            ></textarea>
+
+            <button
+              type="button"
+              (click)="sendMessage()"
+              [disabled]="!inputText().trim() || isLoading()"
+              class="btn btn-primary send-btn"
+              aria-label="إرسال الاستشارة"
+            >
+              @if (isLoading()) {
+                <span class="spinner-sm"></span>
+              } @else {
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" [style.transform]="langService.currentLang() === 'ar' ? 'rotate(180deg)' : 'rotate(0deg)'">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              }
+              <span>إرسال</span>
+            </button>
+          </div>
+
+          <div class="input-footer-bottom">
+            <p class="disclaimer-text">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>تنبيه مهني: التوصيات استرشادية لمساعدة الأخصائي في تنسيق واختيار التجهيزات، وتخضع دائماً للتقييم السريري للحالة.</span>
+            </p>
+
+            @if (messages().length > 0) {
+              <button
+                type="button"
+                (click)="clearConversation()"
+                class="btn-clear-chat"
+                title="بدء محادثة جديدة"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="1 4 1 10 7 10"></polyline>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                <span>بدء استشارة جديدة</span>
+              </button>
+            }
+          </div>
+        </footer>
+      </section>
+
+      <!-- Right Column: Clinical Support & Equipping Inquiries -->
+      <aside class="clinical-sidebar">
+        <!-- 1. Center Consultation Card -->
+        <div class="sidebar-card card equipping-card">
+          <div class="card-badge-top">خدمة المتخصصين</div>
+          <h3 class="card-heading">تجهيز المراكز والعيادات بالكامل</h3>
+          <p class="card-desc">
+            هل تخطط لتجهيز مركز تأهيل أو غرفة سنوزلين متكاملة؟ فريقنا الهندسي والطبي يوفر معاينة مجانية وتصميم 3D لمساحتك.
+          </p>
+          <a
+            [href]="getCustomInquiryUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-whatsapp btn-md w-full pulse-whatsapp"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.055-1.92-.477-1.528-.63-2.518-2.176-2.595-2.277-.076-.101-.617-.821-.617-1.565 0-.745.39-1.111.528-1.262.138-.152.3-.19.4-.19.1 0 .2 0 .288.005.093.004.22-.036.343.262.13.312.441 1.077.48 1.156.038.079.063.172.013.272-.05.101-.076.165-.152.253-.076.089-.16.198-.228.266-.076.076-.156.16-.067.312.089.152.395.65.847 1.054.582.52 1.073.681 1.225.757.152.076.24.063.329-.038.089-.101.38-.443.481-.595.101-.152.202-.127.341-.076.139.051.884.417 1.036.493.152.076.253.114.291.177.038.064.038.368-.106.773z"/>
+            </svg>
+            <span>طلب معاينة وتجهيز مركز</span>
+          </a>
+        </div>
+
+        <!-- 2. Sensory Systems Directory Card -->
+        <div class="sidebar-card card">
+          <h3 class="card-heading">كتالوج الأجهزة الحسية</h3>
+          <ul class="sensory-nav-list">
+            <li>
+              <a [routerLink]="['/', langService.currentLang(), 'products']" class="sensory-link">
+                <span>الحس الدهليزي والتوازن</span>
+                <span class="count-pill">أراجيح وألواح</span>
+              </a>
+            </li>
+            <li>
+              <a [routerLink]="['/', langService.currentLang(), 'products']" class="sensory-link">
+                <span>الحس العضلي العميق</span>
+                <span class="count-pill">ضغط عميق</span>
+              </a>
+            </li>
+            <li>
+              <a [routerLink]="['/', langService.currentLang(), 'products']" class="sensory-link">
+                <span>الحاسة اللمسية</span>
+                <span class="count-pill">مسارات وحصائر</span>
+              </a>
+            </li>
+            @if (settingsService.showPackagesSection()) {
+              <li>
+                <a [routerLink]="['/', langService.currentLang(), 'packages']" class="sensory-link">
+                  <span>باقات غرف سنوزلين</span>
+                  <span class="count-pill">VIP</span>
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,110 @@
+<article class="card product-card" *transloco="let t">
+  <!-- Thumbnail & Badges -->
+  <a [routerLink]="['/', langService.currentLang(), 'products', product.slug | localize]" class="card-img-wrap" [class.img-loading]="!isImageLoaded()" [attr.aria-label]="product.name | localize">
+    <!-- Spinner Skeleton Overlay while loading -->
+    @if (!isImageLoaded()) {
+      <div class="img-skeleton-overlay" aria-hidden="true">
+        <div class="skeleton-shimmer"></div>
+        <div class="skeleton-spinner"></div>
+      </div>
+    }
+
+    <img
+      [src]="hasImageError() ? '/images/placeholder-product.svg' : (product.images[0]?.url || 'images/logo.png')"
+      [alt]="product.name | localize"
+      loading="lazy"
+      class="card-img"
+      [class.blur-loading]="!isImageLoaded()"
+      (load)="onImageLoad()"
+      (error)="onImageError()"
+      width="320"
+      height="240"
+    />
+
+    <div class="badges-overlay">
+      @if (product.sensorySystem?.ar) {
+        <span class="badge badge-primary">
+          {{ product.sensorySystem | localize }}
+        </span>
+      }
+      @if (!product.inStock || product.isDeleted || product.isActive === false) {
+        <span class="badge badge-danger">
+          {{ t('products.out_of_stock') }}
+        </span>
+      }
+    </div>
+  </a>
+
+  <!-- Content -->
+  <div class="card-content">
+    <h3 class="card-title">
+      <a [routerLink]="['/', langService.currentLang(), 'products', product.slug | localize]">
+        {{ product.name | localize }}
+      </a>
+    </h3>
+
+    <p class="card-desc">{{ product.shortDescription | localize }}</p>
+
+    <!-- Price Section -->
+    <div class="price-row">
+      <div class="price-group">
+        <span class="current-price">{{ product.price.toLocaleString() }} {{ t('common.currency') }}</span>
+        @if (product.oldPrice && product.oldPrice > product.price) {
+          <span class="old-price">{{ product.oldPrice.toLocaleString() }} {{ t('common.currency') }}</span>
+        }
+      </div>
+    </div>
+
+    <!-- Action Buttons (Touch Target >= 44px) -->
+    <div class="card-actions">
+      @if (product.isDeleted || product.isActive === false || !product.inStock) {
+        <a
+          [href]="getInquiryUrl()"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-outline btn-sm full-width"
+        >
+          {{ t('products.inquire_whatsapp') }}
+        </a>
+      } @else if (authService.isAdmin()) {
+        <a [routerLink]="['/admin/products', product._id || product.id, 'edit']" class="btn btn-outline btn-sm full-width">
+          {{ t('products.edit_in_dashboard') }}
+        </a>
+      } @else {
+        <button
+          (click)="addToCart($event)"
+          class="btn btn-sm flex-1"
+          [ngClass]="justAdded() ? 'btn-success' : 'btn-primary'"
+          [attr.aria-label]="justAdded() ? 'تمت الإضافة للسلة' : t('products.add_to_cart')"
+        >
+          @if (justAdded()) {
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="animate-scale-in">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span class="animate-scale-in">تمت الإضافة!</span>
+          } @else {
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span>{{ t('products.add_to_cart') }}</span>
+          }
+        </button>
+
+        <a
+          [href]="getBuyNowUrl()"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-whatsapp btn-sm icon-only"
+          [title]="t('products.buy_now_whatsapp')"
+          aria-label="Direct WhatsApp Purchase"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.055-1.92-.477-1.528-.63-2.518-2.176-2.595-2.277-.076-.101-.617-.821-.617-1.565 0-.745.39-1.111.528-1.262.138-.152.3-.19.4-.19.1 0 .2 0 .288.005.093.004.22-.036.343.262.13.312.441 1.077.48 1.156.038.079.063.172.013.272-.05.101-.076.165-.152.253-.076.089-.16.198-.228.266-.076.076-.156.16-.067.312.089.152.395.65.847 1.054.582.52 1.073.681 1.225.757.152.076.24.063.329-.038.089-.101.38-.443.481-.595.101-.152.202-.127.341-.076.139.051.884.417 1.036.493.152.076.253.114.291.177.038.064.038.368-.106.773z"/>
+          </svg>
+        </a>
+      }
+    </div>
+  </div>
+</article>

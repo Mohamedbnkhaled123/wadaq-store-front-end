@@ -1,0 +1,103 @@
+﻿<div class="package-detail-page" *transloco="let t">
+  <div class="container">
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>{{ t('common.loading') }}</p>
+      </div>
+    } @else if (pkg(); as p) {
+      <nav class="breadcrumbs animate-fade-down" aria-label="Breadcrumb">
+        <a [routerLink]="['/', langService.currentLang()]">{{ t('nav.home') }}</a>
+        <span class="sep">/</span>
+        <a [routerLink]="['/', langService.currentLang(), 'packages']">{{ t('nav.packages') }}</a>
+        <span class="sep">/</span>
+        <span class="current">{{ p.name | localize }}</span>
+      </nav>
+
+      <div class="package-hero card animate-fade-up">
+        <div class="hero-image-wrap">
+          <img
+            [src]="p.images[0]?.url || 'images/logo.png'"
+            [alt]="p.name | localize"
+            class="hero-img"
+            width="640"
+            height="400"
+          />
+        </div>
+
+        <div class="hero-info">
+          <span class="tier-pill" [ngClass]="'tier-' + p.tier">
+            {{ p.tier === 'basic' ? t('packages.tier_basic') : (p.tier === 'premium' ? t('packages.tier_premium') : t('packages.tier_standard')) }}
+          </span>
+
+          <h1 class="pkg-title">{{ p.name | localize }}</h1>
+          <p class="pkg-subtitle">{{ p.shortDescription | localize }}</p>
+
+          @if (p.roomSize?.ar) {
+            <div class="meta-row">
+              <div class="meta-box">
+                <span class="meta-label">{{ t('packages.room_size') }}</span>
+                <strong class="meta-val">{{ p.roomSize | localize }}</strong>
+              </div>
+            </div>
+          }
+
+          <div class="pricing-card">
+            <div class="price-data">
+              <span class="price-label">السعر التقديري للتجهيز الشامل:</span>
+              <span class="price-val">{{ p.price.toLocaleString() }} {{ t('common.currency') }}</span>
+            </div>
+
+            <a
+              [href]="whatsappUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-whatsapp btn-lg quote-btn pulse-whatsapp"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.055-1.92-.477-1.528-.63-2.518-2.176-2.595-2.277-.076-.101-.617-.821-.617-1.565 0-.745.39-1.111.528-1.262.138-.152.3-.19.4-.19.1 0 .2 0 .288.005.093.004.22-.036.343.262.13.312.441 1.077.48 1.156.038.079.063.172.013.272-.05.101-.076.165-.152.253-.076.089-.16.198-.228.266-.076.076-.156.16-.067.312.089.152.395.65.847 1.054.582.52 1.073.681 1.225.757.152.076.24.063.329-.038.089-.101.38-.443.481-.595.101-.152.202-.127.341-.076.139.051.884.417 1.036.493.152.076.253.114.291.177.038.064.038.368-.106.773z"/>
+              </svg>
+              <span>{{ t('packages.request_package') }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Included Items Breakdown -->
+      <section class="items-section">
+        <h2 class="items-title">{{ t('packages.included_items') }} ({{ p.items.length }})</h2>
+        <div class="items-list">
+          @for (item of p.items; track item.product._id) {
+            <div class="included-item card">
+              <img
+                [src]="item.product.images[0]?.url || 'images/logo.png'"
+                [alt]="item.product.name | localize"
+                class="item-thumb"
+                width="80"
+                height="80"
+              />
+              <div class="item-info">
+                <h3 class="item-name">
+                  <a [routerLink]="['/', langService.currentLang(), 'products', item.product.slug | localize]">
+                    {{ item.product.name | localize }}
+                  </a>
+                </h3>
+                <p class="item-desc">{{ item.product.shortDescription | localize }}</p>
+              </div>
+              <div class="item-qty-tag">
+                <span>الكمية المشمولة:</span>
+                <strong>{{ item.quantity }}</strong>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- Comprehensive Description -->
+      <div class="full-desc card">
+        <h2 class="desc-heading">دليل التجهيز والمواصفات المعمارية</h2>
+        <div class="desc-content">{{ p.description | localize }}</div>
+      </div>
+    }
+  </div>
+</div>

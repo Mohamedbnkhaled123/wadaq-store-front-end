@@ -1,0 +1,1308 @@
+[
+  {
+    "id": "back-tapping-massager-1",
+    "name": "عصا دقدقة لتنشيط الحواس (موديل 1)",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 450,
+    "discount": "30%",
+    "description": "عصا دقدقة لتنشيط الحواس وتحفيز المستقبلات العصبية العميقة.",
+    "clinicalIndications": [
+      "تحفيز حسي",
+      "تنشيط عصبي",
+      "حس عميق"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/back-tapping-massager-1.webp",
+        "alt": {
+          "ar": "عصا دقدقة لتنشيط الحواس (موديل 1)",
+          "en": "عصا دقدقة لتنشيط الحواس (موديل 1)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "back-tapping-massager-2",
+    "name": "عصا دقدقة لتنشيط الحواس (موديل 2)",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 450,
+    "discount": "30%",
+    "description": "عصا دقدقة لتنشيط الحواس بالضغط المتتابع.",
+    "clinicalIndications": [
+      "تحفيز حسي",
+      "تنشيط عصبي",
+      "حس عميق"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/back-tapping-massager-2.webp",
+        "alt": {
+          "ar": "عصا دقدقة لتنشيط الحواس (موديل 2)",
+          "en": "عصا دقدقة لتنشيط الحواس (موديل 2)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "back-tapping-massager-3",
+    "name": "عصا دقدقة لتنشيط الحواس (موديل 3)",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 450,
+    "discount": "30%",
+    "description": "عصا دقدقة لتنشيط الحواس وتخفيف التوتر العضلي.",
+    "clinicalIndications": [
+      "تحفيز حسي",
+      "تنشيط عصبي",
+      "حس عميق"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/back-tapping-massager-3.webp",
+        "alt": {
+          "ar": "عصا دقدقة لتنشيط الحواس (موديل 3)",
+          "en": "عصا دقدقة لتنشيط الحواس (موديل 3)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "neck-massager",
+    "name": "مدلك الرقبة الحسي (Neck Massager)",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 450,
+    "discount": "30%",
+    "description": "تحفيز حسي لمنطقة الرقبة وتخفيف التوتر العضلي.",
+    "clinicalIndications": [
+      "تحفيز حسي",
+      "تهدئة عضلية",
+      "تنظيم عصبي"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/neck-massager.webp",
+        "alt": {
+          "ar": "مدلك الرقبة الحسي (Neck Massager)",
+          "en": "مدلك الرقبة الحسي (Neck Massager)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "foot-roller-massager",
+    "name": "مدلك باطن القدم الأسطواني (Foot Roller)",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 450,
+    "discount": "30%",
+    "description": "تحفيز عميق لباطن القدم وتنشيط المنعكسات الحسية.",
+    "clinicalIndications": [
+      "تحفيز باطن القدم",
+      "تنشيط المنعكسات",
+      "إدراك جسدي"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/foot-roller-massager.webp",
+        "alt": {
+          "ar": "مدلك باطن القدم الأسطواني (Foot Roller)",
+          "en": "مدلك باطن القدم الأسطواني (Foot Roller)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fingers-roller-massager-standard",
+    "name": "مدلك الأصابع الدقيق (Fingers Roller)",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 450,
+    "discount": "30%",
+    "description": "يحفز نهايات الأصابع ويعزز الإدراك الحسي الدقيق.",
+    "clinicalIndications": [
+      "نهايات الأصابع",
+      "إدراك حسي دقيق",
+      "تنبيه لمسي"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/fingers-roller-massager-standard.webp",
+        "alt": {
+          "ar": "مدلك الأصابع الدقيق (Fingers Roller)",
+          "en": "مدلك الأصابع الدقيق (Fingers Roller)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fingers-roller-massager-mini",
+    "name": "مدلك الأصابع المصغر",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 100,
+    "discount": "30%",
+    "description": "أداة مدمجة لتحفيز نهايات الأصابع وتعزيز الإدراك الدقيق.",
+    "clinicalIndications": [
+      "نهايات الأصابع",
+      "إدراك حسي دقيق"
+    ],
+    "oldPrice": 143,
+    "images": [
+      {
+        "url": "/images/products/fingers-roller-massager-mini.webp",
+        "alt": {
+          "ar": "مدلك الأصابع المصغر",
+          "en": "مدلك الأصابع المصغر"
+        }
+      }
+    ]
+  },
+  {
+    "id": "head-massager-wire",
+    "name": "مدلك فروة الرأس السلكي المعدني",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 100,
+    "discount": "30%",
+    "description": "لمسة معدنية لتنشيط حسي سريع لفروة الرأس.",
+    "clinicalIndications": [
+      "تنبيه حسي",
+      "تهدئة سريعة"
+    ],
+    "oldPrice": 143,
+    "images": [
+      {
+        "url": "/images/products/head-massager-wire.webp",
+        "alt": {
+          "ar": "مدلك فروة الرأس السلكي المعدني",
+          "en": "مدلك فروة الرأس السلكي المعدني"
+        }
+      }
+    ]
+  },
+  {
+    "id": "vibrating-head-massager-electric",
+    "name": "مدلك الرأس الاهتزازي الذكي",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 1350,
+    "discount": "30%",
+    "description": "تحفيز عميق لفروة الرأس وتهدئة فورية عبر الاهتزاز الذكي.",
+    "clinicalIndications": [
+      "تحفيز بالاهتزاز",
+      "تهدئة فورية",
+      "تنظيم عصبي"
+    ],
+    "oldPrice": 1929,
+    "images": [
+      {
+        "url": "/images/products/vibrating-head-massager-electric.webp",
+        "alt": {
+          "ar": "مدلك الرأس الاهتزازي الذكي",
+          "en": "مدلك الرأس الاهتزازي الذكي"
+        }
+      }
+    ]
+  },
+  {
+    "id": "bend-head-massager-flexible",
+    "name": "مدلك الرأس المرن القابل للتشكيل",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 450,
+    "discount": "30%",
+    "description": "مرونة في التدليك لتحفيز حسي مخصص لفروة الرأس.",
+    "clinicalIndications": [
+      "تحفيز مخصص",
+      "مرونة تدليك"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/bend-head-massager-flexible.webp",
+        "alt": {
+          "ar": "مدلك الرأس المرن القابل للتشكيل",
+          "en": "مدلك الرأس المرن القابل للتشكيل"
+        }
+      }
+    ]
+  },
+  {
+    "id": "spiky-body-massage-roller",
+    "name": "أسطوانة تدليك الجسم النقطية (Spiky Roller)",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 350,
+    "discount": "30%",
+    "description": "تحفيز عميق للعضلات وتنشيط المستقبلات العصبية بفعالية.",
+    "clinicalIndications": [
+      "تحفيز عضلي",
+      "تنشيط مستقبلات",
+      "ضغط عميق"
+    ],
+    "oldPrice": 500,
+    "images": [
+      {
+        "url": "/images/products/spiky-body-massage-roller.webp",
+        "alt": {
+          "ar": "أسطوانة تدليك الجسم النقطية (Spiky Roller)",
+          "en": "أسطوانة تدليك الجسم النقطية (Spiky Roller)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "bean-bag-sensory-large",
+    "name": "بين باج حسي كبير 150×50 سم",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 2500,
+    "discount": "30%",
+    "description": "احتضان مريح للجسم وتحفيز حسي عميق للمساعدة في التنظيم الذاتي.",
+    "clinicalIndications": [
+      "ضغط عميق",
+      "تهدئة واحتضان",
+      "تنظيم حسي كلي"
+    ],
+    "specs": {
+      "dimensions": "150 سم × 50 سم"
+    },
+    "oldPrice": 3571,
+    "images": [
+      {
+        "url": "/images/products/bean-bag-sensory-large.webp",
+        "alt": {
+          "ar": "بين باج حسي كبير 150×50 سم",
+          "en": "بين باج حسي كبير 150×50 سم"
+        }
+      }
+    ]
+  },
+  {
+    "id": "yoga-mat-sensory",
+    "name": "سجادة تمارين واستقرار حسي (Yoga Mat)",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 600,
+    "discount": "30%",
+    "description": "أساس ثابت لدعم التمارين الحسية والحركية وتمارين الثبات.",
+    "clinicalIndications": [
+      "دعم حركي",
+      "ثبات اتزاني"
+    ],
+    "oldPrice": 857,
+    "images": [
+      {
+        "url": "/images/products/yoga-mat-sensory.webp",
+        "alt": {
+          "ar": "سجادة تمارين واستقرار حسي (Yoga Mat)",
+          "en": "سجادة تمارين واستقرار حسي (Yoga Mat)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "sensory-air-mattress-balance",
+    "name": "مرتبة حسية هوائية ديناميكية",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 1500,
+    "discount": "30%",
+    "description": "تحفيز التوازن والاستجابة الحسية عبر الحركة الهوائية غير المستقرة.",
+    "clinicalIndications": [
+      "تحفيز التوازن",
+      "استجابة ديناميكية",
+      "ثبات الجذع"
+    ],
+    "oldPrice": 2143,
+    "images": [
+      {
+        "url": "/images/products/sensory-air-mattress-balance.webp",
+        "alt": {
+          "ar": "مرتبة حسية هوائية ديناميكية",
+          "en": "مرتبة حسية هوائية ديناميكية"
+        }
+      }
+    ]
+  },
+  {
+    "id": "massage-gun-deep-muscle",
+    "name": "مسدس المساج العضلي العميق (Massage Gun)",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 900,
+    "discount": "30%",
+    "description": "تحفيز عضلي عميق وتنشيط الإحساس الجسدي والتنبيه العضلي.",
+    "clinicalIndications": [
+      "تحفيز عضلي عميق",
+      "إدراك جسدي بالاهتزاز"
+    ],
+    "oldPrice": 1286,
+    "images": [
+      {
+        "url": "/images/products/massage-gun-deep-muscle.webp",
+        "alt": {
+          "ar": "مسدس المساج العضلي العميق (Massage Gun)",
+          "en": "مسدس المساج العضلي العميق (Massage Gun)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "wooden-massage-tools-kit",
+    "name": "حقيبة أدوات التدليك الخشبية الطبيعية (مجموعة كاملة)",
+    "category": "proprioceptive",
+    "categoryNameAr": "الحس العميق",
+    "price": 3000,
+    "discount": "30%",
+    "description": "تحفيز حسي طبيعي بملمس خشبي دافئ ومتعدد الأشكال السريرية.",
+    "clinicalIndications": [
+      "ملامس طبيعية",
+      "تحفيز عميق متعدد الأدوات"
+    ],
+    "specs": {
+      "material": "خشب طبيعي"
+    },
+    "oldPrice": 4286,
+    "images": [
+      {
+        "url": "/images/products/wooden-massage-tools-kit.webp",
+        "alt": {
+          "ar": "حقيبة أدوات التدليك الخشبية الطبيعية (مجموعة كاملة)",
+          "en": "حقيبة أدوات التدليك الخشبية الطبيعية (مجموعة كاملة)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "head-scalp-massage-device",
+    "name": "جهاز تدليك فروة الرأس والرقبة المتطور",
+    "category": "tactile",
+    "categoryNameAr": "المعالجة التلامسية",
+    "price": 600,
+    "discount": "30%",
+    "description": "تحفيز عميق لفروة الرأس يوازن الحواس وينعش الجهاز العصبي.",
+    "clinicalIndications": [
+      "تنظيم عصبي",
+      "موازنة الحواس التلامسية"
+    ],
+    "oldPrice": 857,
+    "images": [
+      {
+        "url": "/images/products/head-scalp-massage-device.webp",
+        "alt": {
+          "ar": "جهاز تدليك فروة الرأس والرقبة المتطور",
+          "en": "جهاز تدليك فروة الرأس والرقبة المتطور"
+        }
+      }
+    ]
+  },
+  {
+    "id": "sensory-tactile-tiles-set",
+    "name": "بلاطات وألواح الملمس الحسي المتنوعة",
+    "category": "tactile",
+    "categoryNameAr": "المعالجة التلامسية",
+    "price": 450,
+    "discount": "30%",
+    "description": "تجربة لمس متطورة تحدث ثورة في تنظيم الحواس واستكشاف الملامس المتعددة.",
+    "clinicalIndications": [
+      "فرط الحساسية اللمسية",
+      "نقص الاستجابة",
+      "تمييز الملامس"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/sensory-tactile-tiles-set.webp",
+        "alt": {
+          "ar": "بلاطات وألواح الملمس الحسي المتنوعة",
+          "en": "بلاطات وألواح الملمس الحسي المتنوعة"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ice-globes-face-pair",
+    "name": "كرات التبريد الزجاجية لتحفيز الوجه (Ice Globes)",
+    "category": "tactile",
+    "categoryNameAr": "المعالجة التلامسية",
+    "price": 450,
+    "discount": "30%",
+    "description": "انتعاش فوري وتحفيز حسي حراري بلمسة باردة مهدئة لتنظيم الاستجابة اللمسية.",
+    "clinicalIndications": [
+      "تحفيز حراري بارد",
+      "تهدئة حسية",
+      "تنبيه عصبي"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/ice-globes-face-pair.webp",
+        "alt": {
+          "ar": "كرات التبريد الزجاجية لتحفيز الوجه (Ice Globes)",
+          "en": "كرات التبريد الزجاجية لتحفيز الوجه (Ice Globes)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ice-globes-facial-pro",
+    "name": "كرات التبريد الحركية الخاصة بالوجه (إصدار إضافي)",
+    "category": "tactile",
+    "categoryNameAr": "المعالجة التلامسية",
+    "price": 250,
+    "discount": "30%",
+    "description": "انتعاش فوري وتحفيز حسي بلمسة باردة مصممة لجلسات الدفاعية اللمسية.",
+    "clinicalIndications": [
+      "تحفيز حراري بارد",
+      "تعديل الاستجابة"
+    ],
+    "oldPrice": 357,
+    "images": [
+      {
+        "url": "/images/products/ice-globes-facial-pro.webp",
+        "alt": {
+          "ar": "كرات التبريد الحركية الخاصة بالوجه (إصدار إضافي)",
+          "en": "كرات التبريد الحركية الخاصة بالوجه (إصدار إضافي)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ice-roller-facial-soothing",
+    "name": "أسطوانة التبريد المهدئة (Ice Roller)",
+    "category": "tactile",
+    "categoryNameAr": "المعالجة التلامسية",
+    "price": 200,
+    "discount": "30%",
+    "description": "برودة ناعمة تلامس حواسك لتهدئة فرط الحساسية والتنظيم اللمسي السريع.",
+    "clinicalIndications": [
+      "تحفيز بارد",
+      "تهدئة الملمس السطحي"
+    ],
+    "oldPrice": 286,
+    "images": [
+      {
+        "url": "/images/products/ice-roller-facial-soothing.webp",
+        "alt": {
+          "ar": "أسطوانة التبريد المهدئة (Ice Roller)",
+          "en": "أسطوانة التبريد المهدئة (Ice Roller)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "metal-ball-massage-precision",
+    "name": "أداة الكرات المعدنية الدقيقة للمس النقطي",
+    "category": "tactile",
+    "categoryNameAr": "المعالجة التلامسية",
+    "price": 300,
+    "discount": "30%",
+    "description": "تحفيز لمسي دقيق لتنشيط النقاط الحسية ومستقبلات الضغط الخفيف.",
+    "clinicalIndications": [
+      "تحفيز لمسي نقطي",
+      "تنشيط نقاط حسية"
+    ],
+    "oldPrice": 429,
+    "images": [
+      {
+        "url": "/images/products/metal-ball-massage-precision.webp",
+        "alt": {
+          "ar": "أداة الكرات المعدنية الدقيقة للمس النقطي",
+          "en": "أداة الكرات المعدنية الدقيقة للمس النقطي"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hot-cold-gel-pack-dual",
+    "name": "كمادة الجل المزدوجة للتحفيز الحراري والضغط (ساخن/بارد)",
+    "category": "tactile",
+    "categoryNameAr": "المعالجة التلامسية",
+    "price": 200,
+    "discount": "30%",
+    "description": "تحفيز حراري مهدئ مع لمسة ضغط عميق (قابلة للتبريد بالمجمد أو التسخين بالميكروويف).",
+    "clinicalIndications": [
+      "تعديل استجابة حرارية",
+      "ضغط مهدئ"
+    ],
+    "oldPrice": 286,
+    "images": [
+      {
+        "url": "/images/products/hot-cold-gel-pack-dual.webp",
+        "alt": {
+          "ar": "كمادة الجل المزدوجة للتحفيز الحراري والضغط (ساخن/بارد)",
+          "en": "كمادة الجل المزدوجة للتحفيز الحراري والضغط (ساخن/بارد)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "silicone-facial-brush-sensory",
+    "name": "فرشاة السيليكون فائقة النعومة للتحفيز اللمسي",
+    "category": "tactile",
+    "categoryNameAr": "المعالجة التلامسية",
+    "price": 450,
+    "discount": "30%",
+    "description": "تحفيز لمسي لطيف ومناسب لعلاج الدفاعية التلامسية والحساسية المفرطة.",
+    "clinicalIndications": [
+      "دفاعية لمسية",
+      "تحفيز ناعم لطيف"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/silicone-facial-brush-sensory.webp",
+        "alt": {
+          "ar": "فرشاة السيليكون فائقة النعومة للتحفيز اللمسي",
+          "en": "فرشاة السيليكون فائقة النعومة للتحفيز اللمسي"
+        }
+      }
+    ]
+  },
+  {
+    "id": "sensory-light-tunnel-3500",
+    "name": "نفق الضوء الحسي اللانهائي (مقاس 115 سم)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 3500,
+    "discount": "30%",
+    "description": "تنمية البعد والتتبع البصري عبر تأثير النفق اللانهائي ثلاثي الأبعاد.",
+    "clinicalIndications": [
+      "إدراك العمق والبعد",
+      "تتبع بصري",
+      "تركيز وانتباه"
+    ],
+    "oldPrice": 5000,
+    "images": [
+      {
+        "url": "/images/products/sensory-light-tunnel-3500.webp",
+        "alt": {
+          "ar": "نفق الضوء الحسي اللانهائي (مقاس 115 سم)",
+          "en": "نفق الضوء الحسي اللانهائي (مقاس 115 سم)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "sensory-light-tunnel-4500",
+    "name": "نفق الضوء الحسي اللانهائي (المقاس المتوسط)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 4500,
+    "discount": "30%",
+    "description": "تنمية البعد والتتبع البصري عبر تأثير النفق اللانهائي.",
+    "clinicalIndications": [
+      "إدراك العمق والبعد",
+      "تتبع بصري"
+    ],
+    "oldPrice": 6429,
+    "images": [
+      {
+        "url": "/images/products/sensory-light-tunnel-4500.webp",
+        "alt": {
+          "ar": "نفق الضوء الحسي اللانهائي (المقاس المتوسط)",
+          "en": "نفق الضوء الحسي اللانهائي (المقاس المتوسط)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "sensory-light-tunnel-5500",
+    "name": "نفق الضوء الحسي اللانهائي (المقاس الكبير للغرف الحسية)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 5500,
+    "discount": "30%",
+    "description": "تنمية البعد والتتبع البصري بأبعاد موسعة لغرف التكامل الحسي المتكاملة.",
+    "clinicalIndications": [
+      "إدراك العمق والبعد",
+      "تركيز وانتباه متقدم"
+    ],
+    "oldPrice": 7857,
+    "images": [
+      {
+        "url": "/images/products/sensory-light-tunnel-5500.webp",
+        "alt": {
+          "ar": "نفق الضوء الحسي اللانهائي (المقاس الكبير للغرف الحسية)",
+          "en": "نفق الضوء الحسي اللانهائي (المقاس الكبير للغرف الحسية)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ktv-sharpy-beam-moving-light-pro",
+    "name": "إضاءة البيم المتحركة الاحترافية (Sharpy Beam Light)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 4200,
+    "discount": "30%",
+    "description": "إضاءة متحركة تعزز التتبع والانتباه البصري الديناميكي في الغرف الحسية.",
+    "clinicalIndications": [
+      "تتبع بصري ديناميكي",
+      "جذب الانتباه"
+    ],
+    "oldPrice": 6000,
+    "images": [
+      {
+        "url": "/images/products/ktv-sharpy-beam-moving-light-pro.webp",
+        "alt": {
+          "ar": "إضاءة البيم المتحركة الاحترافية (Sharpy Beam Light)",
+          "en": "إضاءة البيم المتحركة الاحترافية (Sharpy Beam Light)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ktv-sharpy-beam-moving-light-display",
+    "name": "إضاءة البيم المتحركة بشاشة ديسبلاي رقمية",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 450,
+    "discount": "30%",
+    "description": "إضاءة متحركة مع شاشة تحكم رقمية لضبط سرعة ونمط التتبع البصري.",
+    "clinicalIndications": [
+      "تتبع بصري ديناميكي",
+      "تحكم في شدة الإضاءة"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/ktv-sharpy-beam-moving-light-display.webp",
+        "alt": {
+          "ar": "إضاءة البيم المتحركة بشاشة ديسبلاي رقمية",
+          "en": "إضاءة البيم المتحركة بشاشة ديسبلاي رقمية"
+        }
+      }
+    ]
+  },
+  {
+    "id": "black-light-flashlight-68-led",
+    "name": "كشاف الأشعة فوق البنفسجية (68 لمبة LED)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 450,
+    "discount": "30%",
+    "description": "إضاءة محفّزة لتنظيم الإدراك البصري وإبراز الخامات والأدوات الفلورية.",
+    "clinicalIndications": [
+      "إدراك لوني وتباين",
+      "تنظيم بصري في الظلام"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/black-light-flashlight-68-led.webp",
+        "alt": {
+          "ar": "كشاف الأشعة فوق البنفسجية (68 لمبة LED)",
+          "en": "كشاف الأشعة فوق البنفسجية (68 لمبة LED)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "black-light-flashlight-100-led",
+    "name": "كشاف الأشعة فوق البنفسجية عالي الشدة (100 لمبة LED)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 600,
+    "discount": "30%",
+    "description": "إضاءة فوق بنفسجية واسعة النطاق لتحفيز الإدراك البصري في الغرف المظلمة.",
+    "clinicalIndications": [
+      "تحفيز بصري عالي الكثافة",
+      "تجهيز غرف مظلمة"
+    ],
+    "oldPrice": 857,
+    "images": [
+      {
+        "url": "/images/products/black-light-flashlight-100-led.webp",
+        "alt": {
+          "ar": "كشاف الأشعة فوق البنفسجية عالي الشدة (100 لمبة LED)",
+          "en": "كشاف الأشعة فوق البنفسجية عالي الشدة (100 لمبة LED)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "black-light-flashlight-1-led",
+    "name": "قلم/كشاف الأشعة فوق البنفسجية المركز (1 لمبة LED)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 290,
+    "discount": "30%",
+    "description": "إضاءة محفزة موجهة لتنظيم الإدراك والتركيز البصري النقطي وتثبيت البصر.",
+    "clinicalIndications": [
+      "تركيز نقطي",
+      "تثبيت النظر وتتبع بؤري"
+    ],
+    "oldPrice": 414,
+    "images": [
+      {
+        "url": "/images/products/black-light-flashlight-1-led.webp",
+        "alt": {
+          "ar": "قلم/كشاف الأشعة فوق البنفسجية المركز (1 لمبة LED)",
+          "en": "قلم/كشاف الأشعة فوق البنفسجية المركز (1 لمبة LED)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "smart-firework-led-strip",
+    "name": "إضاءة الألعاب النارية الذكية المتفاعلة (Smart Firework LED)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 1500,
+    "discount": "30%",
+    "description": "إضاءة نارية تفاعلية تنمي الانتباه البصري مع تحكم عبر التطبيق الذكي ونظام RGB.",
+    "clinicalIndications": [
+      "انتباه بصري",
+      "تحفيز تفاعلي بألوان RGB"
+    ],
+    "oldPrice": 2143,
+    "images": [
+      {
+        "url": "/images/products/smart-firework-led-strip.webp",
+        "alt": {
+          "ar": "إضاءة الألعاب النارية الذكية المتفاعلة (Smart Firework LED)",
+          "en": "إضاءة الألعاب النارية الذكية المتفاعلة (Smart Firework LED)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "mini-laser-led-lights-stage",
+    "name": "أضواء الليزر التفاعلية المصغرة (Mini Laser LED)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 850,
+    "discount": "30%",
+    "description": "أضواء ليزرية تعزز التتبع البصري وتستجيب للصوت والإيقاع الحركي.",
+    "clinicalIndications": [
+      "تتبع بصري",
+      "تكامل سمعي-بصري"
+    ],
+    "oldPrice": 1214,
+    "images": [
+      {
+        "url": "/images/products/mini-laser-led-lights-stage.webp",
+        "alt": {
+          "ar": "أضواء الليزر التفاعلية المصغرة (Mini Laser LED)",
+          "en": "أضواء الليزر التفاعلية المصغرة (Mini Laser LED)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "pen-light-green-laser-pointer",
+    "name": "قلم الليزر الأخضر بأنماط هندسية للتتبع البصري",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 525,
+    "discount": "30%",
+    "description": "ينمي الانتباه والتتبع عبر أنماط ضوئية وحركات موجهة وسريعة.",
+    "clinicalIndications": [
+      "حركات العين التتبعية",
+      "تثبيت النظر"
+    ],
+    "oldPrice": 750,
+    "images": [
+      {
+        "url": "/images/products/pen-light-green-laser-pointer.webp",
+        "alt": {
+          "ar": "قلم الليزر الأخضر بأنماط هندسية للتتبع البصري",
+          "en": "قلم الليزر الأخضر بأنماط هندسية للتتبع البصري"
+        }
+      }
+    ]
+  },
+  {
+    "id": "plasma-ball-interactive-glow",
+    "name": "كرة البلازما التفاعلية اللمسية البصرية",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 600,
+    "discount": "30%",
+    "description": "عرض بصري ساحر يدمج بين الضوء والتفاعل باللمس، يحفز الإدراك البصري واللمسي.",
+    "clinicalIndications": [
+      "تكامل بصري لمسي",
+      "انتباه وتفاعل حسي"
+    ],
+    "oldPrice": 857,
+    "images": [
+      {
+        "url": "/images/products/plasma-ball-interactive-glow.webp",
+        "alt": {
+          "ar": "كرة البلازما التفاعلية اللمسية البصرية",
+          "en": "كرة البلازما التفاعلية اللمسية البصرية"
+        }
+      }
+    ]
+  },
+  {
+    "id": "glow-sticks-sensory-set",
+    "name": "مجموعة العصي المضيئة المتنوعة (Glow Sticks Pack)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 400,
+    "discount": "30%",
+    "description": "ألوان مضيئة تجذب الانتباه وتنشط الإدراك البصري في البيئات منخفضة الإضاءة.",
+    "clinicalIndications": [
+      "إدراك الألوان في الظلام",
+      "أنشطة حركية بصرية"
+    ],
+    "oldPrice": 571,
+    "images": [
+      {
+        "url": "/images/products/glow-sticks-sensory-set.webp",
+        "alt": {
+          "ar": "مجموعة العصي المضيئة المتنوعة (Glow Sticks Pack)",
+          "en": "مجموعة العصي المضيئة المتنوعة (Glow Sticks Pack)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "disco-ball-360-projector",
+    "name": "كرة الديسكو الضوئية الدوارة الكبيرة 360 درجة",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 900,
+    "discount": "30%",
+    "description": "أضواء دوّارة شاملة تُحفّز الانتباه والتتبع البصري في أرجاء الغرفة الحسية.",
+    "clinicalIndications": [
+      "تحفيز المجال البصري المحيطي",
+      "انتباه بصري عام"
+    ],
+    "oldPrice": 1286,
+    "images": [
+      {
+        "url": "/images/products/disco-ball-360-projector.webp",
+        "alt": {
+          "ar": "كرة الديسكو الضوئية الدوارة الكبيرة 360 درجة",
+          "en": "كرة الديسكو الضوئية الدوارة الكبيرة 360 درجة"
+        }
+      }
+    ]
+  },
+  {
+    "id": "mini-disco-ball-compact",
+    "name": "كرة الديسكو الضوئية المصغرة للمساحات المحدودة",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 400,
+    "discount": "30%",
+    "description": "أضواء دوّارة مدمجة تُحفّز الانتباه البصري في الجلسات الفردية والمساحات الصغيرة.",
+    "clinicalIndications": [
+      "تتبع بصري",
+      "جلسات فردية"
+    ],
+    "oldPrice": 571,
+    "images": [
+      {
+        "url": "/images/products/mini-disco-ball-compact.webp",
+        "alt": {
+          "ar": "كرة الديسكو الضوئية المصغرة للمساحات المحدودة",
+          "en": "كرة الديسكو الضوئية المصغرة للمساحات المحدودة"
+        }
+      }
+    ]
+  },
+  {
+    "id": "led-star-projector-lamp",
+    "name": "بروجيكتور النجوم المتحركة المهدئ (LED Star Projector)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 300,
+    "discount": "30%",
+    "description": "نجوم متحركة تُحفّز التتبع والانتباه البصري وتبعث على الهدوء والاسترخاء الحسي.",
+    "clinicalIndications": [
+      "تهدئة واسترخاء",
+      "تتبع حركات بطيئة"
+    ],
+    "oldPrice": 429,
+    "images": [
+      {
+        "url": "/images/products/led-star-projector-lamp.webp",
+        "alt": {
+          "ar": "بروجيكتور النجوم المتحركة المهدئ (LED Star Projector)",
+          "en": "بروجيكتور النجوم المتحركة المهدئ (LED Star Projector)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "bubble-machine-motorized",
+    "name": "آلة إطلاق الفقاعات الأوتوماتيكية للتتبع البصري",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 1450,
+    "discount": "30%",
+    "description": "فقاعات متحركة تنشط التمييز البصري وتدعم التتبع والتآزر الحركي البصري في الجلسات.",
+    "clinicalIndications": [
+      "تآزر بصري حركي",
+      "تتبع مسار الأجسام"
+    ],
+    "oldPrice": 2071,
+    "images": [
+      {
+        "url": "/images/products/bubble-machine-motorized.webp",
+        "alt": {
+          "ar": "آلة إطلاق الفقاعات الأوتوماتيكية للتتبع البصري",
+          "en": "آلة إطلاق الفقاعات الأوتوماتيكية للتتبع البصري"
+        }
+      }
+    ]
+  },
+  {
+    "id": "light-moving-sand-art-frame",
+    "name": "لوحة الرمال المتحركة المضيئة مع قاعدة إضاءة",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 450,
+    "discount": "30%",
+    "description": "حركة رملية انسيابية مهدئة تُحفّز التركيز البصري مع إضاءة دافئة مدمجة.",
+    "clinicalIndications": [
+      "تنظيم ذاتي",
+      "تهدئة بصرية",
+      "تركيز ممتد"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/light-moving-sand-art-frame.webp",
+        "alt": {
+          "ar": "لوحة الرمال المتحركة المضيئة مع قاعدة إضاءة",
+          "en": "لوحة الرمال المتحركة المضيئة مع قاعدة إضاءة"
+        }
+      }
+    ]
+  },
+  {
+    "id": "moving-sand-desk-art",
+    "name": "إطار الرمال المتحركة المكتبي الكلاسيكي",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 350,
+    "discount": "30%",
+    "description": "حركة رملية انسيابية مهدئة تُحفّز التركيز البصري والانتباه الهادئ لتنظيم فرط النشاط.",
+    "clinicalIndications": [
+      "تهدئة بصرية",
+      "خفض التوتر الحسي"
+    ],
+    "oldPrice": 500,
+    "images": [
+      {
+        "url": "/images/products/moving-sand-desk-art.webp",
+        "alt": {
+          "ar": "إطار الرمال المتحركة المكتبي الكلاسيكي",
+          "en": "إطار الرمال المتحركة المكتبي الكلاسيكي"
+        }
+      }
+    ]
+  },
+  {
+    "id": "sand-timer-hourglass-color",
+    "name": "الساعة الرملية الحسية الملونة للتنظيم البصري",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 250,
+    "discount": "30%",
+    "description": "حركة رملية إيقاعية مهدئة تُحفّز التركيز البصري وتدعم مفهوم الوقت والانتظار.",
+    "clinicalIndications": [
+      "إدراك زمني بصري",
+      "تركيز هادئ"
+    ],
+    "oldPrice": 357,
+    "images": [
+      {
+        "url": "/images/products/sand-timer-hourglass-color.webp",
+        "alt": {
+          "ar": "الساعة الرملية الحسية الملونة للتنظيم البصري",
+          "en": "الساعة الرملية الحسية الملونة للتنظيم البصري"
+        }
+      }
+    ]
+  },
+  {
+    "id": "sensory-liquid-motion-timer-calm",
+    "name": "مؤقت السوائل الحركي قطرات ملونة (Liquid Motion Timer)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 250,
+    "discount": "30%",
+    "description": "حركة سائلة انسيابية مهدئة تُنمّي الانتباه البصري وتساعد على التنظيم العاطفي.",
+    "clinicalIndications": [
+      "تثبيت بصري مهدئ",
+      "تنظيم المشاعر والحواس"
+    ],
+    "oldPrice": 357,
+    "images": [
+      {
+        "url": "/images/products/sensory-liquid-motion-timer-calm.webp",
+        "alt": {
+          "ar": "مؤقت السوائل الحركي قطرات ملونة (Liquid Motion Timer)",
+          "en": "مؤقت السوائل الحركي قطرات ملونة (Liquid Motion Timer)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "pendulum-balls-balance-newton",
+    "name": "كرات البندول الإيقاعية الحركية (Newton Pendulum)",
+    "category": "visual",
+    "categoryNameAr": "المعالجة البصرية",
+    "price": 250,
+    "discount": "30%",
+    "description": "حركة إيقاعية فيزيائية منتظمة تُحفّز الانتباه البصري والتركيز المتتابع والمستمر.",
+    "clinicalIndications": [
+      "تتبع إيقاعي",
+      "تركيز بصري متكرر"
+    ],
+    "oldPrice": 357,
+    "images": [
+      {
+        "url": "/images/products/pendulum-balls-balance-newton.webp",
+        "alt": {
+          "ar": "كرات البندول الإيقاعية الحركية (Newton Pendulum)",
+          "en": "كرات البندول الإيقاعية الحركية (Newton Pendulum)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "gym-ball-45cm",
+    "name": "كرة التمارين والتوازن الدهليزي (قطر 45 سم)",
+    "category": "vestibular",
+    "categoryNameAr": "المعالجة الدهليزية",
+    "price": 350,
+    "discount": "30%",
+    "description": "تنشط الحاسة الدهليزية، تعزّز التوازن وتدعم التحكم الحركي للأطفال الصغار.",
+    "clinicalIndications": [
+      "توازن دهليزي",
+      "تحكم وضعي",
+      "تقوية الجذع"
+    ],
+    "specs": {
+      "diameter": "45cm"
+    },
+    "oldPrice": 500,
+    "images": [
+      {
+        "url": "/images/products/gym-ball-45cm.webp",
+        "alt": {
+          "ar": "كرة التمارين والتوازن الدهليزي (قطر 45 سم)",
+          "en": "كرة التمارين والتوازن الدهليزي (قطر 45 سم)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "gym-ball-55cm",
+    "name": "كرة التمارين والتوازن الدهليزي (قطر 55 سم)",
+    "category": "vestibular",
+    "categoryNameAr": "المعالجة الدهليزية",
+    "price": 350,
+    "discount": "30%",
+    "description": "تنشط الحاسة الدهليزية وتدعم استقرار وضعية الجلوس والتوازن.",
+    "clinicalIndications": [
+      "توازن دهليزي",
+      "تحكم وضعي"
+    ],
+    "specs": {
+      "diameter": "55cm"
+    },
+    "oldPrice": 500,
+    "images": [
+      {
+        "url": "/images/products/gym-ball-55cm.webp",
+        "alt": {
+          "ar": "كرة التمارين والتوازن الدهليزي (قطر 55 سم)",
+          "en": "كرة التمارين والتوازن الدهليزي (قطر 55 سم)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "gym-ball-65cm",
+    "name": "كرة التمارين والتوازن الدهليزي (قطر 65 سم)",
+    "category": "vestibular",
+    "categoryNameAr": "المعالجة الدهليزية",
+    "price": 350,
+    "discount": "30%",
+    "description": "تنشط الحاسة الدهليزية وتعزز استجابات التعديل التوازني للأطفال الأكبر سناً.",
+    "clinicalIndications": [
+      "توازن دهليزي",
+      "تحكم وضعي"
+    ],
+    "specs": {
+      "diameter": "65cm"
+    },
+    "oldPrice": 500,
+    "images": [
+      {
+        "url": "/images/products/gym-ball-65cm.webp",
+        "alt": {
+          "ar": "كرة التمارين والتوازن الدهليزي (قطر 65 سم)",
+          "en": "كرة التمارين والتوازن الدهليزي (قطر 65 سم)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "gym-ball-75cm",
+    "name": "كرة التمارين والتوازن الدهليزي (قطر 75 سم)",
+    "category": "vestibular",
+    "categoryNameAr": "المعالجة الدهليزية",
+    "price": 600,
+    "discount": "30%",
+    "description": "كرة توازن كبيرة لدعم جلسات التأهيل الحركي والدهليزي المكثف.",
+    "clinicalIndications": [
+      "توازن دهليزي",
+      "استجابات وقائية"
+    ],
+    "specs": {
+      "diameter": "75cm"
+    },
+    "oldPrice": 857,
+    "images": [
+      {
+        "url": "/images/products/gym-ball-75cm.webp",
+        "alt": {
+          "ar": "كرة التمارين والتوازن الدهليزي (قطر 75 سم)",
+          "en": "كرة التمارين والتوازن الدهليزي (قطر 75 سم)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "gym-ball-85cm",
+    "name": "كرة التمارين والتوازن الدهليزي (قطر 85 سم)",
+    "category": "vestibular",
+    "categoryNameAr": "المعالجة الدهليزية",
+    "price": 600,
+    "discount": "30%",
+    "description": "كرة تمارين دهليزية بأكبر مقاس لدعم مختلف التمارين السريرية المتقدمة.",
+    "clinicalIndications": [
+      "توازن دهليزي متقدم",
+      "دعم كامل للجسم"
+    ],
+    "specs": {
+      "diameter": "85cm"
+    },
+    "oldPrice": 857,
+    "images": [
+      {
+        "url": "/images/products/gym-ball-85cm.webp",
+        "alt": {
+          "ar": "كرة التمارين والتوازن الدهليزي (قطر 85 سم)",
+          "en": "كرة التمارين والتوازن الدهليزي (قطر 85 سم)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "balance-ball-dome-1300",
+    "name": "نصف كرة التوازن والضغط الديناميكي (موديل 1)",
+    "category": "vestibular",
+    "categoryNameAr": "المعالجة الدهليزية",
+    "price": 1300,
+    "discount": "30%",
+    "description": "ملمس يحفّز، ضغط يقوّي، وحركة تنشط التوازن واستقرار المفاصل السفلية.",
+    "clinicalIndications": [
+      "توازن حركي",
+      "تقوية عضلية",
+      "تنبيه دهليزي ومفصلي"
+    ],
+    "oldPrice": 1857,
+    "images": [
+      {
+        "url": "/images/products/balance-ball-dome-1300.webp",
+        "alt": {
+          "ar": "نصف كرة التوازن والضغط الديناميكي (موديل 1)",
+          "en": "نصف كرة التوازن والضغط الديناميكي (موديل 1)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "balance-ball-dome-1800",
+    "name": "نصف كرة التوازن والضغط العالي (موديل احترافي)",
+    "category": "vestibular",
+    "categoryNameAr": "المعالجة الدهليزية",
+    "price": 1800,
+    "discount": "30%",
+    "description": "أداة تدريب توازن متطورة للمراكز العلاجية لتحفيز التوازن والثبات الوظيفي.",
+    "clinicalIndications": [
+      "توازن حركي متقدم",
+      "ثبات مفصلي وعضلي"
+    ],
+    "oldPrice": 2571,
+    "images": [
+      {
+        "url": "/images/products/balance-ball-dome-1800.webp",
+        "alt": {
+          "ar": "نصف كرة التوازن والضغط العالي (موديل احترافي)",
+          "en": "نصف كرة التوازن والضغط العالي (موديل احترافي)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "balance-ball-dome-compact",
+    "name": "نصف كرة التوازن والضغط (إصدار إضافي)",
+    "category": "vestibular",
+    "categoryNameAr": "المعالجة الدهليزية",
+    "price": 450,
+    "discount": "30%",
+    "description": "ملمس يحفّز وضغط يقوّي لتنشيط التوازن في الجلسات الفردية.",
+    "clinicalIndications": [
+      "توازن حركي",
+      "تنبيه دهليزي"
+    ],
+    "oldPrice": 643,
+    "images": [
+      {
+        "url": "/images/products/balance-ball-dome-compact.webp",
+        "alt": {
+          "ar": "نصف كرة التوازن والضغط (إصدار إضافي)",
+          "en": "نصف كرة التوازن والضغط (إصدار إضافي)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "therapy-sensory-swing-clinic",
+    "name": "أرجوحة التكامل الحسي العلاجية المعلقة (50×60 سم)",
+    "category": "vestibular",
+    "categoryNameAr": "المعالجة الدهليزية",
+    "price": 3000,
+    "discount": "30%",
+    "description": "حركة خطية ودورانية تهدئ الحواس، وتصنع التوازن والتنظيم الدهليزي داخل العيادة.",
+    "clinicalIndications": [
+      "تهدئة دهليزية",
+      "تحفيز دوراني وخطي",
+      "تنظيم نغمة عضلية"
+    ],
+    "specs": {
+      "dimensions": "50 × 60 سم"
+    },
+    "oldPrice": 4286,
+    "images": [
+      {
+        "url": "/images/products/therapy-sensory-swing-clinic.webp",
+        "alt": {
+          "ar": "أرجوحة التكامل الحسي العلاجية المعلقة (50×60 سم)",
+          "en": "أرجوحة التكامل الحسي العلاجية المعلقة (50×60 سم)"
+        }
+      }
+    ]
+  }
+]

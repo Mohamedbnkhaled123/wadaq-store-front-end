@@ -1,0 +1,279 @@
+<div class="products-page" *transloco="let t">
+  <div class="container">
+    <!-- Page Title & Header -->
+    <header class="page-header animate-fade-down">
+      <h1 class="page-title">{{ t('products.title') }}</h1>
+      <p class="page-subtitle">{{ t('products.subtitle') }}</p>
+    </header>
+
+    <!-- Filters & Search Toolbar -->
+    <div class="toolbar card animate-fade-up delay-75">
+      <!-- Search Container with Dropdown Suggestions -->
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="text"
+            [placeholder]="t('products.search_placeholder')"
+            [value]="searchInputValue()"
+            (input)="onSearchInput($event)"
+            (focus)="onSearchFocus()"
+            (keydown.enter)="applySearch()"
+            class="search-input"
+            autocomplete="off"
+            aria-label="بحث في المنتجات"
+          />
+          @if (searchInputValue()) {
+            <button type="button" class="search-clear-btn" (click)="clearSearch()" title="مسح">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          }
+          <button type="button" class="btn btn-primary search-action-btn" (click)="applySearch()">
+            <span>بحث</span>
+          </button>
+        </div>
+
+        <!-- Live Suggestions Dropdown -->
+        @if (showSuggestions() && (suggestions().products.length > 0 || suggestions().categories.length > 0 || searchInputValue().trim().length >= 2)) {
+          <div class="suggestions-dropdown animate-fade-down" (click)="$event.stopPropagation()">
+            @if (suggestions().categories.length > 0) {
+              <div class="suggestions-section">
+                <span class="suggestions-section-title">التصنيفات المطابقة</span>
+                <div class="suggestions-chips-row">
+                  @for (cat of suggestions().categories; track cat._id) {
+                    <button type="button" class="suggestion-cat-chip" (click)="selectCategorySuggestion(cat)">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 6h16M4 12h16M4 18h7"></path>
+                      </svg>
+                      <span>{{ cat.name | localize }}</span>
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (suggestions().products.length > 0) {
+              <div class="suggestions-section">
+                <span class="suggestions-section-title">المنتجات المقترحة</span>
+                <div class="suggestions-list">
+                  @for (prod of suggestions().products; track prod._id) {
+                    <div class="suggestion-item" (click)="navigateToProduct(prod)">
+                      <img
+                        [src]="prod.images[0]?.url || '/images/placeholder-product.svg'"
+                        [alt]="prod.name | localize"
+                        class="suggestion-item-img"
+                        loading="lazy"
+                      />
+                      <div class="suggestion-item-info">
+                        <div class="suggestion-item-title">{{ prod.name | localize }}</div>
+                        <div class="suggestion-item-meta">
+                          <span class="suggestion-item-price">{{ prod.price }} ر.س</span>
+                          @if (prod.category) {
+                            <span class="suggestion-item-cat">{{ getCategoryName(prod.category) }}</span>
+                          }
+                        </div>
+                      </div>
+                      <svg class="suggestion-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                      </svg>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (suggestions().products.length === 0 && suggestions().categories.length === 0 && searchInputValue().trim().length >= 2) {
+              <div class="suggestions-empty">
+                <span>لا توجد اقتراحات مطابقة لـ "{{ searchInputValue() }}"</span>
+              </div>
+            }
+
+            <button type="button" class="suggestion-action-footer" (click)="applySearch()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span>عرض جميع نتائج البحث عن "{{ searchInputValue() }}"</span>
+            </button>
+          </div>
+        }
+      </div>
+
+      <!-- Sort dropdown -->
+      <div class="sort-box">
+        <select [value]="currentSort()" (change)="onSortChange($event)" class="sort-select">
+          <option value="newest">{{ t('products.sort_newest') }}</option>
+          <option value="price_asc">{{ t('products.sort_price_asc') }}</option>
+          <option value="price_desc">{{ t('products.sort_price_desc') }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Active Filter Feedback -->
+    @if (searchQuery() || selectedCategory()) {
+      <div class="active-filter-banner animate-fade-in">
+        <span class="active-filter-text">
+          @if (searchQuery() && selectedCategory()) {
+            نتائج البحث عن "<strong>{{ searchQuery() }}</strong>" في قسم "<strong>{{ getSelectedCategoryName() }}</strong>"
+          } @else if (searchQuery()) {
+            نتائج البحث عن "<strong>{{ searchQuery() }}</strong>"
+          } @else {
+            عرض المنتجات في قسم "<strong>{{ getSelectedCategoryName() }}</strong>"
+          }
+        </span>
+        <button type="button" class="btn-clear-filters" (click)="resetAllFilters()">
+          مسح التصفية
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    }
+
+    <!-- Category Chips -->
+    <div class="category-filters animate-fade-up delay-150">
+      <button
+        (click)="selectCategory('')"
+        class="chip-btn"
+        [class.active]="selectedCategory() === ''"
+      >
+        {{ t('products.all_categories') }}
+      </button>
+      @for (cat of categories(); track cat._id) {
+        <button
+          (click)="onCategoryClick(cat)"
+          class="chip-btn"
+          [class.active]="isCategoryActive(cat)"
+        >
+          {{ cat.name | localize }}
+        </button>
+      }
+    </div>
+
+    <!-- Products Grid / Empty State -->
+    @if (isLoading()) {
+      <div class="products-grid loading-grid animate-fade-in">
+        @for (i of [1,2,3,4,5,6]; track i) {
+          <div class="card skeleton-card">
+            <div class="skeleton-img-wrap">
+              <div class="skeleton-shimmer"></div>
+              <div class="skeleton-spinner"></div>
+            </div>
+            <div class="skeleton-content">
+              <div class="skeleton-line skeleton-title"></div>
+              <div class="skeleton-line skeleton-desc"></div>
+              <div class="skeleton-bottom-row">
+                <div class="skeleton-line skeleton-price"></div>
+                <div class="skeleton-line skeleton-btn"></div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (products().length === 0) {
+      <div class="empty-box card animate-fade-up">
+        <div class="empty-icon-wrap">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+        </div>
+        <h2 class="empty-title">
+          @if (searchQuery()) {
+            المنتج الذي تبحث عنه غير موجود
+          } @else if (selectedCategory()) {
+            لا توجد منتجات متوفرة حالياً في هذا القسم
+          } @else {
+            المنتج الذي تبحث عنه غير موجود
+          }
+        </h2>
+        @if (searchQuery()) {
+          <p class="empty-query-badge">
+            لم نجد نتائج مطابقة لـ: <strong>"{{ searchQuery() }}"</strong>
+          </p>
+        }
+        <p class="empty-desc">
+          لا تقلق! يمكننا توفير أو تصنيع أي أداة حسية أو تأهيلية خصيصاً لمركزك أو عيادتك بأعلى معايير الجودة والمواصفات الطبية المعتمدة.
+        </p>
+
+        <div class="empty-actions">
+          <a
+            [href]="getCustomInquiryUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-whatsapp btn-lg pulse-whatsapp"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.055-1.92-.477-1.528-.63-2.518-2.176-2.595-2.277-.076-.101-.617-.821-.617-1.565 0-.745.39-1.111.528-1.262.138-.152.3-.19.4-.19.1 0 .2 0 .288.005.093.004.22-.036.343.262.13.312.441 1.077.48 1.156.038.079.063.172.013.272-.05.101-.076.165-.152.253-.076.089-.16.198-.228.266-.076.076-.156.16-.067.312.089.152.395.65.847 1.054.582.52 1.073.681 1.225.757.152.076.24.063.329-.038.089-.101.38-.443.481-.595.101-.152.202-.127.341-.076.139.051.884.417 1.036.493.152.076.253.114.291.177.038.064.038.368-.106.773z"/>
+            </svg>
+            <span>اسأل عن المنتج عبر واتساب</span>
+          </a>
+
+          @if (searchQuery() || selectedCategory()) {
+            <button type="button" class="btn btn-outline" (click)="resetAllFilters()">
+              عرض جميع المنتجات
+            </button>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="products-grid">
+        @for (prod of products(); track prod._id) {
+          <app-product-card [product]="prod" />
+        }
+      </div>
+
+      <!-- Pagination Component (15 items per page) -->
+      @if (totalPages() > 1) {
+        <nav class="pagination-container animate-fade-up" aria-label="صفحات المنتجات">
+          <button
+            type="button"
+            class="pagination-nav-btn prev-btn"
+            [disabled]="currentPage() === 1"
+            (click)="goToPage(currentPage() - 1)"
+            aria-label="الصفحة السابقة"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+            <span>السابق</span>
+          </button>
+
+          <div class="pagination-pages">
+            @for (p of getVisiblePages(); track p) {
+              <button
+                type="button"
+                class="page-number-btn"
+                [class.active]="p === currentPage()"
+                (click)="goToPage(p)"
+              >
+                {{ p }}
+              </button>
+            }
+          </div>
+
+          <button
+            type="button"
+            class="pagination-nav-btn next-btn"
+            [disabled]="currentPage() === totalPages()"
+            (click)="goToPage(currentPage() + 1)"
+            aria-label="الصفحة التالية"
+          >
+            <span>التالي</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+        </nav>
+      }
+    }
+  </div>
+</div>

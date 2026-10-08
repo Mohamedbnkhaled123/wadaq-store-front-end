@@ -1,0 +1,152 @@
+@if (cartService.isOpen()) {
+  <div class="cart-backdrop animate-fade-in" (click)="cartService.closeCart()"></div>
+  <aside class="cart-drawer" *transloco="let t" aria-labelledby="cart-title">
+    <!-- Drawer Header -->
+    <div class="drawer-header">
+      <div class="drawer-title-group">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <h2 id="cart-title" class="drawer-title">{{ t('cart.title') }}</h2>
+        <span class="count-tag">({{ cartService.totalCount() }})</span>
+      </div>
+
+      <button (click)="cartService.closeCart()" class="close-btn" aria-label="Close Cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Drawer Content -->
+    <div class="drawer-body">
+      @if (cartService.items().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon-box">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#7FB3C2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
+              <line x1="9" y1="9" x2="9.01" y2="9"></line>
+              <line x1="15" y1="9" x2="15.01" y2="9"></line>
+            </svg>
+          </div>
+          <p class="empty-text">{{ t('cart.empty') }}</p>
+          <button (click)="cartService.closeCart()" class="btn btn-outline btn-sm">
+            {{ t('cart.empty_action') }}
+          </button>
+        </div>
+      } @else {
+        <div class="cart-items-list">
+          @for (item of cartService.items(); track item.product._id) {
+            <div class="cart-item">
+              <img
+                [src]="item.product.images[0]?.url || 'images/logo.png'"
+                [alt]="item.product.name | localize"
+                class="item-img"
+                width="70"
+                height="70"
+              />
+              <div class="item-details">
+                <h3 class="item-title">{{ item.product.name | localize }}</h3>
+                <p class="item-price">{{ item.product.price.toLocaleString() }} {{ t('common.currency') }}</p>
+
+                <div class="quantity-controls">
+                  <button
+                    (click)="cartService.updateQuantity(item.product._id, item.quantity - 1)"
+                    class="qty-btn"
+                    aria-label="Decrease quantity"
+                  >-</button>
+                  <span class="qty-num">{{ item.quantity }}</span>
+                  <button
+                    (click)="cartService.updateQuantity(item.product._id, item.quantity + 1)"
+                    class="qty-btn"
+                    aria-label="Increase quantity"
+                  >+</button>
+
+                  <button
+                    (click)="cartService.removeItem(item.product._id)"
+                    class="remove-btn"
+                    title="حذف من السلة"
+                    aria-label="Remove item"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E04B4B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Drawer Footer -->
+    @if (cartService.items().length > 0) {
+      <div class="drawer-footer">
+        <div class="price-summary">
+          <div class="summary-row">
+            <span class="summary-label">{{ t('cart.total') }}</span>
+            <span class="summary-val">{{ cartService.totalPrice().toLocaleString() }} {{ t('common.currency') }}</span>
+          </div>
+          <p class="shipping-notice">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            {{ t('cart.shipping_note') }}
+          </p>
+        </div>
+
+        <!-- Admin restriction warning if logged in as admin -->
+        @if (authService.isAdmin()) {
+          <div class="admin-notice">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span>{{ t('products.admin_cannot_buy') }}</span>
+          </div>
+        } @else {
+          <!-- WhatsApp Checkout Button -->
+          <a
+            [href]="getCheckoutUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-whatsapp btn-lg checkout-btn pulse-whatsapp"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.055-1.92-.477-1.528-.63-2.518-2.176-2.595-2.277-.076-.101-.617-.821-.617-1.565 0-.745.39-1.111.528-1.262.138-.152.3-.19.4-.19.1 0 .2 0 .288.005.093.004.22-.036.343.262.13.312.441 1.077.48 1.156.038.079.063.172.013.272-.05.101-.076.165-.152.253-.076.089-.16.198-.228.266-.076.076-.156.16-.067.312.089.152.395.65.847 1.054.582.52 1.073.681 1.225.757.152.076.24.063.329-.038.089-.101.38-.443.481-.595.101-.152.202-.127.341-.076.139.051.884.417 1.036.493.152.076.253.114.291.177.038.064.038.368-.106.773z"/>
+            </svg>
+            <span>{{ t('cart.checkout_whatsapp') }}</span>
+          </a>
+        }
+
+        <!-- View Full Cart Page Link -->
+        <a
+          [routerLink]="['/', langService.currentLang(), 'cart']"
+          (click)="cartService.closeCart()"
+          class="btn btn-outline view-cart-link"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>عرض صفحة السلة الكاملة</span>
+        </a>
+
+        <button (click)="cartService.clearCart()" class="clear-btn">
+          {{ t('cart.clear_cart') }}
+        </button>
+      </div>
+    }
+  </aside>
+}

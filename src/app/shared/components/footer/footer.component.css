@@ -1,0 +1,129 @@
+.footer {
+  background: #0E252E;
+  color: #D3E0E6;
+  padding-top: 4rem;
+  margin-top: 5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.footer-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  padding-bottom: 3.5rem;
+}
+@media (min-width: 768px) {
+  .footer-container {
+    grid-template-columns: 1.6fr 1fr 1.2fr;
+  }
+}
+.footer-brand-link {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  text-decoration: none;
+  transition: transform var(--transition-fast);
+}
+.footer-brand-link:hover {
+  transform: translateY(-2px);
+}
+.footer-logo {
+  height: 90px;
+  width: auto;
+  object-fit: contain;
+}
+.brand-desc {
+  font-size: 0.95rem;
+  color: #9FB8C2;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+.medical-disclaimer {
+  font-size: 0.8rem;
+  color: #728F9B;
+  line-height: 1.5;
+}
+.col-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 1.25rem;
+  position: relative;
+}
+.links-list, .contact-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.links-list a {
+  color: #9FB8C2;
+  font-size: 0.9rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+.links-list a:hover {
+  color: var(--color-secondary);
+  transform: translateX(-4px);
+}
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #9FB8C2;
+}
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-block: 1.5rem;
+  background: #091A20;
+}
+.bottom-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #728F9B;
+}
+.bottom-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.footer-bottom-logo {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+.designer-credits {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #728F9B;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+.designer-credits:hover {
+  color: #E2F1F8;
+  opacity: 0.95;
+}
+.designer-logo {
+  height: 22px;
+  width: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+  transition: transform 0.2s ease;
+}
+.designer-credits:hover .designer-logo {
+  transform: scale(1.1);
+}
+@media (max-width: 640px) {
+  .bottom-container {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+}

@@ -1,0 +1,193 @@
+<header class="header" *transloco="let t">
+  <div class="container header-container">
+    <!-- Brand Logo -->
+    <a
+      [attr.href]="'/' + langService.currentLang()"
+      (click)="onLogoClick($event)"
+      class="brand-link"
+      aria-label="Wadaq Store Home"
+    >
+      <img
+        [src]="logoUrl()"
+        (error)="onLogoError($event)"
+        alt="شعار متجر ودق للتكامل الحسي"
+        class="brand-logo"
+        width="60"
+        height="60"
+      />
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav class="desktop-nav" aria-label="Main Navigation">
+      <a [routerLink]="['/', langService.currentLang()]" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+        {{ t('nav.home') }}
+      </a>
+      <a [routerLink]="['/', langService.currentLang(), 'products']" routerLinkActive="active" class="nav-link">
+        {{ t('nav.products') }}
+      </a>
+      @if (settingsService.showPackagesSection()) {
+        <a [routerLink]="['/', langService.currentLang(), 'packages']" routerLinkActive="active" class="nav-link">
+          {{ t('nav.packages') }}
+        </a>
+      }
+      @if (settingsService.showProjectsSection()) {
+        <a [routerLink]="['/', langService.currentLang(), 'projects']" routerLinkActive="active" class="nav-link">
+          {{ t('nav.projects') }}
+        </a>
+      }
+      <a [routerLink]="['/', langService.currentLang(), 'about']" routerLinkActive="active" class="nav-link">
+        {{ t('nav.about') }}
+      </a>
+      <a [routerLink]="['/', langService.currentLang(), 'consultant']" routerLinkActive="active" class="nav-link" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+        </svg>
+        <span>{{ t('nav.consultant') }}</span>
+      </a>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <!-- Admin Mode Indicator -->
+      @if (authService.isAdmin()) {
+        <a routerLink="/admin/products" class="admin-pill" title="الانتقال إلى لوحة التحكم">
+          <span class="pulse-dot"></span>
+          {{ t('nav.admin_badge') }}
+        </a>
+      }
+
+      <!-- Theme Toggle Button (Light / Slate Dark) -->
+      <button
+        (click)="themeService.toggleTheme()"
+        class="action-btn theme-btn"
+        [attr.aria-label]="themeService.isDark() ? 'التبديل إلى المظهر الفاتح' : 'التبديل إلى المظهر الداكن الطبي'"
+        [title]="themeService.isDark() ? 'المظهر الفاتح' : 'المظهر الداكن الطبي'"
+      >
+        @if (themeService.isDark()) {
+          <!-- Sun SVG -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        } @else {
+          <!-- Moon SVG -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        }
+      </button>
+
+      <!-- Language Switcher -->
+      <button (click)="onLanguageToggle()" class="action-btn lang-btn" [class.flipping]="isLangFlipping()" aria-label="Switch Language">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        <span class="lang-text">{{ langService.currentLang() === 'ar' ? 'English' : 'العربية' }}</span>
+      </button>
+
+      <!-- Shopping Cart Button (Navigates to Dedicated Cart Page) -->
+      <a
+        [routerLink]="['/', langService.currentLang(), 'cart']"
+        id="header-cart-btn"
+        class="action-btn cart-btn"
+        aria-label="سلة المشتريات"
+        [title]="t('nav.cart')"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        @if (cartService.totalCount() > 0) {
+          <span class="cart-badge">{{ cartService.totalCount() }}</span>
+        }
+      </a>
+
+      <!-- Mobile Menu Hamburger -->
+      <button (click)="toggleMobileMenu()" class="action-btn mobile-menu-btn" aria-label="Toggle Navigation Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          @if (mobileMenuOpen()) {
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          } @else {
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          }
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation Drawer -->
+  @if (mobileMenuOpen()) {
+    <div class="mobile-nav animate-fade-in">
+      <a [routerLink]="['/', langService.currentLang()]" (click)="closeMobileMenu()" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mobile-nav-link">
+        {{ t('nav.home') }}
+      </a>
+      <a [routerLink]="['/', langService.currentLang(), 'products']" (click)="closeMobileMenu()" routerLinkActive="active" class="mobile-nav-link">
+        {{ t('nav.products') }}
+      </a>
+      @if (settingsService.showPackagesSection()) {
+        <a [routerLink]="['/', langService.currentLang(), 'packages']" (click)="closeMobileMenu()" routerLinkActive="active" class="mobile-nav-link">
+          {{ t('nav.packages') }}
+        </a>
+      }
+      @if (settingsService.showProjectsSection()) {
+        <a [routerLink]="['/', langService.currentLang(), 'projects']" (click)="closeMobileMenu()" routerLinkActive="active" class="mobile-nav-link">
+          {{ t('nav.projects') }}
+        </a>
+      }
+      <a [routerLink]="['/', langService.currentLang(), 'about']" (click)="closeMobileMenu()" routerLinkActive="active" class="mobile-nav-link">
+        {{ t('nav.about') }}
+      </a>
+      <a [routerLink]="['/', langService.currentLang(), 'consultant']" (click)="closeMobileMenu()" routerLinkActive="active" class="mobile-nav-link" style="display: flex; align-items: center; gap: 0.4rem;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+        </svg>
+        <span>{{ t('nav.consultant') }}</span>
+      </a>
+      <a [routerLink]="['/', langService.currentLang(), 'cart']" (click)="closeMobileMenu()" routerLinkActive="active" class="mobile-nav-link" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>{{ t('nav.cart') }}</span>
+        @if (cartService.totalCount() > 0) {
+          <span class="cart-badge" style="position: static; font-size: 0.75rem; min-width: 20px; height: 20px; padding: 0 6px;">{{ cartService.totalCount() }}</span>
+        }
+      </a>
+
+      <!-- Mobile Theme Toggle Option -->
+      <button (click)="themeService.toggleTheme()" class="mobile-theme-btn">
+        <div class="theme-info">
+          @if (themeService.isDark()) {
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <span>المظهر الداكن مفعّل (انقر للتحويل إلى الفاتح)</span>
+          } @else {
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <span>المظهر الفاتح مفعّل (انقر للتحويل إلى الداكن)</span>
+          }
+        </div>
+        <span class="theme-badge">{{ themeService.isDark() ? 'داكن' : 'فاتح' }}</span>
+      </button>
+    </div>
+  }
+</header>

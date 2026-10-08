@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products & Tools",
+    "packages": "Room Packages",
+    "projects": "Showcase",
+    "about": "About Wadaq",
+    "cart": "Shopping Cart",
+    "consultant": "AI Advisor",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "admin_badge": "Admin Mode"
+  },
+  "hero": {
+    "badge": "Premier Sensory Integration & Occupational Therapy Supplier",
+    "title": "Wadaq for Skills Development & Sensory Room Setup",
+    "subtitle": "Certified sensory integration solutions and clinical tools for therapists, specialists, and rehabilitation centers adhering to the highest medical safety standards.",
+    "cta_products": "Explore Products",
+    "cta_packages": "Room Packages",
+    "cta_custom": "Custom Order"
+  },
+  "stats": {
+    "centers": "Equipped Clinics & Centers",
+    "tools": "Specialized Sensory Tools",
+    "partners": "Partner Therapists & Doctors",
+    "satisfaction": "Center Satisfaction Rate"
+  },
+  "products": {
+    "title": "Sensory Integration Equipment",
+    "subtitle": "Certified therapeutic instruments designed for targeted sensory system stimulation",
+    "all_categories": "All Categories",
+    "search_placeholder": "Search by tool name, sensory system, or specs...",
+    "sort_newest": "Newest",
+    "sort_price_asc": "Price: Low to High",
+    "sort_price_desc": "Price: High to Low",
+    "in_stock": "In Stock",
+    "out_of_stock": "Currently Out of Stock",
+    "add_to_cart": "Add to Cart",
+    "buy_now_whatsapp": "Buy via WhatsApp",
+    "inquire_whatsapp": "Inquire via WhatsApp",
+    "view_details": "View Details",
+    "specs": "Technical & Therapeutic Specs",
+    "sensory_system": "Target Sensory System",
+    "age_range": "Recommended Age",
+    "related_products": "Related Sensory Tools",
+    "empty_search": "No sensory tools matched your criteria",
+    "unavailable_title": "This Product is Currently Unavailable",
+    "unavailable_desc": "You can reach out via WhatsApp to inquire about availability dates or request recommended clinical alternatives.",
+    "admin_cannot_buy": "Notice: You are logged in as Admin. Purchasing is disabled in Admin mode.",
+    "edit_in_dashboard": "Edit in Dashboard"
+  },
+  "packages": {
+    "title": "Sensory Room & Clinic Packages",
+    "subtitle": "Tailored turnkey setups for Snoezelen rooms, OT clinics, and special needs centers",
+    "room_size": "Suggested Area",
+    "tier_basic": "Basic Package",
+    "tier_standard": "Standard Package",
+    "tier_premium": "Comprehensive (VIP) Package",
+    "request_package": "Order Package via WhatsApp",
+    "included_items": "Included Tools & Equipment",
+    "includes_installation": "Includes technical support & installation guidance"
+  },
+  "projects": {
+    "title": "Wadaq Completed Projects Portfolio",
+    "subtitle": "Real-world sensory rooms and therapy environments equipped and delivered by our team",
+    "client": "Client / Facility",
+    "location": "Location",
+    "completion_date": "Completion Date",
+    "view_project": "View Case Study"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is currently empty",
+    "empty_action": "Start Browsing Sensory Tools",
+    "items_count": "Items Count",
+    "total": "Items Total",
+    "shipping_note": "+ Shipping costs apply based on governorate and delivery destination",
+    "checkout_whatsapp": "Submit Order via WhatsApp",
+    "clear_cart": "Clear Cart",
+    "quantity": "Qty",
+    "price_each": "each",
+    "total_price": "Subtotal",
+    "order_summary": "Order Summary",
+    "item_added": "Product added to your cart successfully"
+  },
+  "custom_cta": {
+    "title": "Haven't found the specific sensory tool you need?",
+    "description": "We can manufacture or source customized sensory equipment tailored to your clinical facility specifications.",
+    "button": "Request Custom Tool via WhatsApp"
+  },
+  "about": {
+    "title": "About Wadaq Sensory Integration",
+    "mission_title": "Our Mission",
+    "vision_title": "Our Vision",
+    "contact_us": "Contact Us Directly",
+    "address": "Headquarters",
+    "phone": "Phone",
+    "email": "Email",
+    "whatsapp": "Clinical & Sales WhatsApp"
+  },
+  "footer": {
+    "desc": "Wadaq Store is the trusted provider of sensory integration equipment and multi-sensory room setups for clinicians and therapy centers across the Middle East.",
+    "quick_links": "Quick Links",
+    "contact_info": "Contact Information",
+    "rights": "All Rights Reserved - Wadaq Sensory Integration Store",
+    "designed_by": "Designed by Eng. Mohamed Khaled",
+    "disclaimer": "All products are carefully selected and built according to pediatric therapy safety standards."
+  },
+  "common": {
+    "currency": "EGP",
+    "back": "Back",
+    "loading": "Loading...",
+    "error": "An error occurred while loading data",
+    "retry": "Retry"
+  }
+}

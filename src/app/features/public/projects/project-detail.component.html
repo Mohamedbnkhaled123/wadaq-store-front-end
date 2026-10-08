@@ -1,0 +1,52 @@
+<div class="project-detail-page" *transloco="let t">
+  <div class="container">
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>{{ t('common.loading') }}</p>
+      </div>
+    } @else if (project(); as proj) {
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a [routerLink]="['/', langService.currentLang()]">{{ t('nav.home') }}</a>
+        <span class="sep">/</span>
+        <a [routerLink]="['/', langService.currentLang(), 'projects']">{{ t('nav.projects') }}</a>
+        <span class="sep">/</span>
+        <span class="current">{{ proj.title | localize }}</span>
+      </nav>
+
+      <header class="project-header">
+        @if (proj.clientName?.ar) {
+          <span class="client-badge">{{ proj.clientName | localize }}</span>
+        }
+        <h1 class="project-title">{{ proj.title | localize }}</h1>
+
+        <div class="meta-tags">
+          @if (proj.location?.ar) {
+            <span class="meta-tag">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>{{ proj.location | localize }}</span>
+            </span>
+          }
+        </div>
+      </header>
+
+      <!-- Main Gallery -->
+      <div class="gallery-grid">
+        @for (img of proj.images; track img.url) {
+          <div class="gallery-item card">
+            <img [src]="img.url" [alt]="proj.title | localize" class="gallery-img" />
+          </div>
+        }
+      </div>
+
+      <!-- Description Case Study -->
+      <div class="case-study card">
+        <h2 class="case-heading">تفاصيل ومواصفات المشروع المنفذ</h2>
+        <div class="case-text">{{ proj.description | localize }}</div>
+      </div>
+    }
+  </div>
+</div>

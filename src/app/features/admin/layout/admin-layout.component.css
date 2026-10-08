@@ -1,0 +1,364 @@
+.admin-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color var(--transition-normal);
+  overflow-x: hidden;
+}
+
+/* 1. Sidebar - Fixed/Sticky 100vh with Smooth Collapse/Expand */
+.admin-sidebar {
+  width: 260px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background: #0E252E;
+  color: #D3E0E6;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-inline-end: 1px solid rgba(255, 255, 255, 0.05);
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .admin-sidebar {
+  background: #091117;
+  border-inline-end: 1px solid var(--color-border);
+}
+
+/* Sidebar Brand Header */
+.sidebar-brand {
+  padding: 1.25rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  min-height: 72px;
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.logo {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  transition: height 0.3s ease;
+}
+
+/* Desktop Collapse Arrow Button */
+.desktop-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  color: #9FB8C2;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.desktop-collapse-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+}
+
+.collapse-arrow {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.collapse-arrow.arrow-flipped {
+  transform: rotate(180deg);
+}
+
+.nav-toggle-btn {
+  display: none;
+}
+
+/* Sidebar Navigation Items - Scrollable inside viewport */
+.sidebar-nav {
+  flex: 1;
+  padding: 1.25rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #9FB8C2;
+  transition: all var(--transition-fast);
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.nav-item:hover, .nav-item.active {
+  background: rgba(22, 94, 116, 0.4);
+  color: #FFFFFF;
+}
+
+.nav-item.active {
+  background: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.nav-text {
+  transition: opacity 0.2s ease;
+}
+
+.mobile-store-link {
+  display: none;
+}
+
+/* Anchored Sidebar Footer (Fixed at the bottom of the 100vh sidebar, NEVER pushed 7000px down) */
+.sidebar-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  background: inherit;
+}
+
+.store-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.store-link:hover {
+  background: rgba(93, 187, 138, 0.12);
+  color: #FFFFFF;
+}
+
+/* Collapsed Sidebar State (Desktop Mini Mode) */
+.admin-sidebar.sidebar-collapsed {
+  width: 78px;
+}
+
+.admin-sidebar.sidebar-collapsed .brand-left .badge {
+  display: none;
+}
+
+.admin-sidebar.sidebar-collapsed .brand-left .logo {
+  height: 32px;
+}
+
+.admin-sidebar.sidebar-collapsed .nav-item {
+  justify-content: center;
+  padding: 0.75rem 0.5rem;
+  gap: 0;
+}
+
+.admin-sidebar.sidebar-collapsed .nav-text {
+  display: none;
+}
+
+.admin-sidebar.sidebar-collapsed .store-link {
+  justify-content: center;
+  padding: 0.5rem;
+  gap: 0;
+}
+
+.admin-sidebar.sidebar-collapsed .store-link-text {
+  display: none;
+}
+
+/* 2. Main Body Content Area */
+.admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.admin-topbar {
+  min-height: 64px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  backdrop-filter: blur(8px);
+}
+
+.topbar-start {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sidebar-toggle-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 40px;
+  padding: 0.45rem 0.85rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.user-greeting {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-greeting strong {
+  color: var(--color-primary);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.admin-page-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-x: hidden;
+}
+
+/* Responsive Mobile Layout (<= 860px) */
+@media (max-width: 860px) {
+  .admin-shell {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    position: relative !important;
+    border-inline-end: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  [data-theme="dark"] .admin-sidebar {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .desktop-collapse-btn {
+    display: none;
+  }
+
+  .sidebar-toggle-trigger {
+    display: none;
+  }
+
+  .sidebar-brand {
+    padding: 0.85rem 1.25rem;
+    min-height: auto;
+  }
+
+  .nav-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .nav-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    max-height: 480px;
+    opacity: 1;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, padding 0.3s ease;
+    padding: 0.75rem 1rem 1.25rem;
+    gap: 0.4rem;
+  }
+
+  .sidebar-nav.nav-collapsed {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    pointer-events: none;
+  }
+
+  .nav-item {
+    white-space: normal;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    justify-content: flex-start !important;
+  }
+
+  .nav-text {
+    display: inline !important;
+  }
+
+  .mobile-store-link {
+    display: flex;
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 0.75rem;
+    color: var(--color-secondary);
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  .admin-page-content {
+    padding: 1.25rem 1rem;
+  }
+
+  .admin-topbar {
+    padding: 0.75rem 1rem;
+    position: relative;
+  }
+}

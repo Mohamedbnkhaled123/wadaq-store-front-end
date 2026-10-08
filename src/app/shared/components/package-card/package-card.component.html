@@ -1,0 +1,67 @@
+﻿<article class="card package-card" *transloco="let t">
+  <div class="card-img-wrap">
+    <img
+      [src]="pkg.images[0]?.url || 'images/logo.png'"
+      [alt]="pkg.name | localize"
+      loading="lazy"
+      class="card-img"
+      width="360"
+      height="220"
+    />
+    <div class="tier-badge" [ngClass]="'tier-' + pkg.tier">
+      {{ pkg.tier === 'basic' ? t('packages.tier_basic') : (pkg.tier === 'premium' ? t('packages.tier_premium') : t('packages.tier_standard')) }}
+    </div>
+  </div>
+
+  <div class="card-content">
+    <h3 class="pkg-title">
+      <a [routerLink]="['/', langService.currentLang(), 'packages', pkg.slug | localize]">
+        {{ pkg.name | localize }}
+      </a>
+    </h3>
+
+    <p class="pkg-desc">{{ pkg.shortDescription | localize }}</p>
+
+    @if (pkg.roomSize?.ar) {
+      <div class="room-size-badge">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="9" y1="3" x2="9" y2="21"></line>
+        </svg>
+        <span>{{ t('packages.room_size') }}: {{ pkg.roomSize | localize }}</span>
+      </div>
+    }
+
+    <div class="included-tools-count">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5DBB8A" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>{{ pkg.items.length }} {{ t('packages.included_items') }}</span>
+    </div>
+
+    <div class="price-row">
+      <div class="price-info">
+        <span class="price-label">السعر التقديري:</span>
+        <span class="price-val">{{ pkg.price.toLocaleString() }} {{ t('common.currency') }}</span>
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <a
+        [routerLink]="['/', langService.currentLang(), 'packages', pkg.slug | localize]"
+        class="btn btn-outline btn-sm flex-1"
+      >
+        التفاصيل والمحتويات
+      </a>
+
+      <a
+        [href]="whatsappUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-whatsapp btn-sm flex-1"
+      >
+        {{ t('packages.request_package') }}
+      </a>
+    </div>
+  </div>
+</article>

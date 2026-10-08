@@ -1,0 +1,269 @@
+<div class="products-manager">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-titles">
+      <div class="title-row">
+        <h1 class="page-title">إدارة المنتجات والأدوات الحسية</h1>
+        <span class="count-badge">{{ filteredProducts().length }} أداة حسية</span>
+      </div>
+      <p class="page-subtitle">استعراض وتعديل كافة المنتجات وتتبع حالتها وإدارتها بالكامل</p>
+    </div>
+
+    <a routerLink="/admin/products/new" class="btn btn-primary btn-lg">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      <span>إضافة منتج حسي جديد</span>
+    </a>
+  </header>
+
+  <!-- Filters & Search Toolbar -->
+  <div class="toolbar card">
+    <div class="toolbar-left">
+      <!-- Status Tabs -->
+      <div class="filter-tabs">
+        <button
+          (click)="setStatusFilter('all')"
+          [class.active]="currentStatus() === 'all'"
+          class="filter-tab"
+        >
+          الكل ({{ totalCount() }})
+        </button>
+        <button
+          (click)="setStatusFilter('active')"
+          [class.active]="currentStatus() === 'active'"
+          class="filter-tab"
+        >
+          النشطة ({{ activeCount() }})
+        </button>
+        <button
+          (click)="setStatusFilter('inactive')"
+          [class.active]="currentStatus() === 'inactive'"
+          class="filter-tab"
+        >
+          المعطلة ({{ inactiveCount() }})
+        </button>
+        <button
+          (click)="setStatusFilter('deleted')"
+          [class.active]="currentStatus() === 'deleted'"
+          class="filter-tab tab-danger"
+        >
+          المحذوفة مؤقتاً ({{ deletedCount() }})
+        </button>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="category-select-wrap">
+        <select
+          [ngModel]="selectedCategory()"
+          (ngModelChange)="onCategoryFilterChange($event)"
+          class="cat-select"
+        >
+          <option value="">جميع التصنيفات الحسية</option>
+          @for (cat of categories(); track cat._id) {
+            <option [value]="cat._id">{{ cat.name.ar }} ({{ cat.slug.en }})</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <!-- Search Input -->
+    <div class="search-box">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input
+        type="text"
+        [(ngModel)]="searchQ"
+        (input)="onSearchInput()"
+        placeholder="ابحث باسم المنتج أو الجهاز الحسي..."
+        class="search-input"
+      />
+      @if (searchQ) {
+        <button (click)="searchQ = ''; onSearchInput()" class="clear-search">&times;</button>
+      }
+    </div>
+  </div>
+
+  <!-- Products Data Table -->
+  <div class="table-card card">
+    @if (isLoading() && allProducts().length === 0) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>جاري تحميل قائمة المنتجات من قاعدة البيانات السحابية...</p>
+      </div>
+    } @else if (filteredProducts().length === 0) {
+      <div class="empty-state">
+        <p>لا توجد منتجات تطابق معايير البحث أو الفلتر المحددة.</p>
+        <button (click)="resetFilters()" class="btn btn-outline btn-sm">
+          إعادة ضبط الفلاتر
+        </button>
+      </div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 70px;">الصورة</th>
+            <th>اسم الأداة الحسية</th>
+            <th>التصنيف الحسي</th>
+            <th style="min-width: 130px;">السعر</th>
+            <th>المخزون / التمييز</th>
+            <th>الحالة</th>
+            <th style="text-align: center; width: 280px;">الإجراءات والتحكم</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of filteredProducts(); track (p._id || $index)) {
+            <tr [class.row-deleted]="p.isDeleted" [class.row-inactive]="!p.isActive && !p.isDeleted">
+              <!-- Thumbnail -->
+              <td>
+                <div class="thumb-wrap">
+                  <img
+                    [src]="p.images[0]?.url || 'images/logo.png'"
+                    [alt]="p.name.ar"
+                    class="table-thumb"
+                    loading="lazy"
+                  />
+                </div>
+              </td>
+
+              <!-- Name -->
+              <td>
+                <div class="prod-identity">
+                  <strong class="prod-name">{{ p.name.ar }}</strong>
+                  <span class="prod-sub">{{ p.name.en }}</span>
+                </div>
+              </td>
+
+              <!-- Category -->
+              <td>
+                <span class="sensory-badge" [attr.data-cat]="getCategorySlug(p)">
+                  {{ getCategoryName(p) }}
+                </span>
+              </td>
+
+              <!-- Price -->
+              <td>
+                <div class="price-cell">
+                  <span class="price-label">السعر التقديري:</span>
+                  <div class="price-values">
+                    <span class="current-price">{{ p.price.toLocaleString() }} ج.م</span>
+                    @if (p.oldPrice && p.oldPrice > p.price) {
+                      <span class="old-price">{{ p.oldPrice.toLocaleString() }} ج.م</span>
+                    }
+                  </div>
+                </div>
+              </td>
+
+              <!-- Stock / Badges -->
+              <td>
+                <div class="meta-badges">
+                  @if (p.inStock) {
+                    <span class="badge badge-stock-in">متوفر بالمخزن</span>
+                  } @else {
+                    <span class="badge badge-stock-out">نفد المخزون</span>
+                  }
+                  @if (p.isFeatured) {
+                    <span class="badge badge-featured">مميز بالرئيسية</span>
+                  }
+                </div>
+              </td>
+
+              <!-- Status -->
+              <td>
+                @if (p.isDeleted) {
+                  <span class="badge badge-danger">محذوف مؤقتاً</span>
+                } @else if (!p.isActive) {
+                  <span class="badge badge-warning">معطل</span>
+                } @else {
+                  <span class="badge badge-success">نشط</span>
+                }
+              </td>
+
+              <!-- Actions -->
+              <td>
+                <div class="table-actions">
+                  <!-- Edit Page Link -->
+                  <a
+                    [routerLink]="['/admin/products', p._id || p.id, 'edit']"
+                    (click)="onEditProduct(p, $event)"
+                    class="btn btn-outline btn-sm action-btn"
+                    title="تعديل المنتج في صفحة كاملة"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    <span>تعديل</span>
+                  </a>
+
+                  <!-- Store Preview -->
+                  <a
+                    [href]="'/ar/products/' + (p.slug.ar || p.slug.en)"
+                    target="_blank"
+                    class="btn btn-outline btn-sm action-btn"
+                    title="معاينة في واجهة المتجر"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <span>معاينة</span>
+                  </a>
+
+                  <!-- Toggle Active -->
+                  @if (!p.isDeleted) {
+                    <button
+                      type="button"
+                      (click)="toggleActive(p)"
+                      class="btn btn-outline btn-sm action-btn"
+                      [class.btn-warning-outline]="p.isActive"
+                      [title]="p.isActive ? 'إيقاف تنشيط المنتج' : 'تنشيط المنتج وإتاحته'"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      <span>{{ p.isActive ? 'إيقاف' : 'تنشيط' }}</span>
+                    </button>
+
+                    <!-- Soft Delete -->
+                    <button
+                      type="button"
+                      (click)="deleteProduct(p)"
+                      class="btn btn-danger-outline btn-sm action-btn"
+                      title="حذف مؤقت (Soft Delete)"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                      <span>حذف</span>
+                    </button>
+                  } @else {
+                    <!-- Restore -->
+                    <button
+                      type="button"
+                      (click)="restoreProduct(p)"
+                      class="btn btn-success btn-sm action-btn"
+                      title="استعادة المنتج"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                      </svg>
+                      <span>استعادة</span>
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>

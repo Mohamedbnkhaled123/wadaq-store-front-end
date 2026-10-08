@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <title>متجر ودق — أدوات التكامل الحسي وتجهيز الغرف الحسية للمتخصصين</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#165E74" />
+    <meta name="description" content="متجر ودق المتخصص في توفير أدوات التكامل الحسي والعلاج الوظيفي وتجهيز الغرف متعددة الحواس للأطباء والأخصائيين ومراكز التأهيل في مصر والشرق الأوسط." />
+    <link rel="icon" type="image/png" href="images/logo.png" />
+
+    <!-- Instant Theme Init Script (FOUC Prevention) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('wadaq_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (saved === 'dark' || (!saved && prefersDark)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', '#0B141A');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Preconnect for Remote CDN Assets -->
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Optimized Google Fonts (Essential weights: 400, 600, 700) -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Outfit:wght@500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Outfit:wght@500;700&display=swap" rel="stylesheet" />
+    </noscript>
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
+</html>

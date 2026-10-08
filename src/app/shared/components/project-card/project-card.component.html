@@ -1,0 +1,46 @@
+﻿<article class="card project-card" *transloco="let t">
+  <div class="card-img-wrap">
+    <img
+      [src]="project.images[0]?.url || 'images/logo.png'"
+      [alt]="project.title | localize"
+      loading="lazy"
+      class="card-img"
+      width="360"
+      height="240"
+    />
+
+    @if (project.location?.ar) {
+      <div class="location-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        <span>{{ project.location | localize }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="card-content">
+    @if (project.clientName?.ar) {
+      <span class="client-name">{{ project.clientName | localize }}</span>
+    }
+
+    <h3 class="project-title">
+      <a [routerLink]="['/', langService.currentLang(), 'projects', project.slug | localize]">
+        {{ project.title | localize }}
+      </a>
+    </h3>
+
+    <p class="project-desc">{{ project.description | localize }}</p>
+
+    <a
+      [routerLink]="['/', langService.currentLang(), 'projects', project.slug | localize]"
+      class="view-link"
+    >
+      <span>{{ t('projects.view_project') }}</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </a>
+  </div>
+</article>

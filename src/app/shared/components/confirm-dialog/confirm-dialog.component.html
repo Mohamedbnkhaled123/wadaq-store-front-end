@@ -1,0 +1,81 @@
+@if (confirmService.isOpen() && confirmService.options(); as opt) {
+  <div class="confirm-backdrop animate-fade-in" (click)="confirmService.reject()" aria-hidden="true"></div>
+
+  <div
+    class="confirm-modal-wrapper"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="opt.title"
+  >
+    <div class="confirm-card card animate-scale-in" (click)="$event.stopPropagation()">
+      <div class="card-header">
+        <div class="icon-indicator" [ngClass]="'indicator-' + (opt.type || 'warning')">
+          @if (opt.type === 'danger' || opt.confirmIcon === 'trash') {
+            <!-- Trash SVG Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18"></path>
+              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          } @else if (opt.confirmIcon === 'pause') {
+            <!-- Pause SVG Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+          } @else if (opt.confirmIcon === 'play') {
+            <!-- Play SVG Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          } @else {
+            <!-- Alert Triangle SVG Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          }
+        </div>
+
+        <button
+          type="button"
+          (click)="confirmService.reject()"
+          class="btn-close"
+          aria-label="إغلاق نافذة التأكيد"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="card-body">
+        <h3 class="dialog-title">{{ opt.title }}</h3>
+        <p class="dialog-message">{{ opt.message }}</p>
+      </div>
+
+      <div class="card-footer">
+        <button
+          type="button"
+          (click)="confirmService.reject()"
+          class="btn btn-outline btn-dialog-cancel"
+        >
+          {{ opt.cancelText || 'إلغاء' }}
+        </button>
+
+        <button
+          type="button"
+          (click)="confirmService.accept()"
+          class="btn btn-dialog-confirm"
+          [ngClass]="'btn-' + (opt.type || 'warning')"
+        >
+          {{ opt.confirmText || 'تأكيد الإجراء' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

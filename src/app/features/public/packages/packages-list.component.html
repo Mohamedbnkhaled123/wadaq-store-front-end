@@ -1,0 +1,41 @@
+<div class="packages-page" *transloco="let t">
+  <div class="container">
+    <header class="page-header animate-fade-down">
+      <span class="section-tag">حلول تسليم مفتاح</span>
+      <h1 class="page-title">{{ t('packages.title') }}</h1>
+      <p class="page-subtitle">{{ t('packages.subtitle') }}</p>
+    </header>
+
+    @if (isLoading()) {
+      <div class="packages-grid">
+        <div class="package-skeleton card">
+          <div class="skeleton-img skeleton"></div>
+          <div class="skeleton-body">
+            <div class="skeleton skeleton-line-title"></div>
+            <div class="skeleton skeleton-line-desc"></div>
+            <div class="skeleton skeleton-line-price"></div>
+          </div>
+        </div>
+        <div class="package-skeleton card">
+          <div class="skeleton-img skeleton"></div>
+          <div class="skeleton-body">
+            <div class="skeleton skeleton-line-title"></div>
+            <div class="skeleton skeleton-line-desc"></div>
+            <div class="skeleton skeleton-line-price"></div>
+          </div>
+        </div>
+      </div>
+    } @else if (packages().length > 0) {
+      <div class="packages-grid animate-fade-up delay-75">
+        @for (pkg of packages(); track pkg._id) {
+          <app-package-card [pkg]="pkg" />
+        }
+      </div>
+    } @else {
+      <div class="empty-state card animate-fade-up">
+        <p class="empty-text">لا توجد باقات معروضة حالياً، يمكنك التواصل معنا لتجهيز غرفة حسية مخصصة لمركزك.</p>
+        <a [routerLink]="['/', langService.currentLang(), 'products']" class="btn btn-primary">تصفح المنتجات والأدوات</a>
+      </div>
+    }
+  </div>
+</div>
