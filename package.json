@@ -6,6 +6,7 @@
     "start": "ng serve",
     "dev": "ng serve",
     "build": "ng build && node -e \"const fs=require('fs'); const p='dist/wadaq-store/browser'; if(fs.existsSync(p+'/index.csr.html')) fs.copyFileSync(p+'/index.csr.html', p+'/index.html');\"",
+    "postbuild": "node -e \"const fs=require('fs'); const p='dist/wadaq-store/browser'; if(fs.existsSync(p+'/index.csr.html')) fs.copyFileSync(p+'/index.csr.html', p+'/index.html');\"",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:wadaq-store": "node dist/wadaq-store/server/server.mjs"
