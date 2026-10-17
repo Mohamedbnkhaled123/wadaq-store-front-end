@@ -48,13 +48,16 @@ export class HeaderComponent {
 
   logoUrl(): string {
     const sLogo = this.settingsService.settings()?.logo;
-    return sLogo || '/images/logo.png';
+    if (sLogo && sLogo.endsWith('.png')) {
+      return sLogo.replace('.png', '.webp');
+    }
+    return sLogo || '/images/logo.webp';
   }
 
   onLogoError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (img && !img.src.includes('logo.png')) {
-      img.src = '/images/logo.png';
+    if (img && !img.src.includes('logo.webp')) {
+      img.src = '/images/logo.webp';
     }
   }
 

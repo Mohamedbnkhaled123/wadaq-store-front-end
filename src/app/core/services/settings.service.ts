@@ -15,7 +15,7 @@ export const DEFAULT_SETTINGS: Settings = {
     ar: 'حلول متكاملة وأدوات حسية معتمدة لتجهيز غرف التكامل الحسي وتنمية مهارات الأطفال',
     en: 'Integrated solutions and certified sensory tools for sensory rooms and child skill development',
   },
-  logo: '/images/logo.png',
+  logo: '/images/logo.webp',
   whatsappNumber: '201000000000',
   phone: '+201000000000',
   email: 'info@wadaq.com',

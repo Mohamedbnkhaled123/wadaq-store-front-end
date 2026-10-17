@@ -79,6 +79,14 @@
   max-width: 580px;
   min-height: 3.2em;
 }
+@media (max-width: 991px) {
+  .hero-title {
+    min-height: 2.8em;
+  }
+  .hero-subtitle {
+    min-height: 5.3em;
+  }
+}
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
@@ -86,6 +94,7 @@
 }
 .hero-visual {
   position: relative;
+  width: 100%;
 }
 .hero-image-card {
   position: relative;
@@ -94,15 +103,17 @@
   box-shadow: var(--shadow-xl);
   border: 1px solid var(--color-border-subtle);
   transition: transform var(--transition-normal);
+  aspect-ratio: 4 / 3;
+  width: 100%;
 }
 .hero-image-card:hover {
   transform: translateY(-4px);
 }
 .hero-img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
-  aspect-ratio: 4/3;
+  aspect-ratio: 4 / 3;
 }
 .hero-floating-top-tag {
   position: absolute;
