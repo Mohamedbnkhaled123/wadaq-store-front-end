@@ -1,4 +1,4 @@
-﻿import { inject, Injectable, DOCUMENT } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 
@@ -25,13 +25,22 @@ export class SeoService {
 
     this.meta.updateTag({ name: 'description', content: config.description });
 
-    // OpenGraph
+    // OpenGraph & Social
     this.meta.updateTag({ property: 'og:title', content: fullTitle });
     this.meta.updateTag({ property: 'og:description', content: config.description });
     this.meta.updateTag({ property: 'og:type', content: config.type || 'website' });
+    this.meta.updateTag({ property: 'og:site_name', content: 'متجر ودق للتكامل الحسي' });
 
-    const imageUrl = config.image || `${environment.siteUrl}/images/logo.png`;
+    let imageUrl = config.image || `${environment.siteUrl}/images/og-preview.png`;
+    if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+      imageUrl = `${environment.siteUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+    }
     this.meta.updateTag({ property: 'og:image', content: imageUrl });
+    this.meta.updateTag({ property: 'og:image:secure_url', content: imageUrl });
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({ name: 'twitter:title', content: fullTitle });
+    this.meta.updateTag({ name: 'twitter:description', content: config.description });
+    this.meta.updateTag({ name: 'twitter:image', content: imageUrl });
 
     const currentUrl = config.path
       ? `${environment.siteUrl}${config.path}`

@@ -1,10 +1,59 @@
 import { inject, Injectable, signal, computed, PLATFORM_ID, TransferState, makeStateKey } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Observable, of, tap, shareReplay } from 'rxjs';
+import { Observable, of, tap, catchError, timeout, shareReplay, finalize } from 'rxjs';
 import { ApiService } from './api.service';
 import { Settings } from '../models/models';
 
 export const SETTINGS_STATE_KEY = makeStateKey<Settings>('wadaq_ssr_settings_key');
+
+export const DEFAULT_SETTINGS: Settings = {
+  logo: '/images/logo.png',
+  whatsappNumber: '201000000000',
+  phone: '01000000000',
+  email: 'info@wadaq-store.com',
+  address: { ar: 'القاهرة، مصر', en: 'Cairo, Egypt' },
+  currency: 'ج.م',
+  shippingNote: {
+    ar: 'يضاف مصاريف الشحن حسب المحافظة وموقع التوصيل',
+    en: 'Shipping fees will be added based on governorate and delivery location',
+  },
+  social: {},
+  hero: {
+    title: { ar: 'بيئة حسية متكاملة تنبض بالحياة والتعلم', en: 'Integrated Sensory Environments' },
+    subtitle: {
+      ar: 'أكبر متجر عربي متخصص في أدوات التكامل الحسي وتجهيز غرف التأهيل الحسي للأطفال والمراكز المتخصصة',
+      en: 'The leading Arabic store specialized in sensory integration and therapy rooms',
+    },
+    ctaPrimary: { ar: 'تصفح المنتجات', en: 'Browse Products' },
+    ctaSecondary: { ar: 'استشر الذكاء الاصطناعي', en: 'Consult AI' },
+  },
+  about: {
+    title: { ar: 'رواد تجهيز البيئات الحسية', en: 'Pioneers in Sensory Environments' },
+    content: {
+      ar: 'نقدم حلولاً وأدوات حسية مبتكرة مصممة بعناية لتنمية المهارات وتطوير الحواس.',
+      en: 'We provide innovative sensory solutions crafted to empower sensory skills.',
+    },
+    mission: {
+      ar: 'تمكين الأطفال والمراكز من بيئات علاجية حسية متكاملة وفق أعلى المعايير.',
+      en: 'Empowering children and centers with integrated sensory environments.',
+    },
+    vision: {
+      ar: 'أن نكون الوجهة الأولى في العالم العربي في حلول التكامل الحسي.',
+      en: 'To be the premier destination in the Arab world for sensory solutions.',
+    },
+  },
+  stats: [],
+  customProductCta: {
+    title: { ar: 'لم تجد ما تبحث عنه؟', en: "Didn't find what you need?" },
+    description: {
+      ar: 'نصنع لك أي أداة أو جهاز حسي بمقاسات ومواصفات خاصة تناسب مركزك أو منزلك',
+      en: 'We manufacture custom sensory tools tailored for your space',
+    },
+    buttonText: { ar: 'طلب تفصيل مخصص', en: 'Request Custom Order' },
+  },
+  showPackagesSection: true,
+  showProjectsSection: true,
+};
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
@@ -13,40 +62,70 @@ export class SettingsService {
   private transferState = inject(TransferState);
   private settingsRequest$: Observable<any> | null = null;
 
-  public settings = signal<Settings | null>(null);
-
-  // Local storage keys for resilient section visibility persistence
+  private readonly SETTINGS_STORAGE_KEY = 'wadaq_settings_cache_v2';
   private readonly PKG_SECTION_KEY = 'wadaq_section_packages';
   private readonly PROJ_SECTION_KEY = 'wadaq_section_projects';
 
+  public settings = signal<Settings | null>(this.getInitialSettings());
+
   private localPackagesActive = signal<boolean>(
-    typeof window !== 'undefined'
-      ? localStorage.getItem('wadaq_section_packages') !== 'false'
-      : true
+    this.settings()?.showPackagesSection ??
+      (typeof window !== 'undefined' && localStorage.getItem(this.PKG_SECTION_KEY) !== null
+        ? localStorage.getItem(this.PKG_SECTION_KEY) === 'true'
+        : true)
   );
 
   private localProjectsActive = signal<boolean>(
-    typeof window !== 'undefined'
-      ? localStorage.getItem('wadaq_section_projects') !== 'false'
-      : true
+    this.settings()?.showProjectsSection ??
+      (typeof window !== 'undefined' && localStorage.getItem(this.PROJ_SECTION_KEY) !== null
+        ? localStorage.getItem(this.PROJ_SECTION_KEY) === 'true'
+        : true)
   );
 
   constructor() {
-    if (isPlatformBrowser(this.platformId) && this.transferState.hasKey(SETTINGS_STATE_KEY)) {
-      try {
-        const ssrSettings = this.transferState.get(SETTINGS_STATE_KEY, null);
-        if (ssrSettings) {
-          this.settings.set(ssrSettings);
-          if (ssrSettings.showPackagesSection !== undefined) {
-            this.setLocalPackageSection(ssrSettings.showPackagesSection);
+    if (isPlatformBrowser(this.platformId)) {
+      // Absorb SSR TransferState if present
+      if (this.transferState.hasKey(SETTINGS_STATE_KEY)) {
+        try {
+          const ssrSettings = this.transferState.get(SETTINGS_STATE_KEY, null);
+          if (ssrSettings) {
+            this.applySettings(ssrSettings);
           }
-          if (ssrSettings.showProjectsSection !== undefined) {
-            this.setLocalProjectSection(ssrSettings.showProjectsSection);
-          }
+        } catch {
+          // Safe fallback
         }
-      } catch {
-        // Safe fallback
       }
+    }
+  }
+
+  private getInitialSettings(): Settings | null {
+    if (typeof window === 'undefined') return null;
+    try {
+      const raw = localStorage.getItem(this.SETTINGS_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          return parsed as Settings;
+        }
+      }
+    } catch {
+      // Safe fallback
+    }
+    return null;
+  }
+
+  private applySettings(data: Settings): void {
+    this.settings.set(data);
+    if (data.showPackagesSection !== undefined) {
+      this.setLocalPackageSection(data.showPackagesSection);
+    }
+    if (data.showProjectsSection !== undefined) {
+      this.setLocalProjectSection(data.showProjectsSection);
+    }
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(this.SETTINGS_STORAGE_KEY, JSON.stringify(data));
+      } catch {}
     }
   }
 
@@ -68,28 +147,45 @@ export class SettingsService {
 
   getSettings(): Observable<any> {
     if (this.settings()) {
+      // Still fetch in background if needed, but return current instantly
+      if (!this.settingsRequest$) {
+        this.fetchSettingsInBackground();
+      }
       return of({ success: true, data: this.settings() });
     }
+
     if (this.settingsRequest$) {
       return this.settingsRequest$;
     }
+
+    return this.fetchSettingsInBackground();
+  }
+
+  private fetchSettingsInBackground(): Observable<any> {
     this.settingsRequest$ = this.api.get<Settings>('/settings', undefined, false).pipe(
+      timeout(3500),
       tap((res) => {
         if (res.success && res.data) {
-          this.settings.set(res.data);
-          if (res.data.showPackagesSection !== undefined) {
-            this.setLocalPackageSection(res.data.showPackagesSection);
-          }
-          if (res.data.showProjectsSection !== undefined) {
-            this.setLocalProjectSection(res.data.showProjectsSection);
-          }
+          this.applySettings(res.data);
           if (isPlatformServer(this.platformId)) {
             this.transferState.set(SETTINGS_STATE_KEY, res.data);
           }
         }
       }),
+      catchError(() => {
+        // Fallback gracefully without breaking UI or throwing 500 error to user
+        const fallback = this.settings() || DEFAULT_SETTINGS;
+        if (!this.settings()) {
+          this.applySettings(fallback);
+        }
+        return of({ success: true, data: fallback });
+      }),
+      finalize(() => {
+        this.settingsRequest$ = null;
+      }),
       shareReplay(1)
     );
+
     return this.settingsRequest$;
   }
 
@@ -105,7 +201,7 @@ export class SettingsService {
     return this.api.put<Settings>('/settings', data).pipe(
       tap((res) => {
         if (res.success && res.data) {
-          this.settings.set(res.data);
+          this.applySettings(res.data);
         }
       })
     );

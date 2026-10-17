@@ -1,38 +1,39 @@
 import { Component, inject, signal, computed, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Title, Meta, DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Title, Meta } from '@angular/platform-browser';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { AiConsultantService, AiChatMessage } from '../../../core/services/ai-consultant.service';
+import { ProductsService } from '../../../core/services/products.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { WhatsappService } from '../../../core/services/whatsapp.service';
 import { SettingsService } from '../../../core/services/settings.service';
-import { AiTopicCardCMS } from '../../../core/models/models';
+import { AiTopicCardCMS, Product } from '../../../core/models/models';
 import { ProductCardComponent } from '../../../shared/components/product-card/product-card.component';
+import { ChatMessageFormatterPipe } from '../../../shared/pipes/chat-message-formatter.pipe';
 
 @Component({
   selector: 'app-ai-consultant',
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     FormsModule,
     TranslocoDirective,
     ProductCardComponent,
+    ChatMessageFormatterPipe,
   ],
   templateUrl: './ai-consultant.component.html',
   styleUrl: './ai-consultant.component.css',
 })
 export class AiConsultantComponent implements OnInit, AfterViewChecked {
   aiService = inject(AiConsultantService);
+  productsService = inject(ProductsService);
   langService = inject(LanguageService);
   whatsappService = inject(WhatsappService);
   settingsService = inject(SettingsService);
   private titleService = inject(Title);
   private metaService = inject(Meta);
-  private sanitizer = inject(DomSanitizer);
 
   @ViewChild('messagesScroll') private messagesScrollContainer?: ElementRef<HTMLDivElement>;
 
@@ -111,6 +112,7 @@ export class AiConsultantComponent implements OnInit, AfterViewChecked {
     this.loadStoredMessages();
     this.checkStatus();
     this.loadSuggestions();
+    this.productsService.getProducts({ limit: 60 }).subscribe({ error: () => {} });
   }
 
   ngAfterViewChecked(): void {
@@ -160,6 +162,7 @@ export class AiConsultantComponent implements OnInit, AfterViewChecked {
   }
 
   private loadStoredMessages(): void {
+    if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') return;
     try {
       const saved = sessionStorage.getItem(this.STORAGE_KEY);
       if (saved) {
@@ -186,6 +189,7 @@ export class AiConsultantComponent implements OnInit, AfterViewChecked {
   }
 
   private saveMessagesToStorage(): void {
+    if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') return;
     try {
       const msgs = this.messages().filter((m) => m.content && !m.isStreaming);
       if (msgs.length > 0) {
@@ -219,6 +223,20 @@ export class AiConsultantComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  onInputChange(value: string): void {
+    this.inputText.set(value);
+    this.adjustTextareaHeight();
+  }
+
+  private adjustTextareaHeight(): void {
+    if (this.chatTextareaElement?.nativeElement) {
+      const el = this.chatTextareaElement.nativeElement;
+      el.style.height = 'auto';
+      const newHeight = Math.min(el.scrollHeight, 180);
+      el.style.height = `${newHeight}px`;
+    }
+  }
+
   async sendMessage(): Promise<void> {
     const text = this.inputText().trim();
     if (!text || this.isLoading()) return;
@@ -240,6 +258,7 @@ export class AiConsultantComponent implements OnInit, AfterViewChecked {
 
     this.messages.set([...currentList, userMsg, assistantMsg]);
     this.inputText.set('');
+    this.adjustTextareaHeight();
     this.isLoading.set(true);
     this.shouldScroll = true;
 
@@ -281,11 +300,15 @@ export class AiConsultantComponent implements OnInit, AfterViewChecked {
               .replace(/RECOMMENDED_SLUGS?:?[^\n]*/gi, '')
               .replace(/\[\s*$/g, '')
               .trim();
+            let prods = doneData.recommendedProducts || [];
+            if (prods.length === 0) {
+              prods = this.fallbackMatchProducts(cleanContent);
+            }
             list[lastIdx] = {
               ...list[lastIdx],
               content: cleanContent,
               isStreaming: false,
-              recommendedProducts: doneData.recommendedProducts || [],
+              recommendedProducts: prods,
             };
             this.messages.set(list);
             this.shouldScroll = true;
@@ -315,11 +338,15 @@ export class AiConsultantComponent implements OnInit, AfterViewChecked {
             .replace(/\[?\s*RECOMMENDED_SLUGS?:?[^\]\n]*\]?/gi, '')
             .replace(/RECOMMENDED_SLUGS?:?[^\n]*/gi, '')
             .trim();
+          let prods = res.data?.recommendedProducts || [];
+          if (prods.length === 0) {
+            prods = this.fallbackMatchProducts(cleanResp);
+          }
           list[lastIdx] = {
             ...list[lastIdx],
             content: cleanResp,
             isStreaming: false,
-            recommendedProducts: res.data?.recommendedProducts || [],
+            recommendedProducts: prods,
           };
           this.messages.set(list);
           this.shouldScroll = true;
@@ -350,7 +377,9 @@ export class AiConsultantComponent implements OnInit, AfterViewChecked {
   clearConversation(): void {
     this.messages.set([]);
     try {
-      sessionStorage.removeItem(this.STORAGE_KEY);
+      if (typeof window !== 'undefined' && typeof sessionStorage !== 'undefined') {
+        sessionStorage.removeItem(this.STORAGE_KEY);
+      }
     } catch {}
   }
 
@@ -363,12 +392,16 @@ export class AiConsultantComponent implements OnInit, AfterViewChecked {
 
   private scrollToBottom(): void {
     try {
-      if (this.messagesScrollContainer) {
-        this.messagesScrollContainer.nativeElement.scrollTop =
-          this.messagesScrollContainer.nativeElement.scrollHeight;
+      if (this.messagesScrollContainer?.nativeElement) {
+        const el = this.messagesScrollContainer.nativeElement;
+        el.scrollTo({
+          top: el.scrollHeight,
+          behavior: 'smooth',
+        });
       }
     } catch {}
   }
+
 
   toggleShowProducts(msgIndex: number): void {
     this.expandedProducts.update((prev) => ({
@@ -380,6 +413,95 @@ export class AiConsultantComponent implements OnInit, AfterViewChecked {
 
   isProductsVisible(msgIndex: number): boolean {
     return !!this.expandedProducts()[msgIndex];
+  }
+
+  /**
+   * Intelligently matches relevant store products based on consultation keywords
+   * ensuring clinical product cards are always recommended even if backend tag is omitted.
+   */
+  private fallbackMatchProducts(text: string): Product[] {
+    const all = this.productsService.cachedProducts();
+    if (!all || all.length === 0) return [];
+
+    const lower = text.toLowerCase();
+    const matchedSet = new Set<string>();
+    const matches: Product[] = [];
+
+    const addProduct = (p: Product) => {
+      const id = String(p._id);
+      if (!matchedSet.has(id)) {
+        matchedSet.add(id);
+        matches.push(p);
+      }
+    };
+
+    // 1. Exact Name or Slug Matching
+    for (const p of all) {
+      const nameAr = p.name?.ar?.toLowerCase() || '';
+      const nameEn = p.name?.en?.toLowerCase() || '';
+      const slugAr = p.slug?.ar?.toLowerCase() || '';
+      const slugEn = p.slug?.en?.toLowerCase() || '';
+
+      if (
+        (slugAr && lower.includes(slugAr)) ||
+        (slugEn && lower.includes(slugEn)) ||
+        (nameAr && lower.includes(nameAr)) ||
+        (nameEn && lower.includes(nameEn))
+      ) {
+        addProduct(p);
+      }
+    }
+
+    // 2. Keyword Matching (e.g. أرجوحة, ضغط, سترة, سنوزلين, مسار, أسطوانة)
+    if (matches.length < 4) {
+      for (const p of all) {
+        const nameAr = p.name?.ar?.toLowerCase() || '';
+        const keywords = nameAr
+          .split(/\s+/)
+          .filter((w) => w.length >= 4 && !['أداة', 'حسية', 'أدوات', 'خاصة', 'لتجهيز'].includes(w));
+
+        for (const kw of keywords) {
+          if (lower.includes(kw)) {
+            addProduct(p);
+            break;
+          }
+        }
+        if (matches.length >= 4) break;
+      }
+    }
+
+    // 3. Clinical Sensory Domains Heuristic
+    if (matches.length === 0) {
+      if (lower.includes('دهليز') || lower.includes('توازن') || lower.includes('أرجوح') || lower.includes('حرك')) {
+        for (const p of all) {
+          const n = (p.name?.ar || '').toLowerCase();
+          const s = (p.sensorySystem?.ar || '').toLowerCase();
+          if (n.includes('أرجوح') || n.includes('توازن') || s.includes('دهليز')) {
+            addProduct(p);
+            if (matches.length >= 3) break;
+          }
+        }
+      } else if (lower.includes('ضغط') || lower.includes('عميق') || lower.includes('تهدئ') || lower.includes('ستر') || lower.includes('تنظيم')) {
+        for (const p of all) {
+          const n = (p.name?.ar || '').toLowerCase();
+          const s = (p.sensorySystem?.ar || '').toLowerCase();
+          if (n.includes('ضغط') || n.includes('ستر') || s.includes('عميق') || n.includes('أسطوان')) {
+            addProduct(p);
+            if (matches.length >= 3) break;
+          }
+        }
+      } else if (lower.includes('سنوزلين') || lower.includes('ضوئ') || lower.includes('فقاع') || lower.includes('ألياف') || lower.includes('غرف')) {
+        for (const p of all) {
+          const n = (p.name?.ar || '').toLowerCase();
+          if (n.includes('ضوئ') || n.includes('فقاع') || n.includes('ألياف') || n.includes('سنوزلين')) {
+            addProduct(p);
+            if (matches.length >= 3) break;
+          }
+        }
+      }
+    }
+
+    return matches.slice(0, 4);
   }
 
   getCustomInquiryUrl(): string {
@@ -395,102 +517,5 @@ export class AiConsultantComponent implements OnInit, AfterViewChecked {
       this.langService.currentLang()
     );
   }
-
-  /**
-   * Formats raw markdown into clean, beautiful HTML:
-   * - Eliminates raw hashtags (###, ##, #) and converts to styled bold section headers
-   * - Converts numbered steps (1., 2.) into styled step badges
-   * - Converts sub-steps (أ., ب., etc.) into clean sub-item indicators
-   * - Converts bullet points (*, -) into styled bullet indicators
-   * - Converts **bold** into <strong class="msg-bold">
-   * - Strips any unwanted markdown asterisks or internal tags
-   */
-  formatContent(rawText: string): SafeHtml {
-    if (!rawText) return '';
-
-    // Strip internal slug tags completely and aggressively
-    let cleaned = rawText
-      .replace(/\[?\s*RECOMMENDED_SLUGS?.*$/gis, '')
-      .replace(/\[?\s*RECOMMEND[A-Z_]*.*$/gis, '')
-      .replace(/\[?\s*RECOMMENDED_SLUGS?:?[^\]\n]*\]?/gi, '')
-      .replace(/RECOMMENDED_SLUGS?:?[^\n]*/gi, '')
-      .replace(/\[?\s*RECOMMENDED_SLUG[^\n\]]*\]?/gi, '')
-      .replace(/\[\s*$/g, '')
-      .trim();
-
-    // Escape HTML special characters
-    const escaped = cleaned
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-
-    const lines = escaped.split('\n');
-    const resultParts: string[] = [];
-
-    for (let i = 0; i < lines.length; i++) {
-      let line = lines[i].trim();
-
-      if (!line) {
-        resultParts.push('<div class="msg-line-gap"></div>');
-        continue;
-      }
-
-      // Convert Bold **text** -> <strong class="msg-bold">text</strong>
-      line = line.replace(/\*\*(.+?)\*\*/g, '<strong class="msg-bold">$1</strong>');
-      // Clean single asterisks used for italics
-      line = line.replace(/(^|[^\*])\*([^\*]+)\*([^\*]|$)/g, '$1<em>$2</em>$3');
-
-      // Headings: ### or ####
-      if (/^#{3,5}\s+(.*)/.test(line)) {
-        const headingText = line.replace(/^#{3,5}\s+/, '');
-        resultParts.push(`<h4 class="msg-section-heading">${headingText}</h4>`);
-        continue;
-      }
-
-      // Main Headings: # or ##
-      if (/^#{1,2}\s+(.*)/.test(line)) {
-        const headingText = line.replace(/^#{1,2}\s+/, '');
-        resultParts.push(`<h3 class="msg-main-heading">${headingText}</h3>`);
-        continue;
-      }
-
-      // Numbered List: 1. or 2.
-      const numMatch = line.match(/^(\d+)[\.\)]\s+(.*)/);
-      if (numMatch) {
-        const num = numMatch[1];
-        const body = numMatch[2];
-        resultParts.push(
-          `<div class="msg-list-item"><span class="msg-num-badge">${num}</span><div class="msg-item-body">${body}</div></div>`
-        );
-        continue;
-      }
-
-      // Sub-letter List: أ. or ب. or ج. or a. or b.
-      const subMatch = line.match(/^([أ-يa-zA-Z])[\.\)]\s+(.*)/);
-      if (subMatch) {
-        const letter = subMatch[1];
-        const body = subMatch[2];
-        resultParts.push(
-          `<div class="msg-sublist-item"><span class="msg-sub-badge">${letter}</span><div class="msg-item-body">${body}</div></div>`
-        );
-        continue;
-      }
-
-      // Bullet items: * or - or •
-      const bulletMatch = line.match(/^[\*\-•]\s+(.*)/);
-      if (bulletMatch) {
-        const body = bulletMatch[1];
-        resultParts.push(
-          `<div class="msg-bullet-item"><span class="msg-bullet-dot"></span><div class="msg-item-body">${body}</div></div>`
-        );
-        continue;
-      }
-
-      // Regular paragraph line
-      resultParts.push(`<p class="msg-paragraph">${line}</p>`);
-    }
-
-    const htmlString = resultParts.join('');
-    return this.sanitizer.bypassSecurityTrustHtml(htmlString);
-  }
 }
+

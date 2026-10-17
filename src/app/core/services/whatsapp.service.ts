@@ -18,6 +18,15 @@ export class WhatsappService {
   }
 
   /**
+   * Helper to ensure URLs (especially images) are absolute HTTPS URLs for WhatsApp preview
+   */
+  public toAbsoluteUrl(url?: string): string {
+    if (!url) return `${environment.siteUrl}/images/og-preview.png`;
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return `${environment.siteUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+  }
+
+  /**
    * Generates WhatsApp order link for a SINGLE product:
    * includes product name, localized slug URL, high-res image, price, quantity,
    * and "+ مصاريف الشحن".
@@ -30,7 +39,7 @@ export class WhatsappService {
     const name = product.name[lang] || product.name.ar;
     const slug = product.slug[lang] || product.slug.ar;
     const productUrl = `${environment.siteUrl}/${lang}/products/${encodeURIComponent(slug)}`;
-    const imageUrl = product.images?.[0]?.url || `${environment.siteUrl}/images/logo.png`;
+    const imageUrl = this.toAbsoluteUrl(product.images?.[0]?.url);
     const itemTotal = (product.price * quantity).toLocaleString();
     const shippingText = settings?.shippingNote?.[lang] || 'يضاف مصاريف الشحن حسب المحافظة وموقع التوصيل';
 
@@ -82,7 +91,7 @@ export class WhatsappService {
     const totalPrice = items
       .reduce((sum, item) => sum + item.product.price * item.quantity, 0)
       .toLocaleString();
-    const logoUrl = `${environment.siteUrl}/images/logo.png`;
+    const logoUrl = `${environment.siteUrl}/images/og-preview.png`;
     const shippingText = settings?.shippingNote?.[lang] || 'يضاف مصاريف الشحن حسب المحافظة وموقع التوصيل';
     const noteText = customerNote.trim() ? (lang === 'ar' ? `• ملاحظات إضافية: ${customerNote.trim()}` : `• Additional Notes: ${customerNote.trim()}`) : '';
 
@@ -147,6 +156,7 @@ export class WhatsappService {
     const name = pkg.name[lang] || pkg.name.ar;
     const slug = pkg.slug[lang] || pkg.slug.ar;
     const pkgUrl = `${environment.siteUrl}/${lang}/packages/${encodeURIComponent(slug)}`;
+    const pkgImg = this.toAbsoluteUrl(pkg.images?.[0]?.url);
     const priceText = `${pkg.price.toLocaleString()} ${currency}`;
     const roomSize = pkg.roomSize ? (pkg.roomSize[lang] || pkg.roomSize.ar) : '';
 
@@ -156,6 +166,7 @@ export class WhatsappService {
         'مرحباً ودق لتجهيز غرف ومراكز التكامل الحسي،',
         `أود الاستفسار وطلب عرض سعر لتنفيذ باقة: "${name}"`,
         `• رابط الباقة: ${pkgUrl}`,
+        `• صورة الباقة: ${pkgImg}`,
         `• السعر التقديري: ${priceText}`,
         roomSize ? `• المساحة المقترحة: ${roomSize}` : '',
         '---------------------------------------',
@@ -166,6 +177,7 @@ export class WhatsappService {
         'Hello Wadaq Sensory Room Equipping,',
         `I would like to inquire about and request a quotation for: "${name}"`,
         `• Package Link: ${pkgUrl}`,
+        `• Package Image: ${pkgImg}`,
         `• Estimated Price: ${priceText}`,
         roomSize ? `• Suggested Area: ${roomSize}` : '',
         '---------------------------------------',

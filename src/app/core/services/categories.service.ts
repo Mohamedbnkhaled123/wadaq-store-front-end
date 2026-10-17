@@ -77,6 +77,12 @@ export class CategoriesService {
     const key = all ? 'all' : 'public';
     const entry = this.cache.get(key);
     if (entry && Date.now() < entry.expiresAt) {
+      if (!all && Array.isArray(entry.data?.data)) {
+        return {
+          ...entry.data,
+          data: entry.data.data.filter((c) => c.isActive !== false),
+        };
+      }
       return entry.data;
     }
     return null;
