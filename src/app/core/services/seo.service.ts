@@ -35,8 +35,15 @@ export class SeoService {
     if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
       imageUrl = `${environment.siteUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
     }
+    if (imageUrl.includes('/images/products/') && imageUrl.endsWith('.webp')) {
+      imageUrl = imageUrl.replace(/\.webp$/i, '.jpg');
+    }
+    const isPng = imageUrl.endsWith('.png');
     this.meta.updateTag({ property: 'og:image', content: imageUrl });
     this.meta.updateTag({ property: 'og:image:secure_url', content: imageUrl });
+    this.meta.updateTag({ property: 'og:image:type', content: isPng ? 'image/png' : 'image/jpeg' });
+    this.meta.updateTag({ property: 'og:image:width', content: '800' });
+    this.meta.updateTag({ property: 'og:image:height', content: '800' });
     this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title', content: fullTitle });
     this.meta.updateTag({ name: 'twitter:description', content: config.description });

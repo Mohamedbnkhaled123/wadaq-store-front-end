@@ -1,6 +1,28 @@
 {
   "rewrites": [
     {
+      "source": "/:lang(ar|en)/products/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(whatsapp|facebookexternalhit|facebot|twitterbot|telegrambot|linkedinbot|slackbot|skypeuripreview).*"
+        }
+      ],
+      "destination": "/api/og?type=product&slug=:slug&lang=:lang"
+    },
+    {
+      "source": "/products/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(whatsapp|facebookexternalhit|facebot|twitterbot|telegrambot|linkedinbot|slackbot|skypeuripreview).*"
+        }
+      ],
+      "destination": "/api/og?type=product&slug=:slug&lang=ar"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

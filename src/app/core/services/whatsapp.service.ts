@@ -22,8 +22,15 @@ export class WhatsappService {
    */
   public toAbsoluteUrl(url?: string): string {
     if (!url) return `${environment.siteUrl}/images/og-preview.png`;
-    if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    return `${environment.siteUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+    let absUrl = url;
+    if (!absUrl.startsWith('http://') && !absUrl.startsWith('https://')) {
+      absUrl = `${environment.siteUrl}${absUrl.startsWith('/') ? '' : '/'}${absUrl}`;
+    }
+    // Prefer JPG over WEBP for WhatsApp image previews and direct links
+    if (absUrl.includes('/images/products/') && absUrl.endsWith('.webp')) {
+      absUrl = absUrl.replace(/\.webp$/i, '.jpg');
+    }
+    return absUrl;
   }
 
   /**
