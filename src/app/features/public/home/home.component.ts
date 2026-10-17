@@ -118,12 +118,18 @@ export class HomeComponent implements OnInit {
   }
 
   get heroImageUrl(): string {
-    const img =
-      this.settingsService.settings()?.hero?.image ||
-      'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=75';
-    if (img.includes('images.unsplash.com')) {
-      return img.replace(/w=\d+/, 'w=600').replace(/q=\d+/, 'q=75');
+    const heroImageSetting =
+      (this.settingsService.settings() as any)?.hero?.image ||
+      (this.settingsService.settings() as any)?.hero?.imageUrl;
+    if (
+      heroImageSetting &&
+      typeof heroImageSetting === 'string' &&
+      heroImageSetting.trim() !== '' &&
+      !heroImageSetting.startsWith('data:image/') &&
+      !heroImageSetting.includes('images.unsplash.com')
+    ) {
+      return heroImageSetting;
     }
-    return img;
+    return '/images/hero-sensory-room.webp';
   }
 }

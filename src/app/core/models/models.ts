@@ -155,6 +155,8 @@ export interface AiConsultantSettings {
 
 export interface Settings {
   _id?: string;
+  storeName?: LocalizedString;
+  storeDescription?: LocalizedString;
   logo?: string;
   whatsappNumber: string;
   phone: string;
@@ -163,7 +165,13 @@ export interface Settings {
   currency: string;
   shippingNote: LocalizedString;
   freeShippingThreshold?: number;
+  taxRate?: number;
+  socialLinks?: Record<string, string>;
   social: SocialLinks;
+  heroTitle?: LocalizedString;
+  heroSubtitle?: LocalizedString;
+  heroCtaPrimary?: LocalizedString;
+  heroCtaSecondary?: LocalizedString;
   hero: HeroCMS;
   about: AboutCMS;
   stats: StatItem[];

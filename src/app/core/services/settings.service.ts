@@ -7,22 +7,53 @@ import { Settings } from '../models/models';
 export const SETTINGS_STATE_KEY = makeStateKey<Settings>('wadaq_ssr_settings_key');
 
 export const DEFAULT_SETTINGS: Settings = {
+  storeName: {
+    ar: 'ودق لتنمية المهارات وتجهيز غرف التكامل الحسي',
+    en: 'Wadaq Sensory Integration & Skill Development',
+  },
+  storeDescription: {
+    ar: 'حلول متكاملة وأدوات حسية معتمدة لتجهيز غرف التكامل الحسي وتنمية مهارات الأطفال',
+    en: 'Integrated solutions and certified sensory tools for sensory rooms and child skill development',
+  },
   logo: '/images/logo.png',
   whatsappNumber: '201000000000',
-  phone: '01000000000',
-  email: 'info@wadaq-store.com',
+  phone: '+201000000000',
+  email: 'info@wadaq.com',
   address: { ar: 'القاهرة، مصر', en: 'Cairo, Egypt' },
   currency: 'ج.م',
   shippingNote: {
-    ar: 'يضاف مصاريف الشحن حسب المحافظة وموقع التوصيل',
-    en: 'Shipping fees will be added based on governorate and delivery location',
+    ar: 'يتم احتساب رسوم الشحن حسب المحافظة ومكان التسليم',
+    en: 'Shipping fees calculated based on governorate and delivery location',
   },
-  social: {},
+  taxRate: 14,
+  socialLinks: {
+    whatsapp: 'https://wa.me/201000000000',
+    facebook: 'https://facebook.com',
+    instagram: 'https://instagram.com',
+  },
+  social: {
+    facebook: 'https://facebook.com',
+    instagram: 'https://instagram.com',
+  },
+  heroTitle: {
+    ar: 'ودق لتنمية المهارات وتجهيز غرف التكامل الحسي',
+    en: 'Wadaq Sensory Integration & Skill Development',
+  },
+  heroSubtitle: {
+    ar: 'حلول متكاملة وأدوات حسية معتمدة لتجهيز غرف التكامل الحسي وتطوير بيئات التعلم والتربية الخاصة',
+    en: 'Integrated solutions and certified sensory tools for equipping sensory rooms and special education environments',
+  },
+  heroCtaPrimary: { ar: 'تصفح المنتجات', en: 'Browse Products' },
+  heroCtaSecondary: { ar: 'استشر الذكاء الاصطناعي', en: 'Consult AI' },
   hero: {
-    title: { ar: 'بيئة حسية متكاملة تنبض بالحياة والتعلم', en: 'Integrated Sensory Environments' },
+    image: '/images/hero-sensory-room.webp',
+    title: {
+      ar: 'ودق لتنمية المهارات وتجهيز غرف التكامل الحسي',
+      en: 'Wadaq Sensory Integration & Skill Development',
+    },
     subtitle: {
-      ar: 'أكبر متجر عربي متخصص في أدوات التكامل الحسي وتجهيز غرف التأهيل الحسي للأطفال والمراكز المتخصصة',
-      en: 'The leading Arabic store specialized in sensory integration and therapy rooms',
+      ar: 'حلول متكاملة وأدوات حسية معتمدة لتجهيز غرف التكامل الحسي وتطوير بيئات التعلم والتربية الخاصة',
+      en: 'Integrated solutions and certified sensory tools for equipping sensory rooms and special education environments',
     },
     ctaPrimary: { ar: 'تصفح المنتجات', en: 'Browse Products' },
     ctaSecondary: { ar: 'استشر الذكاء الاصطناعي', en: 'Consult AI' },

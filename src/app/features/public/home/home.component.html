@@ -27,12 +27,13 @@
         <div class="hero-image-card card">
           <img
             [src]="heroImageUrl"
-            alt="متجر ودق للتكامل الحسي"
+            [alt]="t('hero.image_alt') || 'متجر ودق للتكامل الحسي'"
             class="hero-img"
             width="600"
             height="450"
             fetchpriority="high"
             loading="eager"
+            decoding="sync"
           />
         </div>
       </div>
