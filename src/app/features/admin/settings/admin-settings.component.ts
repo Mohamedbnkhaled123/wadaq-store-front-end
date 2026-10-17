@@ -221,6 +221,7 @@ export class AdminSettingsComponent implements OnInit {
           if (target === 'about') this.formData.about.image = res.data.url;
           if (target === 'cta') this.formData.customProductCta.image = res.data.url;
           if (target === 'logo') this.formData.logo = res.data.url;
+          this.saveSettings(true);
         }
       },
       error: (err) => {

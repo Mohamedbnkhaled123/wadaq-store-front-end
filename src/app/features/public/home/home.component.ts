@@ -124,9 +124,7 @@ export class HomeComponent implements OnInit {
     if (
       heroImageSetting &&
       typeof heroImageSetting === 'string' &&
-      heroImageSetting.trim() !== '' &&
-      !heroImageSetting.startsWith('data:image/') &&
-      !heroImageSetting.includes('images.unsplash.com')
+      heroImageSetting.trim() !== ''
     ) {
       return heroImageSetting;
     }
