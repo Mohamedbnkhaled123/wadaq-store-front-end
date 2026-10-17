@@ -59,30 +59,27 @@
     </div>
   </section>
 
-  <!-- 3. Categories Horizontal Chips -->
-  @if (categories().length > 0) {
-    <section class="section categories-section">
-      <div class="container">
-        <div class="categories-scroll">
-          <a
-            [routerLink]="['/', langService.currentLang(), 'products']"
-            class="category-chip active"
-          >
-            {{ t('products.all_categories') }}
-          </a>
+  <!-- Categories Section (Always in DOM with Skeleton chips) -->
+  <section class="section categories-section">
+    <div class="container">
+      <div class="categories-scroll">
+        <a [routerLink]="['/', langService.currentLang(), 'products']" class="category-chip active">
+          {{ t('products.all_categories') }}
+        </a>
+        @if (categories().length > 0) {
           @for (cat of categories(); track cat._id) {
-            <a
-              [routerLink]="['/', langService.currentLang(), 'products']"
-              [queryParams]="{ category: cat.slug | localize }"
-              class="category-chip"
-            >
+            <a [routerLink]="['/', langService.currentLang(), 'products']" [queryParams]="{ category: cat.slug | localize }" class="category-chip">
               {{ cat.name | localize }}
             </a>
           }
-        </div>
+        } @else {
+          <span class="category-chip skeleton-chip" aria-hidden="true"></span>
+          <span class="category-chip skeleton-chip" aria-hidden="true"></span>
+          <span class="category-chip skeleton-chip" aria-hidden="true"></span>
+        }
       </div>
-    </section>
-  }
+    </div>
+  </section>
 
   <!-- 4. Featured Sensory Products -->
   <section class="section featured-products-section">
@@ -93,9 +90,16 @@
         <p class="section-subtitle">تشكيلة مختارة بعناية لتحفيز وتدريب الحواس الدهليزية، العميقة، واللمسية.</p>
       </div>
 
+      <!-- Products Grid with Skeletons -->
       <div class="products-grid">
-        @for (prod of featuredProducts(); track prod._id) {
-          <app-product-card [product]="prod" />
+        @if (featuredProducts().length > 0) {
+          @for (product of featuredProducts(); track product._id) {
+            <app-product-card [product]="product"></app-product-card>
+          }
+        } @else {
+          @for (item of [1, 2, 3, 4]; track item) {
+            <div class="product-skeleton-card" aria-hidden="true"></div>
+          }
         }
       </div>
 
