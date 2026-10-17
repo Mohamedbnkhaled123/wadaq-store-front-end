@@ -63,6 +63,8 @@ export class SettingsService {
   private settingsRequest$: Observable<any> | null = null;
 
   private readonly SETTINGS_STORAGE_KEY = 'wadaq_settings_cache_v2';
+  private readonly defaultTtlMs = 24 * 60 * 60 * 1000; // 24 hours
+  private cacheExpiresAt = 0;
   private readonly PKG_SECTION_KEY = 'wadaq_section_packages';
   private readonly PROJ_SECTION_KEY = 'wadaq_section_projects';
 
@@ -105,6 +107,11 @@ export class SettingsService {
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === 'object') {
+          if (parsed.settings && parsed.timestamp) {
+            this.cacheExpiresAt = parsed.timestamp + this.defaultTtlMs;
+            return parsed.settings as Settings;
+          }
+          this.cacheExpiresAt = Date.now() + this.defaultTtlMs;
           return parsed as Settings;
         }
       }
@@ -116,6 +123,7 @@ export class SettingsService {
 
   private applySettings(data: Settings): void {
     this.settings.set(data);
+    this.cacheExpiresAt = Date.now() + this.defaultTtlMs;
     if (data.showPackagesSection !== undefined) {
       this.setLocalPackageSection(data.showPackagesSection);
     }
@@ -124,7 +132,13 @@ export class SettingsService {
     }
     if (typeof window !== 'undefined') {
       try {
-        localStorage.setItem(this.SETTINGS_STORAGE_KEY, JSON.stringify(data));
+        localStorage.setItem(
+          this.SETTINGS_STORAGE_KEY,
+          JSON.stringify({
+            timestamp: Date.now(),
+            settings: data,
+          })
+        );
       } catch {}
     }
   }
@@ -145,9 +159,12 @@ export class SettingsService {
     return this.localProjectsActive();
   });
 
-  getSettings(): Observable<any> {
+  getSettings(forceRefresh = false): Observable<any> {
+    if (!forceRefresh && this.settings() && Date.now() < this.cacheExpiresAt) {
+      return of({ success: true, data: this.settings() });
+    }
+
     if (this.settings()) {
-      // Still fetch in background if needed, but return current instantly
       if (!this.settingsRequest$) {
         this.fetchSettingsInBackground();
       }

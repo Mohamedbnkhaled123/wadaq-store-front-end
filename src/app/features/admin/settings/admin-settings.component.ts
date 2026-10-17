@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SettingsService } from '../../../core/services/settings.service';
 import { ApiService } from '../../../core/services/api.service';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
+import { convertToJpg } from '../../../core/utils/image-converter';
 
 @Component({
   selector: 'app-admin-settings',
@@ -194,23 +195,25 @@ export class AdminSettingsComponent implements OnInit {
     });
   }
 
-  onFileSelected(event: Event, target: 'hero' | 'about' | 'cta' | 'logo'): void {
+  async onFileSelected(event: Event, target: 'hero' | 'about' | 'cta' | 'logo'): Promise<void> {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-      this.uploadImage(file, target);
+      await this.uploadImage(file, target);
       input.value = ''; // Reset input to allow selecting the same file again
     }
   }
 
-  uploadImage(file: File, target: 'hero' | 'about' | 'cta' | 'logo'): void {
+  async uploadImage(file: File, target: 'hero' | 'about' | 'cta' | 'logo'): Promise<void> {
     this.uploadingTarget.set(target);
     this.errorMessage.set('');
 
+    const optimizedFile = await convertToJpg(file, 1600, 0.88);
     const fd = new FormData();
-    fd.append('image', file);
+    fd.append('image', optimizedFile);
 
-    this.apiService.upload<{ url: string; publicId: string }>('/admin/uploads', fd).subscribe({
+    const folder = target === 'logo' ? 'wadaq_store/branding' : 'wadaq_store/content';
+    this.apiService.upload<{ url: string; publicId: string }>(`/admin/uploads?folder=${folder}&format=jpg`, fd).subscribe({
       next: (res) => {
         this.uploadingTarget.set(null);
         if (res.success && res.data?.url) {

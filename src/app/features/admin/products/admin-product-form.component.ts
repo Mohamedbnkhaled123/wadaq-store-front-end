@@ -7,6 +7,7 @@ import { ProductsService } from '../../../core/services/products.service';
 import { CategoriesService } from '../../../core/services/categories.service';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 import { Product, Category, SpecItem } from '../../../core/models/models';
+import { convertToJpg } from '../../../core/utils/image-converter';
 
 @Component({
   selector: 'app-admin-product-form',
@@ -209,23 +210,24 @@ export class AdminProductFormComponent implements OnInit {
     this.formData.images.unshift(img);
   }
 
-  onFileSelected(event: Event): void {
+  async onFileSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      this.uploadImageFile(file);
+      await this.uploadImageFile(file);
       input.value = '';
     }
   }
 
-  uploadImageFile(file: File): void {
+  async uploadImageFile(file: File): Promise<void> {
     this.isUploadingImage.set(true);
     this.errorMessage.set('');
 
+    const optimizedFile = await convertToJpg(file, 1600, 0.88);
     const fd = new FormData();
-    fd.append('image', file);
+    fd.append('image', optimizedFile);
 
-    this.apiService.upload<{ url: string; publicId: string }>('/admin/uploads', fd).subscribe({
+    this.apiService.upload<{ url: string; publicId: string }>('/admin/uploads?folder=wadaq_store/products&format=jpg', fd).subscribe({
       next: (res) => {
         this.isUploadingImage.set(false);
         if (res.success && res.data?.url) {

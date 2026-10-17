@@ -12,7 +12,7 @@ export class CategoriesService {
   private platformId = inject(PLATFORM_ID);
   private transferState = inject(TransferState);
   private readonly STORAGE_KEY = 'wadaq_categories_cache_v1';
-  private readonly defaultTtlMs = 15 * 60 * 1000; // 15 mins
+  private readonly defaultTtlMs = 24 * 60 * 60 * 1000; // 24 hours
 
   private cache = new Map<string, { data: ApiResponse<Category[]>; expiresAt: number }>();
 

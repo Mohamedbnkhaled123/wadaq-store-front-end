@@ -1,44 +1,5 @@
-import fs from 'fs';
-import path from 'path';
-
 const SITE_URL = process.env.SITE_URL || 'https://wadaq-store.vercel.app';
 const API_URL = process.env.API_URL || 'https://wadaq-store-back-end.vercel.app/api';
-
-/**
- * Normalizes text to handle Arabic slug matching
- */
-function normalizeSlug(str) {
-  if (!str) return '';
-  return decodeURIComponent(str)
-    .trim()
-    .toLowerCase()
-    .replace(/[\u064B-\u065F\u0670]/g, '')
-    .replace(/[^\w\s\u0621-\u064A\u0660-\u0669-]/g, '')
-    .replace(/[\s_]+/g, '-')
-    .replace(/-+/g, '-');
-}
-
-/**
- * Finds product from local wadaq-products.json fallback
- */
-function findLocalProduct(slug) {
-  try {
-    const jsonPath = path.join(process.cwd(), 'public/wadaq-products.json');
-    if (!fs.existsSync(jsonPath)) return null;
-    const raw = fs.readFileSync(jsonPath, 'utf8');
-    const products = JSON.parse(raw);
-    const decodedSlug = decodeURIComponent(slug).toLowerCase().trim();
-
-    return products.find((p) => {
-      if (p.id && p.id.toLowerCase() === decodedSlug) return true;
-      if (p.name && normalizeSlug(p.name) === normalizeSlug(decodedSlug)) return true;
-      if (p.name && p.name.includes(decodedSlug)) return true;
-      return false;
-    });
-  } catch (e) {
-    return null;
-  }
-}
 
 export default async function handler(req, res) {
   const { slug, lang = 'ar', type = 'product' } = req.query;
@@ -48,16 +9,15 @@ export default async function handler(req, res) {
   }
 
   let title = 'متجر ودق للتكامل الحسي';
-  let description = 'متجر ودق المتخصص في أدوات التكامل الحسي وتجهيز الغرف الحسية للمتخصصين والمراكز';
+  let description = 'متجر ودق المتخصص في أدوات التكامل الحسي وتجهيز الغرف الحسية للمتخصصين ومراكز التأهيل';
   let imageUrl = `${SITE_URL}/images/og-preview.png`;
-  let priceText = '';
 
   try {
-    // 1. Try remote backend API with short timeout
+    const endpoint = type === 'package' ? `${API_URL}/packages` : `${API_URL}/products`;
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
 
-    const apiRes = await fetch(`${API_URL}/products/${encodeURIComponent(slug)}`, {
+    const apiRes = await fetch(`${endpoint}/${encodeURIComponent(slug)}`, {
       signal: controller.signal,
       headers: { Accept: 'application/json' },
     }).catch(() => null);
@@ -67,40 +27,24 @@ export default async function handler(req, res) {
     if (apiRes && apiRes.ok) {
       const data = await apiRes.json();
       if (data && data.success && data.data) {
-        const p = data.data;
-        title = (p.name && (p.name[lang] || p.name.ar || p.name.en)) || title;
-        const rawDesc = (p.shortDescription && (p.shortDescription[lang] || p.shortDescription.ar)) ||
-          (p.description && (p.description[lang] || p.description.ar)) || '';
-        if (p.price) {
-          priceText = `السعر: ${p.price} ج.م`;
-          description = `${priceText} | ${rawDesc}`.trim();
+        const item = data.data;
+        title = (item.name && (item.name[lang] || item.name.ar || item.name.en)) || title;
+        const rawDesc = (item.shortDescription && (item.shortDescription[lang] || item.shortDescription.ar)) ||
+          (item.description && (item.description[lang] || item.description.ar)) || '';
+        
+        if (item.price) {
+          description = `السعر: ${item.price.toLocaleString()} ج.م | ${rawDesc}`.trim();
         } else {
           description = rawDesc || description;
         }
 
-        if (p.images && p.images.length > 0 && p.images[0].url) {
-          imageUrl = p.images[0].url;
-        }
-      }
-    } else {
-      // 2. Fallback to local catalog
-      const local = findLocalProduct(slug);
-      if (local) {
-        title = local.name || title;
-        const rawDesc = local.description || '';
-        if (local.price) {
-          priceText = `السعر: ${local.price} ج.م`;
-          description = `${priceText} | ${rawDesc}`.trim();
-        } else {
-          description = rawDesc || description;
-        }
-        if (local.images && local.images.length > 0 && local.images[0].url) {
-          imageUrl = local.images[0].url;
+        if (item.images && item.images.length > 0 && item.images[0].url) {
+          imageUrl = item.images[0].url;
         }
       }
     }
   } catch (err) {
-    // Safe fallback
+    // Graceful fallback
   }
 
   // Ensure absolute URL
@@ -108,7 +52,7 @@ export default async function handler(req, res) {
     imageUrl = `${SITE_URL}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
   }
 
-  // Convert .webp to high-compatibility .jpg for WhatsApp crawler
+  // Convert .webp to high-compatibility .jpg for WhatsApp preview if available
   let imageType = 'image/jpeg';
   if (imageUrl.includes('/images/products/') && imageUrl.endsWith('.webp')) {
     imageUrl = imageUrl.replace(/\.webp$/i, '.jpg');
@@ -118,9 +62,10 @@ export default async function handler(req, res) {
     imageType = 'image/webp';
   }
 
-  const targetPageUrl = `${SITE_URL}/${lang}/products/${encodeURIComponent(slug)}`;
+  const targetPath = type === 'package' ? 'packages' : 'products';
+  const targetPageUrl = `${SITE_URL}/${lang}/${targetPath}/${encodeURIComponent(slug)}`;
 
-  // Return full Open Graph meta tags optimized for WhatsApp, Facebook, Twitter, and bots
+  // Open Graph meta tags optimized for WhatsApp, Facebook, Twitter, and search crawlers
   const html = `<!doctype html>
 <html lang="${lang}" dir="${lang === 'ar' ? 'rtl' : 'ltr'}">
   <head>
@@ -161,7 +106,7 @@ export default async function handler(req, res) {
 </html>`;
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=43200');
+  res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800');
   return res.status(200).send(html);
 }
 

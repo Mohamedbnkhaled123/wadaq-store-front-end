@@ -41,8 +41,8 @@ export class ProductsService {
   public cachedProducts = signal<Product[]>([]);
   public isCacheLoaded = signal<boolean>(false);
 
-  // Default TTL: 10 minutes (in ms)
-  private readonly defaultTtlMs = 10 * 60 * 1000;
+  // Long-Lived Memory & Storage TTL: 24 hours (with immediate invalidation on admin mutation)
+  private readonly defaultTtlMs = 24 * 60 * 60 * 1000;
 
   constructor() {
     this.hydrateFromStorage();
