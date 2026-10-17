@@ -3,7 +3,13 @@
   <main class="site-main">
     <router-outlet />
   </main>
-  <app-footer />
-  <app-whatsapp-float />
-  <app-confirm-dialog />
+  @defer (on viewport) {
+    <app-footer />
+  } @placeholder {
+    <div style="min-height: 320px;" aria-hidden="true"></div>
+  }
+  @defer (on idle) {
+    <app-whatsapp-float />
+    <app-confirm-dialog />
+  }
 </div>
